@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 min-h-screen bg-mf-bg font-sans text-mf-ink antialiased;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
+
+@media print {
+  .medflow-sidebar,
+  .medflow-topbar,
+  .medflow-scroll-progress,
+  .medflow-no-print {
+    display: none !important;
+  }
+
+  .medflow-main {
+    margin: 0 !important;
+    padding: 1rem !important;
+    max-width: none !important;
+  }
+}
+
+/* Design tokens (medflow-cursor-export palette) — additive */
+:root {
+  --background: 220 20% 98%;
+  --foreground: 220 30% 12%;
+
+  --border: 220 15% 88%;
+  --input: 220 15% 88%;
+  --ring: 210 80% 42%;
+
+  --card: 220 20% 100%;
+  --card-foreground: 220 30% 12%;
+  --card-border: 220 15% 90%;
+
+  --popover: 220 20% 100%;
+  --popover-foreground: 220 30% 12%;
+  --popover-border: 220 15% 90%;
+
+  --primary: 210 80% 42%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 175 60% 38%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 220 15% 92%;
+  --muted-foreground: 220 20% 40%;
+
+  --accent: 195 70% 45%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 220 30% 10%;
+  --foreground: 220 20% 98%;
+
+  --border: 220 20% 20%;
+  --input: 220 20% 20%;
+  --ring: 210 80% 60%;
+
+  --card: 220 30% 14%;
+  --card-foreground: 220 20% 98%;
+  --card-border: 220 20% 22%;
+
+  --popover: 220 30% 14%;
+  --popover-foreground: 220 20% 98%;
+  --popover-border: 220 20% 22%;
+
+  --primary: 210 80% 60%;
+  --primary-foreground: 220 30% 10%;
+
+  --secondary: 175 60% 45%;
+  --secondary-foreground: 220 30% 10%;
+
+  --muted: 220 20% 18%;
+  --muted-foreground: 220 15% 70%;
+
+  --accent: 195 70% 55%;
+  --accent-foreground: 220 30% 10%;
+
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 220 20% 98%;
+}

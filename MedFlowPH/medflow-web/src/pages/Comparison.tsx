@@ -1,0 +1,456 @@
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  PolarAngleAxis,
+  PolarGrid,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
+import { useEffect, useMemo, useState } from 'react'
+import { BarChart2, Search, Sparkles, Target } from 'lucide-react'
+import { ImageCard } from '../components/ImageCard'
+import type { GalleryImage } from '../components/LightboxGallery'
+import { LightboxGallery } from '../components/LightboxGallery'
+import { MetricCard } from '../components/MetricCard'
+import { PageTOC, TOC_COMPARISON } from '../components/PageTOC'
+import { PageShell } from '../components/PageShell'
+import { SectionHeader } from '../components/SectionHeader'
+import { SectionWrapper } from '../components/SectionWrapper'
+import { DATA_PATHS, IMAGES } from '../data/fileManifest'
+import { useCsvData, useJsonData } from '../hooks/useCsvData'
+
+type ClusterMeta = { k: number }
+
+type ParsedRow = {
+  algorithm: string
+  silhouette: number
+  davies_bouldin: number
+  calinski_harabasz: number
+  noise_share: number
+  cluster_count: number
+  strengths: string
+}
+
+function normalizePair(k: number, d: number, higherBetter: boolean) {
+  if (!Number.isFinite(k) || !Number.isFinite(d)) return { k: 0, d: 0 }
+  if (Math.abs(k - d) < 1e-9) return { k: 0.5, d: 0.5 }
+  if (higherBetter) {
+    const lo = Math.min(k, d)
+    const hi = Math.max(k, d)
+    return { k: (k - lo) / (hi - lo), d: (d - lo) / (hi - lo) }
+  }
+  const lo = Math.min(k, d)
+  const hi = Math.max(k, d)
+  return { k: (hi - k) / (hi - lo), d: (hi - d) / (hi - lo) }
+}
+
+export function Comparison() {
+  const { data } = useCsvData(DATA_PATHS.modelComparisonSummary)
+  const { data: clusterMeta } = useJsonData<ClusterMeta>(DATA_PATHS.clusterCountsKmeans)
+  const [readme, setReadme] = useState<string>('')
+  const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
+    imgs: [],
+    idx: 0,
+  })
+
+  useEffect(() => {
+    fetch('/results/07/Model_Comparison/kmeans_vs_dbscan_comparison_readme.txt')
+      .then((r) => r.text())
+      .then(setReadme)
+      .catch(() => setReadme(''))
+  }, [])
+
+  const parsed = useMemo(() => {
+    const rows = data.map<ParsedRow | null>((row) => {
+      const algo = row.algorithm ?? ''
+      if (!algo) return null
+      return {
+        algorithm: algo,
+        silhouette: Number(row.silhouette),
+        davies_bouldin: Number(row.davies_bouldin),
+        calinski_harabasz: Number(row.calinski_harabasz),
+        noise_share: Number(row.noise_share),
+        cluster_count: Number(row.n_clusters_excluding_noise),
+        strengths: row.strengths ?? '',
+      }
+    })
+    const clean = rows.filter((r): r is ParsedRow => Boolean(r))
+    const kmeans = clean.find((r) => r.algorithm.includes('K-Means'))
+    const dbscan = clean.find((r) => r.algorithm.includes('DBSCAN'))
+    return { kmeans, dbscan }
+  }, [data])
+
+  const groupedBars = useMemo(() => {
+    if (!parsed.kmeans || !parsed.dbscan) return []
+    return [
+      { metric: 'Silhouette', kmeans: parsed.kmeans.silhouette, dbscan: parsed.dbscan.silhouette },
+      {
+        metric: 'Davies–Bouldin',
+        kmeans: parsed.kmeans.davies_bouldin,
+        dbscan: parsed.dbscan.davies_bouldin,
+      },
+      {
+        metric: 'Calinski–Harabasz',
+        kmeans: parsed.kmeans.calinski_harabasz,
+        dbscan: parsed.dbscan.calinski_harabasz,
+      },
+      {
+        metric: 'Noise share',
+        kmeans: parsed.kmeans.noise_share,
+        dbscan: parsed.dbscan.noise_share,
+      },
+      {
+        metric: 'Clusters (excl. noise)',
+        kmeans: parsed.kmeans.cluster_count,
+        dbscan: parsed.dbscan.cluster_count,
+      },
+    ]
+  }, [parsed])
+
+  const radarRows = useMemo(() => {
+    if (!parsed.kmeans || !parsed.dbscan) return []
+    const metricsDef = [
+      { metric: 'Silhouette', k: parsed.kmeans.silhouette, d: parsed.dbscan.silhouette, higher: true },
+      {
+        metric: 'Davies–Bouldin (inv.)',
+        k: parsed.kmeans.davies_bouldin,
+        d: parsed.dbscan.davies_bouldin,
+        higher: false,
+      },
+      {
+        metric: 'Calinski–Harabasz',
+        k: parsed.kmeans.calinski_harabasz,
+        d: parsed.dbscan.calinski_harabasz,
+        higher: true,
+      },
+      { metric: 'Noise share', k: parsed.kmeans.noise_share, d: parsed.dbscan.noise_share, higher: false },
+      {
+        metric: 'Cluster count',
+        k: parsed.kmeans.cluster_count,
+        d: parsed.dbscan.cluster_count,
+        higher: false,
+      },
+    ]
+    return metricsDef.map(({ metric, k, d, higher }) => {
+      const scaled = normalizePair(k, d, higher)
+      return { metric, kmeans: scaled.k, dbscan: scaled.d }
+    })
+  }, [parsed])
+
+  const chosenK = clusterMeta?.k ?? 6
+  const readmeConclusion = readme
+    .split(/Final conclusion:/i)
+    .slice(1)
+    .join('')
+    .split(/\r?\n/)
+    .find((line) => line.trim().length > 0)
+    ?.trim()
+
+  const galleryImages = IMAGES.comparison.map((item) => ({ src: item.src, title: item.title }))
+
+  return (
+    <PageShell>
+      <div className="flex gap-8">
+        <main className="min-w-0 flex-1">
+          <div className="space-y-10">
+            <SectionWrapper id="comparison-aspects" title="K‑Means vs DBSCAN — qualitative comparison">
+              <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
+                <table className="w-full text-left text-sm">
+                  <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Aspect</th>
+                      <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">K‑Means</th>
+                      <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">DBSCAN</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      {
+                        a: 'Cluster Assignment',
+                        k: 'Every record assigned to exactly one cluster',
+                        d: 'Records in sparse areas labeled as noise (–1)',
+                        key: 'assign',
+                      },
+                      {
+                        a: 'Number of Clusters',
+                        k: 'Fixed K chosen via silhouette/elbow methods',
+                        d: 'Determined automatically by density parameters',
+                        key: 'num',
+                      },
+                      {
+                        a: 'Noise Handling',
+                        k: 'No noise concept — all records assigned',
+                        d: 'Outlier records explicitly identified as noise',
+                        key: 'noise',
+                      },
+                      {
+                        a: 'Interpretability',
+                        k: 'Cleaner profiles — easy to describe per cluster',
+                        d: 'Harder when many micro-clusters or large noise group appears',
+                        key: 'interp',
+                      },
+                      {
+                        a: 'Visualization Readability',
+                        k: 'Compact groups with visible centroids in PCA space',
+                        d: 'Irregular shapes; noise points clutter the 3D plot',
+                        key: 'viz',
+                      },
+                      {
+                        a: 'Record Coverage',
+                        k: '100% — no records excluded from analysis',
+                        d: 'Partial — noise records excluded from cluster metrics',
+                        key: 'coverage',
+                        highlight: true,
+                      },
+                    ].map((row, i) => (
+                      <tr
+                        key={row.key}
+                        className={`border-b border-slate-100 dark:border-border ${
+                          row.highlight
+                            ? 'border-l-2 border-l-blue-600 bg-blue-50 dark:bg-blue-950/25'
+                            : i % 2 === 1
+                              ? 'bg-slate-50/50 dark:bg-muted/10'
+                              : ''
+                        }`}
+                      >
+                        <td className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">{row.a}</td>
+                        <td className="px-4 py-3 text-mf-muted dark:text-muted-foreground">{row.k}</td>
+                        <td className="px-4 py-3 text-mf-muted dark:text-muted-foreground">{row.d}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="comparison-verdict" title="Model roles">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="relative rounded-xl border-2 border-mf-primary bg-white p-6 dark:border-primary dark:bg-card">
+                  <span className="inline-block rounded-full bg-mf-primary px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-white dark:bg-primary dark:text-primary-foreground">
+                    Recommended
+                  </span>
+                  <h3 className="font-heading mt-4 text-lg font-semibold text-mf-ink dark:text-foreground">
+                    K-Means: Main Model
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+                    Assigns every procurement record to a cluster, producing a cleaner structure for reporting. Easier to
+                    create tables, explain cluster sizes, and discuss procurement patterns.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-slate-300 bg-slate-50 p-6 dark:border-border dark:bg-muted/30">
+                  <span className="inline-block rounded-full border border-slate-300 bg-white px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-mf-muted dark:border-border dark:bg-card dark:text-muted-foreground">
+                    Companion
+                  </span>
+                  <h3 className="font-heading mt-4 text-lg font-semibold text-mf-ink dark:text-foreground">
+                    DBSCAN: Companion Model
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+                    Identifies records that behave like outliers in PCA space. Best used as a secondary analysis when many
+                    small clusters appear.
+                  </p>
+                </div>
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="comparison-findings" title="Key findings">
+              <div className="grid gap-6 md:grid-cols-3">
+                {[
+                  {
+                    icon: BarChart2,
+                    title: 'Distinct Procurement Groupings Found',
+                    text: 'Medicine procurement records can be grouped into distinct patterns based on timing, quantity, budget, item budget, and contract amount behavior. These groups are not visible in raw tabular data but emerge clearly in PCA space.',
+                  },
+                  {
+                    icon: Target,
+                    title: 'K-Means Provides the Clearest Results',
+                    text: 'K-Means provided the more interpretable final clustering output because it produced full record coverage and clearer cluster labels. Every procurement record is assigned, making it straightforward to profile each group and explain its characteristics.',
+                  },
+                  {
+                    icon: Search,
+                    title: 'DBSCAN Adds Outlier Detection Value',
+                    text: 'DBSCAN added value by identifying records that did not belong to dense groups. These outlier records may be useful for procurement review, but DBSCAN should not be the main model if the goal is to present a simple and understandable clustering result.',
+                  },
+                ].map(({ icon: Icon, title, text }) => (
+                  <div key={title} className="rounded-xl border border-slate-200 bg-white p-6 dark:border-border dark:bg-card">
+                    <Icon className="h-8 w-8 text-mf-primary dark:text-primary" aria-hidden />
+                    <h3 className="font-heading mt-4 font-semibold text-mf-ink dark:text-foreground">{title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </SectionWrapper>
+
+            <SectionHeader
+              title="Executive comparison dashboard"
+              subtitle="Committee‑facing synopsis of calibrated quality metrics contrasting partition vs density models."
+              icon={Sparkles}
+            />
+
+            <SectionWrapper id="comparison-summary" title="Summary metrics">
+              <div className="mx-auto max-w-5xl">
+                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-mf-muted dark:text-muted-foreground">
+                  Metrics — K‑Means vs DBSCAN (paired columns)
+                </p>
+                <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
+                  {parsed.kmeans && parsed.dbscan ? (
+                    <>
+                      <MetricCard label="Silhouette — K‑Means" value={parsed.kmeans.silhouette.toFixed(3)} />
+                      <MetricCard label="Silhouette — DBSCAN" value={parsed.dbscan.silhouette.toFixed(3)} />
+                      <MetricCard
+                        label="Davies–Bouldin — K‑Means"
+                        value={parsed.kmeans.davies_bouldin.toFixed(3)}
+                      />
+                      <MetricCard
+                        label="Davies–Bouldin — DBSCAN"
+                        value={parsed.dbscan.davies_bouldin.toFixed(3)}
+                      />
+                      <MetricCard
+                        label="Calinski–Harabasz — K‑Means"
+                        value={parsed.kmeans.calinski_harabasz.toFixed(0)}
+                      />
+                      <MetricCard
+                        label="Calinski–Harabasz — DBSCAN"
+                        value={parsed.dbscan.calinski_harabasz.toFixed(0)}
+                      />
+                      <MetricCard
+                        label="Noise share — K‑Means"
+                        value={`${(parsed.kmeans.noise_share * 100).toFixed(2)} %`}
+                      />
+                      <MetricCard label="Noise share — DBSCAN" value={`${(parsed.dbscan.noise_share * 100).toFixed(2)} %`} />
+                      <MetricCard
+                        label="Clusters (excl. noise) — K‑Means"
+                        value={parsed.kmeans.cluster_count.toString()}
+                      />
+                      <MetricCard
+                        label="Clusters (excl. noise) — DBSCAN"
+                        value={parsed.dbscan.cluster_count.toString()}
+                      />
+                    </>
+                  ) : (
+                    <p className="text-sm text-mf-muted sm:col-span-2 dark:text-muted-foreground">
+                      Waiting for `{DATA_PATHS.modelComparisonSummary}` to load…
+                    </p>
+                  )}
+                </div>
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="comparison-charts" title="Chart comparison">
+              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
+                <h3 className="text-sm font-semibold text-mf-ink dark:text-foreground">Figure MC1: Grouped metric comparison</h3>
+                <p className="mt-2 text-xs text-mf-muted dark:text-muted-foreground">
+                  Source: `/data/07/Model_Comparison/kmeans_vs_dbscan_summary.csv` (raw engineering units).
+                </p>
+                <div className="mt-6 h-[420px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={groupedBars}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="metric" tick={{ fontSize: 11 }} />
+                      <YAxis tick={{ fontSize: 11 }} />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="kmeans" fill="#1D4ED8" name="K‑Means" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="dbscan" fill="#0F766E" name="DBSCAN" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </section>
+
+              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
+                <h3 className="text-sm font-semibold text-mf-ink dark:text-foreground">
+                  Figure MC2: Normalised capability radar (within‑metric min–max)
+                </h3>
+                <div className="mt-6 h-[420px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={radarRows}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11 }} />
+                      <Tooltip formatter={(value) => (value == null ? '' : Number(value).toFixed(3))} />
+                      <Legend />
+                      <Radar name="K‑Means" dataKey="kmeans" stroke="#1D4ED8" fill="#1D4ED8" fillOpacity={0.2} />
+                      <Radar name="DBSCAN" dataKey="dbscan" stroke="#0F766E" fill="#0F766E" fillOpacity={0.15} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              </section>
+            </SectionWrapper>
+
+            <SectionWrapper id="comparison-gallery" title="Visual gallery">
+              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {IMAGES.comparison.map((img, idx) => (
+                  <ImageCard
+                    key={img.src}
+                    src={img.src}
+                    title={img.title}
+                    figure={`Figure MC‑G${idx + 1}: ${img.title}`}
+                    onClick={() => setGallery({ imgs: galleryImages, idx })}
+                  />
+                ))}
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="comparison-conclusion" title="Conclusion">
+              <div className="space-y-4 rounded-xl bg-slate-50 p-6 italic dark:bg-muted/30">
+                <p className="text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+                  MedFlow PH applies a complete unsupervised learning pipeline to medicine-related procurement data from
+                  PhilGEPS. The project begins with raw data understanding, continues through cleaning and preprocessing,
+                  reduces the feature space using PCA, applies K-Means and DBSCAN clustering, and compares the models based on
+                  both metrics and interpretability.
+                </p>
+                <p className="text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+                  The final result shows that{' '}
+                  <span className="font-semibold not-italic text-mf-primary dark:text-primary">
+                    K-Means is the stronger model
+                  </span>{' '}
+                  for the website&apos;s main clustering presentation, while DBSCAN is best used as a companion method for
+                  detecting dense regions and outlier-like procurement records. Together, both models provide a broader view
+                  of procurement behavior in Philippine public health facilities.
+                </p>
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="comparison-recommendation" title="Recommendation">
+              <div className="rounded-2xl border border-mf-primary bg-gradient-to-r from-blue-50 to-teal-50 p-8 shadow-inner dark:border-primary dark:from-card dark:to-card">
+                <p className="text-xs uppercase tracking-[0.3em] text-mf-muted dark:text-muted-foreground">Recommendation</p>
+                <h3 className="mt-3 text-2xl font-semibold text-mf-ink dark:text-foreground">
+                  Recommended model: K‑Means (K={chosenK})
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+                  {readmeConclusion ??
+                    'K‑Means is more suitable as the final interpretable clustering model. DBSCAN is retained as a supporting comparison for noise and outlier-like procurement records.'}
+                </p>
+                {readme ? (
+                  <details className="mt-4 text-xs text-mf-muted dark:text-muted-foreground">
+                    <summary className="cursor-pointer font-semibold text-mf-ink dark:text-foreground">
+                      Full methodology excerpt
+                    </summary>
+                    <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap rounded-lg bg-white/80 p-3 text-[11px] dark:bg-muted">
+                      {readme.trim()}
+                    </pre>
+                  </details>
+                ) : null}
+              </div>
+            </SectionWrapper>
+
+            <LightboxGallery
+              images={gallery.imgs}
+              index={gallery.idx}
+              open={gallery.imgs.length > 0}
+              onClose={() => setGallery({ imgs: [], idx: 0 })}
+            />
+          </div>
+        </main>
+
+        <aside className="medflow-no-print hidden w-48 shrink-0 xl:block">
+          <PageTOC sections={TOC_COMPARISON} />
+        </aside>
+      </div>
+    </PageShell>
+  )
+}

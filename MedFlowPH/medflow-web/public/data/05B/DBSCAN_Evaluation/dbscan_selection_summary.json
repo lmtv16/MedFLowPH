@@ -1,0 +1,90 @@
+{
+  "chosen_eps": 0.03,
+  "chosen_min_samples": 15,
+  "chosen_method": "fallback_min_noise_ge2",
+  "fallback_used": true,
+  "metric_space": "euclidean",
+  "subsample_rows": 8000,
+  "pc_total_rows": 487605,
+  "metrics_subsample_seed": 42,
+  "timestamp": "2026-05-08T18:56:19",
+  "best_metrics": {
+    "eps": 0.03,
+    "min_samples": 15,
+    "n_clusters_excluding_noise": 18,
+    "n_noise": 7278,
+    "noise_share": 0.90975,
+    "largest_cluster_share": 0.11772853185595568,
+    "silhouette": 0.6129705951546283,
+    "davies_bouldin": 0.44854271217321146,
+    "calinski_harabasz": 16388.613976924036,
+    "composite": -4.935286237918128,
+    "valid_candidate": false,
+    "status": "ok"
+  },
+  "grid": [
+    {
+      "eps": 0.02,
+      "min_samples": 15,
+      "n_clusters_excluding_noise": 7,
+      "n_noise": 7774,
+      "noise_share": 0.97175,
+      "largest_cluster_share": 0.22123893805309736,
+      "silhouette": 0.9065184117635481,
+      "davies_bouldin": 0.14105987808472328,
+      "calinski_harabasz": 39572.37854406138,
+      "status": "ok",
+      "composite": 0.3483960509805768,
+      "valid_candidate": false
+    },
+    {
+      "eps": 0.02,
+      "min_samples": 20,
+      "n_clusters_excluding_noise": 4,
+      "n_noise": 7853,
+      "noise_share": 0.981625,
+      "largest_cluster_share": 0.3129251700680272,
+      "silhouette": 0.9541287578442226,
+      "davies_bouldin": 0.06879863376040715,
+      "calinski_harabasz": 79724.3936378095,
+      "status": "ok",
+      "composite": 2.8546520828187103,
+      "valid_candidate": false
+    },
+    {
+      "eps": 0.03,
+      "min_samples": 15,
+      "n_clusters_excluding_noise": 18,
+      "n_noise": 7278,
+      "noise_share": 0.90975,
+      "largest_cluster_share": 0.11772853185595568,
+      "silhouette": 0.6129705951546283,
+      "davies_bouldin": 0.44854271217321146,
+      "calinski_harabasz": 16388.613976924036,
+      "status": "ok",
+      "composite": -4.935286237918128,
+      "valid_candidate": false
+    },
+    {
+      "eps": 0.03,
+      "min_samples": 20,
+      "n_clusters_excluding_noise": 10,
+      "n_noise": 7575,
+      "noise_share": 0.946875,
+      "largest_cluster_share": 0.17647058823529413,
+      "silhouette": 0.8168361566713089,
+      "davies_bouldin": 0.24758061770020517,
+      "calinski_harabasz": 24445.085082296133,
+      "status": "ok",
+      "composite": -1.6777618958811638,
+      "valid_candidate": false
+    }
+  ],
+  "paths": {
+    "dbscan_metrics_grid_csv": "C:\\Users\\loper\\Desktop\\version_6\\MedFlowPH\\output_source\\05B\\DBSCAN_Evaluation\\dbscan_metrics_grid.csv",
+    "dbscan_selection_summary_json": "C:\\Users\\loper\\Desktop\\version_6\\MedFlowPH\\output_source\\05B\\DBSCAN_Evaluation\\dbscan_selection_summary.json",
+    "evaluation_plots_dir": "C:\\Users\\loper\\Desktop\\version_6\\MedFlowPH\\results\\05B\\DBSCAN_Evaluation",
+    "eda_dir": "C:\\Users\\loper\\Desktop\\version_6\\MedFlowPH\\results\\05B\\EDA",
+    "logs_dir": "C:\\Users\\loper\\Desktop\\version_6\\MedFlowPH\\logs\\05B"
+  }
+}

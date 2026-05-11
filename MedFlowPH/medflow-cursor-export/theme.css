@@ -1,0 +1,117 @@
+/*
+  theme.css — MedFlow PH color palette + typography
+  ─────────────────────────────────────────────────
+  HOW TO USE:
+  1. Paste the @import line as the VERY FIRST LINE of your index.css
+     (it must come before @import "tailwindcss" or any other imports)
+  2. Merge the :root, .dark, and @layer base blocks into your existing index.css
+  3. If you already have a :root block, replace or merge the variables listed below
+
+  ⚠️  Do NOT place @import url(...) after any other CSS — PostCSS will silently ignore it.
+*/
+
+/* ── Step 1: paste this as line 1 of index.css ─────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+
+/* ── Step 2: merge into your :root block ────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --background: 220 20% 98%;
+  --foreground: 220 30% 12%;
+
+  /* Borders & inputs */
+  --border:  220 15% 88%;
+  --input:   220 15% 88%;
+  --ring:    210 80% 42%;
+
+  /* Cards */
+  --card:            220 20% 100%;
+  --card-foreground: 220 30% 12%;
+  --card-border:     220 15% 90%;
+
+  /* Popovers */
+  --popover:            220 20% 100%;
+  --popover-foreground: 220 30% 12%;
+  --popover-border:     220 15% 90%;
+
+  /* Primary — deep blue */
+  --primary:            210 80% 42%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary — teal */
+  --secondary:            175 60% 38%;
+  --secondary-foreground: 0 0% 100%;
+
+  /* Muted */
+  --muted:            220 15% 92%;
+  --muted-foreground: 220 20% 40%;
+
+  /* Accent — sky blue */
+  --accent:            195 70% 45%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Destructive */
+  --destructive:            0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Border radius */
+  --radius: 0.5rem;
+}
+
+/* ── Step 3: merge into your .dark block ────────────────────────────────────── */
+.dark {
+  --background: 220 30% 10%;
+  --foreground: 220 20% 98%;
+
+  --border: 220 20% 20%;
+  --input:  220 20% 20%;
+  --ring:   210 80% 60%;
+
+  --card:            220 30% 14%;
+  --card-foreground: 220 20% 98%;
+  --card-border:     220 20% 22%;
+
+  --popover:            220 30% 14%;
+  --popover-foreground: 220 20% 98%;
+  --popover-border:     220 20% 22%;
+
+  --primary:            210 80% 60%;
+  --primary-foreground: 220 30% 10%;
+
+  --secondary:            175 60% 45%;
+  --secondary-foreground: 220 30% 10%;
+
+  --muted:            220 20% 18%;
+  --muted-foreground: 220 15% 70%;
+
+  --accent:            195 70% 55%;
+  --accent-foreground: 220 30% 10%;
+
+  --destructive:            0 62% 30%;
+  --destructive-foreground: 220 20% 98%;
+}
+
+/* ── Step 4: merge into your @layer base block ──────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;           /* prevents cluttered body text */
+  }
+
+  /* All headings use Plus Jakarta Sans */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Constrain text containers to a comfortable reading width */
+  .text-container {
+    max-width: 850px;
+  }
+}
