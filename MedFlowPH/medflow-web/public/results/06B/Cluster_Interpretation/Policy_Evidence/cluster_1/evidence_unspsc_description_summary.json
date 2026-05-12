@@ -1,0 +1,15 @@
+{
+  "cluster_id": 1,
+  "evidence_group": "shortage_risk",
+  "logical_column": "UNSPSC Description",
+  "column_name": "UNSPSC Description",
+  "resolved_column": "UNSPSC Description",
+  "numeric": false,
+  "top_value": "Medical Equipment and Accessories and Supplies",
+  "top_count": 66397,
+  "cluster_rows": 165632,
+  "top_share_within_cluster": 0.40087060471406494,
+  "global_count_of_top_value": 254804,
+  "global_share_of_top_value": 0.5225623199105833,
+  "lift_vs_global": 0.76712497139606
+}

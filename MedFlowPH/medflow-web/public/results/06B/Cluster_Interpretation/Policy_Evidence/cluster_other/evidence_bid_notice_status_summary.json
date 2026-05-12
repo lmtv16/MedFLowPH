@@ -1,0 +1,15 @@
+{
+  "cluster_id": -2,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Bid Notice Status",
+  "column_name": "Bid Notice Status",
+  "resolved_column": "Bid Notice Status",
+  "numeric": false,
+  "top_value": "Awarded",
+  "top_count": 21122,
+  "cluster_rows": 37669,
+  "top_share_within_cluster": 0.5607263266877273,
+  "global_count_of_top_value": 302113,
+  "global_share_of_top_value": 0.619585525168938,
+  "lift_vs_global": 0.9050023022000684
+}

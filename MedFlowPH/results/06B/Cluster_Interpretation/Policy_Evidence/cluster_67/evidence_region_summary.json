@@ -1,0 +1,15 @@
+{
+  "cluster_id": 67,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Region",
+  "column_name": "Region",
+  "resolved_column": "Region",
+  "numeric": false,
+  "top_value": "Region XII",
+  "top_count": 716,
+  "cluster_rows": 2125,
+  "top_share_within_cluster": 0.33694117647058824,
+  "global_count_of_top_value": 8445,
+  "global_share_of_top_value": 0.01731934660227028,
+  "lift_vs_global": 19.454612475185456
+}

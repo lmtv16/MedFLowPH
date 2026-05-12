@@ -1,0 +1,15 @@
+{
+  "cluster_id": 4,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Business Category",
+  "column_name": "Business Category",
+  "resolved_column": "Business Category",
+  "numeric": false,
+  "top_value": "Drugs and Medicines",
+  "top_count": 25626,
+  "cluster_rows": 48437,
+  "top_share_within_cluster": 0.5290583644734397,
+  "global_count_of_top_value": 128546,
+  "global_share_of_top_value": 0.2636273212949006,
+  "lift_vs_global": 2.0068419383650333
+}

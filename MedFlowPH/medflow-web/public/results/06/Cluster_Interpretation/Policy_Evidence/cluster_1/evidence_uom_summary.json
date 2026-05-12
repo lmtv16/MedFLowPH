@@ -1,0 +1,15 @@
+{
+  "cluster_id": 1,
+  "evidence_group": "inventory_posture",
+  "logical_column": "UOM",
+  "column_name": "UOM",
+  "resolved_column": "UOM",
+  "numeric": false,
+  "top_value": "Piece",
+  "top_count": 15796,
+  "cluster_rows": 59396,
+  "top_share_within_cluster": 0.26594383460165666,
+  "global_count_of_top_value": 84967,
+  "global_share_of_top_value": 0.1742537504742568,
+  "lift_vs_global": 1.5261871487864795
+}

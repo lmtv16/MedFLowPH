@@ -1,0 +1,15 @@
+{
+  "cluster_id": 1,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Province",
+  "column_name": "Province",
+  "resolved_column": "Province",
+  "numeric": false,
+  "top_value": "Metro Manila",
+  "top_count": 11858,
+  "cluster_rows": 59396,
+  "top_share_within_cluster": 0.19964307360765035,
+  "global_count_of_top_value": 122873,
+  "global_share_of_top_value": 0.2519929040924519,
+  "lift_vs_global": 0.7922567277307329
+}
