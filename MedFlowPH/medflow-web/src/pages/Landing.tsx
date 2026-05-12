@@ -128,9 +128,12 @@ export function Landing() {
                 <h1 className="font-heading mt-4 text-4xl font-bold text-mf-ink dark:text-foreground md:text-5xl">
                   MedFlow <span className="text-mf-primary dark:text-primary">PH</span>
                 </h1>
-                <p className="mt-4 max-w-3xl text-lg font-medium text-mf-ink dark:text-foreground">
-                  Unsupervised Clustering Analysis of Medicine Procurement and Distribution Data in Philippine Public
-                  Health Facilities.
+                <p className="mt-4 max-w-3xl text-lg font-medium leading-snug tracking-wide text-mf-ink dark:text-foreground">
+                  MEDFLOW PH: AN UNSUPERVISED CLUSTERING ANALYSIS OF
+                  <br />
+                  MEDICAL - RELATED PROCUREMENT AND DISTRIBUTION DATA IN
+                  <br />
+                  PHILIPPINE PUBLIC HEALTH FACILITIES
                 </p>
                 <p className="mt-4 max-w-3xl text-base text-mf-muted dark:text-muted-foreground">
                   An exploratory study applying PCA, K-Means, and DBSCAN to 6 years of PhilGEPS public procurement records,
