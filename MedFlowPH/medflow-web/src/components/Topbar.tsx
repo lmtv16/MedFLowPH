@@ -81,12 +81,17 @@ function NavPageDropdown({
 
   const navLinkLabel = compact && compactLabel ? compactLabel : label
 
-  function goToSection(sectionId: string) {
+  function goToSection(s: PageTOCSection) {
     onOpenChange(false)
+    if (s.linkTo) {
+      const [pathname, h] = s.linkTo.split('#')
+      navigate({ pathname: pathname || '/', hash: h ? `#${h}` : undefined })
+      return
+    }
     if (location.pathname === path) {
-      scrollToId(sectionId)
+      scrollToId(s.id)
     } else {
-      navigate({ pathname: path, hash: `#${sectionId}` })
+      navigate({ pathname: path, hash: `#${s.id}` })
     }
   }
 
@@ -152,7 +157,7 @@ function NavPageDropdown({
                 key={s.id}
                 type="button"
                 role="menuitem"
-                onClick={() => goToSection(s.id)}
+                onClick={() => goToSection(s)}
                 className="flex w-full px-3 py-2 text-left text-sm text-mf-ink hover:bg-slate-50 dark:text-foreground dark:hover:bg-muted"
               >
                 {s.label}

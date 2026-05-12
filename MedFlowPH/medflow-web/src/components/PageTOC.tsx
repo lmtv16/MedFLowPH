@@ -1,10 +1,12 @@
 import { FlaskConical } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export type PageTOCSection = {
   id: string
   label: string
+  /** If set, navigates to this path (and optional `#hash`) instead of scrolling to `id` on the current page. */
+  linkTo?: string
 }
 
 type PageTOCProps = {
@@ -57,6 +59,11 @@ export const TOC_CLUSTERING_NAV: PageTOCSection[] = [
   { id: 'clustering-pca', label: 'Principal component analysis' },
   { id: 'clustering-kmeans', label: 'K‑Means clustering' },
   { id: 'clustering-dbscan', label: 'DBSCAN clustering' },
+  {
+    id: 'interpretation-dbscan-insights',
+    label: 'DBSCAN Cluster Insights',
+    linkTo: '/interpretation#interpretation-dbscan-insights',
+  },
   { id: 'clustering-approach-comparison', label: 'Approach comparison' },
 ]
 
@@ -69,8 +76,10 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
   { id: 'interpretation-pca-3d', label: '3D PCA (pre‑clustering)' },
   { id: 'interpretation-kmeans-3d', label: '3D K‑Means PCA' },
   { id: 'interpretation-dbscan-3d', label: '3D DBSCAN PCA' },
-  { id: 'interpretation-labels', label: 'Cluster insights' },
-  { id: 'interpretation-cluster-summary', label: 'Summary & Conclusion' },
+  { id: 'interpretation-labels', label: 'K-Means cluster insights' },
+  { id: 'interpretation-cluster-summary', label: 'K-Means summary & conclusion' },
+  { id: 'interpretation-dbscan-insights', label: 'DBSCAN cluster insights' },
+  { id: 'interpretation-dbscan-summary-conclusion', label: 'DBSCAN summary & conclusion' },
   { id: 'interpretation-policy', label: 'Evidences' },
 ]
 
@@ -92,6 +101,7 @@ const routeLinks = [
 ]
 
 export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
+  const navigate = useNavigate()
   const [active, setActive] = useState(sections[0]?.id ?? '')
 
   useEffect(() => {
@@ -99,7 +109,8 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
 
     const observers: IntersectionObserver[] = []
 
-    sections.forEach(({ id }) => {
+    sections.forEach(({ id, linkTo }) => {
+      if (linkTo) return
       const el = document.getElementById(id)
       if (!el) return
       const obs = new IntersectionObserver(
@@ -115,8 +126,13 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
     return () => observers.forEach((o) => o.disconnect())
   }, [sections])
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const goToSection = (s: PageTOCSection) => {
+    if (s.linkTo) {
+      const [pathname, h] = s.linkTo.split('#')
+      navigate({ pathname: pathname || '/', hash: h ? `#${h}` : undefined })
+      return
+    }
+    document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   if (sections.length === 0) return null
@@ -140,7 +156,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
         <button
           key={s.id}
           type="button"
-          onClick={() => scrollTo(s.id)}
+          onClick={() => goToSection(s)}
           className={`rounded-lg px-3 py-1.5 text-left text-xs transition-all duration-200 ${
             active === s.id
               ? 'border-l-2 border-primary bg-primary/10 pl-2.5 font-semibold text-primary'

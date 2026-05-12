@@ -3,6 +3,7 @@ import { AlertTriangle, BarChart3 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { PageTOC, TOC_EDA } from '../components/PageTOC'
 import { SectionHeader } from '../components/SectionHeader'
+import { FigureCarousel } from '../components/FigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import { IframePanel } from '../components/IframePanel'
 import type { GalleryImage } from '../components/LightboxGallery'
@@ -30,14 +31,6 @@ const ROWS_BY_YEAR = '/results/01/Exploratory Data Analysis/merged/06_rows_by_ye
 const RAW_VS_CLEANED = '/results/01/Exploratory Data Analysis/merged/07_raw_vs_cleaned_rows_by_year_grouped.png'
 const STACKED = '/results/01/Exploratory Data Analysis/merged/08_raw_vs_cleaned_stacked_by_year.png'
 
-// Preprocessing
-const NUMERIC_CORR_02 = '/results/02/Feature Selection/04_numeric_correlation.png'
-const TOPK_GRID = '/results/02/Feature Selection/07_topk_grid.png'
-const POST_SCALE = '/results/02/Min-Max Scaling/03_post_scale_summary.png'
-const POST_SCALE_CORR = '/results/02/Min-Max Scaling/04_post_scale_correlation.png'
-const DUMMY_COUNT = '/results/02/One-Hot Encoding/01_dummy_count_per_source.png'
-const TOP_DUMMIES = '/results/02/One-Hot Encoding/04_top_dummies_by_rate.png'
-
 // PCA
 const PCA_LOADINGS = '/results/03/Clustering/pca_loadings_pc123.png'
 const PCA_VARIANCE = '/results/03/Clustering/cumulative_variance_pca.png'
@@ -53,29 +46,6 @@ const KMEANS_INTERACTIVE = '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_in
 const DBSCAN_NUMERIC = '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_numeric.png'
 const DBSCAN_INTERACTIVE = '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_interactive.html'
 const DBSCAN_LEGEND = '/results/04B/PCA_Cluster/dbscan_semantic_legend_table.txt'
-
-// K-Means Evaluation
-const METRIC_RANK = '/results/05/EDA/metric_rank_heatmap.png'
-const SILHOUETTE_K = '/results/05/KSelection/silhouette_vs_k.png'
-const DB_K = '/results/05/KSelection/davies_bouldin_vs_k.png'
-const CH_K = '/results/05/KSelection/calinski_harabasz_vs_k.png'
-const COMPOSITE_K = '/results/05/KSelection/composite_vs_k.png'
-const COMBINED_K = '/results/05/KSelection/combined_silhouette_db_ch_composite_vs_k.png'
-
-// DBSCAN Evaluation
-const DBSCAN_METRIC_RANK = '/results/05B/EDA/metric_rank_heatmap.png'
-const DBSCAN_SIZES = '/results/05B/EDA/dbscan_cluster_sizes_best_params.png'
-const DBSCAN_NOISE_HM = '/results/05B/DBSCAN_Evaluation/dbscan_noise_share_heatmap.png'
-const DBSCAN_SIL_HM = '/results/05B/DBSCAN_Evaluation/dbscan_silhouette_heatmap.png'
-const DBSCAN_DB_HM = '/results/05B/DBSCAN_Evaluation/dbscan_davies_bouldin_heatmap.png'
-const DBSCAN_N_HM = '/results/05B/DBSCAN_Evaluation/dbscan_n_clusters_heatmap.png'
-const DBSCAN_COMP_HM = '/results/05B/DBSCAN_Evaluation/dbscan_composite_heatmap.png'
-
-// Interpretation
-const CLUSTER_SIZE_BAR = '/results/06/Cluster_Interpretation/EDA/cluster_size_bar.png'
-const BASE_MEANS = '/results/06/Cluster_Interpretation/EDA/base_means_heatmap.png'
-const THEME_MEANS = '/results/06/Cluster_Interpretation/EDA/theme_means_heatmap.png'
-const THEME_Z = '/results/06/Cluster_Interpretation/EDA/theme_z_heatmap.png'
 
 // Comparison
 const COMPARISON_CLUSTER_COUNT = '/results/07/Model_Comparison/kmeans_vs_dbscan_cluster_count.png'
@@ -122,6 +92,11 @@ function useFetchedText(url: string) {
 
 export function EDA() {
   const [quarterKey, setQuarterKey] = useState<string | null>(null)
+  const [mergedSlideIdx, setMergedSlideIdx] = useState(0)
+  const [kmeansEvalSlideIdx, setKmeansEvalSlideIdx] = useState(0)
+  const [dbscanEvalSlideIdx, setDbscanEvalSlideIdx] = useState(0)
+  const [kmeansInterpSlideIdx, setKmeansInterpSlideIdx] = useState(0)
+  const [preprocessingSlideIdx, setPreprocessingSlideIdx] = useState(0)
   const [gallery, setGallery] = useState<{ images: GalleryImage[]; idx: number }>({
     images: [],
     idx: 0,
@@ -136,6 +111,18 @@ export function EDA() {
   )
 
   const merged = IMAGES.eda.merged
+  const kmeansEvalSlides = IMAGES.eda.kmeansEvaluationCarousel
+  const dbscanEvalSlides = IMAGES.eda.dbscanEvaluationCarousel
+  const kmeansInterpSlides = IMAGES.eda.kmeansInterpretationCarousel
+  const preprocessingSlides = IMAGES.eda.preprocessingCarousel
+
+  useEffect(() => {
+    setMergedSlideIdx(0)
+  }, [quarterKey])
+
+  useEffect(() => {
+    setMergedSlideIdx((i) => Math.max(0, Math.min(merged.length - 1, i)))
+  }, [merged.length])
 
   function openMerged(i: number) {
     const images = merged.map((item) => ({ src: item.src, title: item.title }))
@@ -150,6 +137,26 @@ export function EDA() {
   function openQuarterlyMerged(i: number) {
     const base = [...quarterlyImages, ...merged]
     const images = base.map((item) => ({ src: item.src, title: item.title }))
+    setGallery({ images, idx: i })
+  }
+
+  function openKmeansEval(i: number) {
+    const images = kmeansEvalSlides.map((item) => ({ src: item.src, title: item.title }))
+    setGallery({ images, idx: i })
+  }
+
+  function openDbscanEval(i: number) {
+    const images = dbscanEvalSlides.map((item) => ({ src: item.src, title: item.title }))
+    setGallery({ images, idx: i })
+  }
+
+  function openKmeansInterp(i: number) {
+    const images = kmeansInterpSlides.map((item) => ({ src: item.src, title: item.title }))
+    setGallery({ images, idx: i })
+  }
+
+  function openPreprocessing(i: number) {
+    const images = preprocessingSlides.map((item) => ({ src: item.src, title: item.title }))
     setGallery({ images, idx: i })
   }
 
@@ -250,32 +257,53 @@ export function EDA() {
                 <ImageCard
                   src={NUMERIC_CORR}
                   title="Numeric feature correlation"
-                  caption="Pairwise Spearman-style overview for continuous procurement signals."
+                  caption={`This heatmap shows how the cleaned numeric fields relate to each other. The strongest relationship is between Item Budget and Contract Amount with a correlation of 0.91, meaning higher planned item budgets usually correspond to higher awarded contract amounts.
+
+Most other numeric fields have weak relationships, so additional feature engineering, scaling, and PCA were needed before clustering.`}
                 />
                 <ImageCard
                   src={CAT_CORR}
                   title="Categorical association heatmap"
-                  caption="Cramér's V highlights dependencies among high-cardinality procurement categories."
+                  caption={`This heatmap shows how selected categorical fields are related using Cramér's V. The strongest relationship is between organization type and grouped organization type, which is expected because they describe similar information.
+
+Most other categorical fields show weak to moderate association, meaning they provide different procurement context. This helped guide which categorical variables could be encoded during preprocessing.`}
                 />
                 <ImageCard
                   src={DTYPE_COUNTS}
                   title="dtype counts"
-                  caption="Confirms the balance of numeric, categorical, and ID-like columns entering preprocessing."
+                  caption={`Most columns in the cleaned PhilGEPS dataset are text or categorical fields. This is expected because procurement records include descriptions, locations, agencies, statuses, and supplier details.
+
+Since clustering requires numeric inputs, the next step converts selected categorical, date, and numeric fields into machine-learning-ready features.`}
                 />
                 <ImageCard
                   src={ROWS_BY_YEAR}
                   title="Rows by year (cleaned medical slice)"
-                  caption="Shows temporal density after medical filtering."
+                  caption={`This chart shows how many cleaned medical procurement records were available per year. The highest counts appear in 2023 and 2024, while 2020 and 2021 have fewer records.
+
+The lower count in 2025 should be interpreted carefully because the available 2025 data may not cover the full year.`}
                 />
                 <ImageCard
                   src={RAW_VS_CLEANED}
                   title="Raw vs cleaned rows by year"
-                  caption="Grouped bars quantify how aggressive filtering reshapes each fiscal year."
+                  caption={
+                    <>
+                      This chart compares all loaded PhilGEPS records with the final cleaned medical procurement records.
+                      The cleaned dataset is smaller because the process filtered out non-medical procurement records.
+                      {'\n\n'}
+                      After Step 01, the dataset was reduced to{' '}
+                      <strong className="font-bold text-slate-700 dark:text-foreground">
+                        487,605 medical-related records
+                      </strong>
+                      , making it focused and ready for preprocessing and clustering.
+                    </>
+                  }
                 />
                 <ImageCard
                   src={STACKED}
                   title="Stacked raw vs cleaned composition"
-                  caption="Stacked view emphasizes proportional retention rather than absolute totals alone."
+                  caption={`This chart shows how the raw PhilGEPS records were reduced into the final cleaned medical dataset. The blue section shows records kept for analysis, while the gray section shows records removed because they were non-medical, duplicated, or not included in the final output.
+
+The final dataset is smaller, but more focused on medical procurement records needed for clustering.`}
                 />
               </div>
               <p className="mt-6 text-sm leading-relaxed text-slate-500 dark:text-muted-foreground">
@@ -290,16 +318,22 @@ export function EDA() {
                 Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding
                 captured categorical structure without collapsing rare procurement modes.
               </p>
+              <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
+                Slides follow the §02 pipeline: feature selection, then min–max scaling diagnostics, then one-hot encoding
+                summaries. Open the lightbox from any slide; edit copy under{' '}
+                <span className="font-mono text-xs">IMAGES.eda.preprocessingCarousel</span>.
+              </p>
+              <FigureCarousel
+                items={preprocessingSlides}
+                activeIndex={preprocessingSlideIdx}
+                onActiveIndexChange={setPreprocessingSlideIdx}
+                getFigureLabel={(idx, item) => `Figure PP-DU${idx + 1}: ${item.title}`}
+                onSlideImageClick={openPreprocessing}
+                ariaPrevLabel="Previous preprocessing figure"
+                ariaNextLabel="Next preprocessing figure"
+              />
 
-              <h3 className="mb-3 font-heading text-lg font-semibold text-mf-ink dark:text-foreground">
-                Feature selection
-              </h3>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={NUMERIC_CORR_02} title="Numeric correlation (step 02)" />
-                <ImageCard src={TOPK_GRID} title="Top‑K feature grid" />
-              </div>
-
-              <div className="mb-10 rounded-r-xl border-l-4 border-amber-400 bg-amber-50 p-5 dark:border-amber-500 dark:bg-amber-950/40">
+              <div className="mt-10 rounded-r-xl border-l-4 border-amber-400 bg-amber-50 p-5 dark:border-amber-500 dark:bg-amber-950/40">
                 <div className="flex gap-3">
                   <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
                   <div>
@@ -335,22 +369,6 @@ export function EDA() {
                     </p>
                   </div>
                 </div>
-              </div>
-
-              <h3 className="mb-3 font-heading text-lg font-semibold text-mf-ink dark:text-foreground">
-                Min‑Max scaling
-              </h3>
-              <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={POST_SCALE} title="Post‑scaling summary" />
-                <ImageCard src={POST_SCALE_CORR} title="Post‑scaling correlation" />
-              </div>
-
-              <h3 className="mb-3 font-heading text-lg font-semibold text-mf-ink dark:text-foreground">
-                One‑hot encoding
-              </h3>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={DUMMY_COUNT} title="Dummy column counts by source" />
-                <ImageCard src={TOP_DUMMIES} title="Top dummy levels by prevalence" />
               </div>
             </SectionWrapper>
 
@@ -475,16 +493,19 @@ export function EDA() {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <ImageCard src={METRIC_RANK} title="Metric rank heatmap (k-means search)" />
-              </div>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={SILHOUETTE_K} title="Silhouette vs k" />
-                <ImageCard src={DB_K} title="Davies–Bouldin vs k" />
-                <ImageCard src={CH_K} title="Calinski–Harabasz vs k" />
-                <ImageCard src={COMPOSITE_K} title="Composite score vs k" />
-              </div>
-              <ImageCard src={COMBINED_K} title="Combined silhouette, DB, CH, and composite vs k" />
+              <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
+                Step through k-selection diagnostics one at a time. Click a figure to open the full gallery; replace
+                placeholders in the manifest with your own interpretations.
+              </p>
+              <FigureCarousel
+                items={kmeansEvalSlides}
+                activeIndex={kmeansEvalSlideIdx}
+                onActiveIndexChange={setKmeansEvalSlideIdx}
+                getFigureLabel={(idx, item) => `Figure KM-DU${idx + 1}: ${item.title}`}
+                onSlideImageClick={openKmeansEval}
+                ariaPrevLabel="Previous K-means evaluation figure"
+                ariaNextLabel="Next K-means evaluation figure"
+              />
             </SectionWrapper>
 
             <SectionWrapper id="du-eval-dbscan" title="05B - Evaluating DBSCAN">
@@ -492,17 +513,19 @@ export function EDA() {
                 DBSCAN grids explore stability of noise share, silhouette substitutes, and composite rankings across
                 epsilon/minPts combinations.
               </p>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={DBSCAN_METRIC_RANK} title="DBSCAN metric rank heatmap" />
-                <ImageCard src={DBSCAN_SIZES} title="Cluster sizes at best parameters" />
-              </div>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={DBSCAN_NOISE_HM} title="Noise share heatmap" />
-                <ImageCard src={DBSCAN_SIL_HM} title="Silhouette heatmap" />
-                <ImageCard src={DBSCAN_DB_HM} title="Davies–Bouldin heatmap" />
-                <ImageCard src={DBSCAN_N_HM} title="Cluster-count heatmap" />
-              </div>
-              <ImageCard src={DBSCAN_COMP_HM} title="Composite DBSCAN heatmap" />
+              <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
+                Step through DBSCAN evaluation heatmaps one at a time. Click a figure for the gallery view; replace
+                placeholders on each entry in <span className="font-mono text-xs">IMAGES.eda.dbscanEvaluationCarousel</span>.
+              </p>
+              <FigureCarousel
+                items={dbscanEvalSlides}
+                activeIndex={dbscanEvalSlideIdx}
+                onActiveIndexChange={setDbscanEvalSlideIdx}
+                getFigureLabel={(idx, item) => `Figure DB-DU${idx + 1}: ${item.title}`}
+                onSlideImageClick={openDbscanEval}
+                ariaPrevLabel="Previous DBSCAN evaluation figure"
+                ariaNextLabel="Next DBSCAN evaluation figure"
+              />
             </SectionWrapper>
 
             <SectionWrapper id="du-interp-kmeans" title="06A - K-Means Cluster Interpretation Preview">
@@ -511,14 +534,20 @@ export function EDA() {
                   The semantic labels are explanation guides only. They were not used to form the clusters.
                 </p>
               </div>
-              <div className="mb-6">
-                <ImageCard src={CLUSTER_SIZE_BAR} title="Cluster size distribution" />
-              </div>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={BASE_MEANS} title="Base feature means by cluster" />
-                <ImageCard src={THEME_MEANS} title="Theme score means by cluster" />
-              </div>
-              <ImageCard src={THEME_Z} title="Theme z-scores by cluster" />
+              <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
+                Preview how K-means segments compare on sizes, base features, and policy-theme proxies. Click a figure for
+                the gallery; edit text on each slide in{' '}
+                <span className="font-mono text-xs">IMAGES.eda.kmeansInterpretationCarousel</span>.
+              </p>
+              <FigureCarousel
+                items={kmeansInterpSlides}
+                activeIndex={kmeansInterpSlideIdx}
+                onActiveIndexChange={setKmeansInterpSlideIdx}
+                getFigureLabel={(idx, item) => `Figure KM-Interp-DU${idx + 1}: ${item.title}`}
+                onSlideImageClick={openKmeansInterp}
+                ariaPrevLabel="Previous K-means interpretation figure"
+                ariaNextLabel="Next K-means interpretation figure"
+              />
             </SectionWrapper>
 
             <SectionWrapper id="du-interp-dbscan" title="06B - DBSCAN Interpretation Preview">
@@ -595,25 +624,20 @@ export function EDA() {
 
               <SectionWrapper id="eda-merged" title="Merged charts">
                 <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
-                  Consolidated figures (merged board) aggregate every quarter in the PhilGEPS medical slice.
+                  Consolidated figures (merged board) aggregate every quarter in the PhilGEPS medical slice. Use the
+                  carousel to focus one figure at a time; open the lightbox for a larger view.
                 </p>
-                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {merged.map((item, idx) => {
-                    const figNo = idx + figureOffset + 1
-                    return (
-                      <ImageCard
-                        key={item.src}
-                        src={item.src}
-                        title={item.title}
-                        onClick={
-                          quarterKey ? () => openQuarterlyMerged(figureOffset + idx) : () => openMerged(idx)
-                        }
-                        caption={filenameToTitle(item.src.split('/').pop() ?? '')}
-                        figure={`Figure ${figNo}: ${item.title}`}
-                      />
-                    )
-                  })}
-                </div>
+                <FigureCarousel
+                  items={merged}
+                  activeIndex={mergedSlideIdx}
+                  onActiveIndexChange={setMergedSlideIdx}
+                  getFigureLabel={(idx, item) => `Figure ${idx + figureOffset + 1}: ${item.title}`}
+                  onSlideImageClick={(idx) =>
+                    quarterKey ? openQuarterlyMerged(figureOffset + idx) : openMerged(idx)
+                  }
+                  ariaPrevLabel="Previous merged figure"
+                  ariaNextLabel="Next merged figure"
+                />
               </SectionWrapper>
 
               <SectionWrapper id="eda-quarter" title="By quarter">

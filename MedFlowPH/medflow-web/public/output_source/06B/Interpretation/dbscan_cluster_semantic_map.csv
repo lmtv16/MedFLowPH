@@ -1,5 +1,7 @@
 cluster_id,cluster_label,rationale_short
-0,"Moderate understocking segment · mean PC=(0.42,-1.01,-0.61)",Strongest theme deviations vs cohort (z): equal_supply_regions=0.46; unequal_supply_regions=-0.46; normal_inventory=0.43; high_risk_shortage=-0.42; low_risk_shortage=0.42
+0,"NCR-Centered Medium-to-High Value Medical Procurement Segment","DBSCAN Cluster 0 represents a small but clearly concentrated group of medical-related procurement records. The cluster is strongly linked to Dr. Jose Rizal Memorial Hospital, with procurement activity concentrated in NCR, Metro Manila, and Luzon. The records are mostly related to medical supplies, laboratory instruments, medical equipment, and pharmaceutical products.
+
+The cluster shows mostly high quantity, medium to high contract amount, and medium to high item budget. This suggests that the cluster contains procurement records that are not extremely broad in size, but still represent meaningful medical-related purchases. The procurement mode includes Public Bidding, Emergency Procurement, and Small Value Procurement, while the bid notice status is mostly Closed and Awarded."
 1,"Severe surplus / extreme overstocking segment · mean PC=(1.16,0.64,-0.22)",Strongest theme deviations vs cohort (z): overstocking=1.97; understocking=-1.97; normal_inventory=-1.93; high_risk_shortage=-1.19; low_risk_shortage=1.19
 2,"Severe surplus / extreme overstocking segment · mean PC=(1.23,0.68,-0.20)",Strongest theme deviations vs cohort (z): normal_inventory=-2.05; understocking=-2.05; overstocking=2.05; high_risk_shortage=-1.27; low_risk_shortage=1.27
 3,"Severe surplus / extreme overstocking segment · mean PC=(0.82,0.43,-0.32)",Strongest theme deviations vs cohort (z): overstocking=1.72; understocking=-1.72; normal_inventory=-1.51; high_risk_shortage=-1.13; low_risk_shortage=1.13
@@ -24,9 +26,19 @@ cluster_id,cluster_label,rationale_short
 22,"Strong understocking / lean-stock segment · mean PC=(-0.46,-1.44,-0.75)",Strongest theme deviations vs cohort (z): understocking=1.28; overstocking=-1.28; high_risk_shortage=-1.18; low_risk_shortage=1.18; normal_inventory=-0.80
 23,"High shortage-risk segment · mean PC=(-0.53,-1.14,-0.80)",Strongest theme deviations vs cohort (z): high_risk_shortage=0.71; low_risk_shortage=-0.71; normal_inventory=0.65; unequal_supply_regions=0.55; equal_supply_regions=-0.55
 24,"Strong understocking / lean-stock segment · mean PC=(-0.59,-1.07,-0.68)",Strongest theme deviations vs cohort (z): low_risk_shortage=0.95; high_risk_shortage=-0.95; understocking=0.74; overstocking=-0.74; unequal_supply_regions=-0.15
-25,"Mixed procurement profile segment · mean PC=(0.74,-1.00,-0.37)",Strongest theme deviations vs cohort (z): low_risk_shortage=0.62; high_risk_shortage=-0.62; normal_inventory=0.52; overstocking=-0.23; understocking=0.23
-26,"High shortage-risk segment · mean PC=(-0.91,-1.66,5.03)",Strongest theme deviations vs cohort (z): equal_supply_regions=2.71; unequal_supply_regions=-2.71; high_risk_shortage=1.09; low_risk_shortage=-1.09; understocking=0.56
-27,"Strong understocking / lean-stock segment · mean PC=(-1.65,-0.58,-0.09)",Strongest theme deviations vs cohort (z): normal_inventory=-2.30; understocking=2.15; overstocking=-2.15; high_risk_shortage=-0.29; low_risk_shortage=0.29
+25,"Emergency High-Quantity Medical Procurement Segment","DBSCAN Cluster 25 is strongly associated with Negotiated Procurement – Emergency Cases. It also shows high quantity, high item budget, medium contract amount, and mostly low award decision and award publishing lag. This means many records in this cluster appear to be emergency-related procurement activities that were processed relatively quickly after award decision and publication.
+
+The cluster is concentrated in Luzon, NCR, and Metro Manila, with medical supplies, drugs, medicines, and laboratory-related supplies appearing as dominant categories. The year pattern shows strong activity in 2020, which may reflect emergency or urgent procurement behavior during a period of high public health demand."
+26,"High-Value Emergency Medical Supply Segment","DBSCAN Cluster 26 represents a dense group of procurement records with very high quantity, very high contract amount, and very high item budget. The dominant procurement mode is Negotiated Procurement – Emergency Cases, while the bid notice status is mostly Awarded.
+
+This cluster also shows mostly low award decision lag and low award publish lag, meaning the decision and publication stages appear relatively fast. However, time-to-close is very high, suggesting that even though awards may have been decided quickly, the overall procurement process still took longer to close.
+
+The cluster is strongly related to medical supplies, drugs and medicines, diagnostic items, and laboratory-related supplies, with activity concentrated in Luzon, NCR, and Metro Manila."
+27,"Active Public Bidding Medical Supply Segment","DBSCAN Cluster 27 appears to represent medical-related procurement records that are still strongly associated with Active bid notice status. The procurement mode is mostly Public Bidding, and the cluster is concentrated in NCR, Metro Manila, and Luzon.
+
+The item pattern includes antibiotic-related items, laboratory supplies, medical equipment, and bottled or packaged medical-related goods. The cluster has mostly medium contract amount, medium item budget, and high approved budget, while quantity is mixed between low and high.
+
+The timing indicators show low award decision lag and low award publish lag, but high time-to-close, meaning these records may be in active or longer-running procurement processes."
 28,"Strong understocking / lean-stock segment · mean PC=(-1.09,-1.37,-0.81)",Strongest theme deviations vs cohort (z): overstocking=-1.37; understocking=1.37; normal_inventory=-0.95; high_risk_shortage=-0.76; low_risk_shortage=0.76
 29,"High shortage-risk segment · mean PC=(-0.51,-1.39,5.08)",Strongest theme deviations vs cohort (z): equal_supply_regions=2.71; unequal_supply_regions=-2.71; normal_inventory=1.22; low_risk_shortage=-1.04; high_risk_shortage=1.04
 30,"Overstocking-heavy procurement segment · mean PC=(-0.35,0.72,-0.39)",Strongest theme deviations vs cohort (z): low_risk_shortage=0.77; high_risk_shortage=-0.77; understocking=-0.50; overstocking=0.50; unequal_supply_regions=-0.25
@@ -118,7 +130,11 @@ cluster_id,cluster_label,rationale_short
 116,"Strong understocking / lean-stock segment · mean PC=(-2.04,-1.25,-1.01)",Strongest theme deviations vs cohort (z): overstocking=-1.79; understocking=1.79; normal_inventory=-1.63; low_risk_shortage=1.05; high_risk_shortage=-1.05
 117,"High shortage-risk segment · mean PC=(0.52,0.50,-0.02)",Strongest theme deviations vs cohort (z): understocking=1.45; overstocking=-1.45; normal_inventory=-1.07; low_risk_shortage=-0.36; high_risk_shortage=0.36
 118,"High shortage-risk segment · mean PC=(0.66,-0.69,-0.21)",Strongest theme deviations vs cohort (z): high_risk_shortage=1.49; low_risk_shortage=-1.49; normal_inventory=0.93; understocking=-0.21; overstocking=0.21
-119,"High shortage-risk segment · mean PC=(-0.19,-1.25,-0.42)",Strongest theme deviations vs cohort (z): understocking=0.85; overstocking=-0.85; low_risk_shortage=-0.53; high_risk_shortage=0.53; equal_supply_regions=-0.11
+119,"Low-Cost Small Value Routine Medical Procurement Segment","DBSCAN Cluster 119 represents routine procurement activities with low contract amount, low item budget, and mostly high quantity. The dominant procurement mode is Negotiated Procurement – Small Value Procurement, while the bid status is mostly Awarded and Closed.
+
+This cluster includes medical supplies, laboratory instruments, drugs and medicines, food items, and other medical-related or support items. It is more geographically distributed compared with the smaller NCR-heavy clusters, although NCR and Luzon still appear strongly.
+
+The timing indicators are mostly medium award publish lag and medium award decision lag, suggesting that the cluster does not show the most severe delay pattern but still requires routine monitoring."
 120,"Overstocking-heavy procurement segment · mean PC=(0.17,-0.21,-0.41)",Strongest theme deviations vs cohort (z): high_risk_shortage=-0.90; low_risk_shortage=0.90; understocking=-0.77; overstocking=0.77; equal_supply_regions=-0.35
 121,"High shortage-risk segment · mean PC=(0.01,-1.12,-0.29)",Strongest theme deviations vs cohort (z): low_risk_shortage=-1.61; high_risk_shortage=1.61; understocking=0.55; overstocking=-0.55; normal_inventory=0.41
 122,"High shortage-risk segment · mean PC=(0.48,-0.81,-0.25)",Strongest theme deviations vs cohort (z): normal_inventory=1.11; low_risk_shortage=-1.08; high_risk_shortage=1.08; equal_supply_regions=-0.12; unequal_supply_regions=0.12
@@ -385,4 +401,8 @@ cluster_id,cluster_label,rationale_short
 383,"Overstocking-heavy procurement segment · mean PC=(2.96,-0.59,0.30)",Strongest theme deviations vs cohort (z): overstocking=0.59; understocking=-0.59; equal_supply_regions=-0.35; unequal_supply_regions=0.35; normal_inventory=0.34
 384,"Mixed procurement profile segment · mean PC=(0.11,-0.94,-0.66)",Strongest theme deviations vs cohort (z): high_risk_shortage=-1.00; low_risk_shortage=1.00; normal_inventory=0.78; unequal_supply_regions=-0.49; equal_supply_regions=0.49
 385,"Mixed procurement profile segment · mean PC=(-0.13,0.37,-0.42)",Strongest theme deviations vs cohort (z): low_risk_shortage=0.87; high_risk_shortage=-0.87; understocking=0.33; overstocking=-0.33; unequal_supply_regions=-0.28
--1,Noise / outlier procurement records,DBSCAN noise label (-1): not assigned to a dense neighborhood in PC1–PC3; treated as outlier procurement records rather than a single procurement pattern.
+-1,Noise — Outlier and Sparse Procurement Records,"The Noise group contains records that DBSCAN did not assign to any dense cluster. These records are important because they may represent sparse, unusual, or less common procurement patterns.
+
+Noise records show strong representation of medical equipment and accessories, drugs and pharmaceutical products, medical supplies, and laboratory supplies. The group has mixed but strong values across quantity, budget, and contract amount. It also shows high and very high award decision lag, high and very high award publish lag, and high time-to-close, which suggests that many noise records may require closer review.
+
+The noise group is heavily concentrated in Luzon, NCR, and Metro Manila, with bid notice status mostly Closed and Awarded. Procurement mode is mostly Public Bidding and Small Value Procurement."

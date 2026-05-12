@@ -1,12 +1,12 @@
-import { ZoomIn } from 'lucide-react'
-import { useState } from 'react'
+import { ChevronDown, ZoomIn } from 'lucide-react'
+import { useId, useState, type ReactNode } from 'react'
 import { useOpenImageZoom } from './ImageZoomLightboxContext'
 
 type ImageCardProps = {
   src: string
   title: string
   onClick?: () => void
-  caption?: string
+  caption?: ReactNode
   figure?: string
   /** When an external heading already shows the title, hide the button footnote caption. */
   hideInlineTitle?: boolean
@@ -14,6 +14,8 @@ type ImageCardProps = {
 
 export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitle }: ImageCardProps) {
   const [imgError, setImgError] = useState(false)
+  const [captionOpen, setCaptionOpen] = useState(false)
+  const captionPanelId = useId()
   const openImageZoom = useOpenImageZoom()
 
   const activate = () => {
@@ -64,17 +66,45 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
               <ZoomIn className="h-10 w-10 text-white" aria-hidden />
             </div>
-          ) : null}        </div>
+          ) : null}
+        </div>
         {hideInlineTitle ? null : (
-          <figcaption className="border-t border-slate-100 bg-white px-3 py-2 text-left text-xs font-medium text-mf-muted">
+          <figcaption className="border-t border-slate-100 bg-white px-3 py-2 text-left text-xs font-bold text-mf-muted">
             {title}
           </figcaption>
         )}
       </button>
       {figure ? (
-        <p className="text-xs text-slate-500">{figure}</p>
+        <p className="text-xs text-slate-500 dark:text-muted-foreground">{figure}</p>
       ) : null}
-      {caption ? <p className="text-xs text-slate-400">{caption}</p> : null}
+      {caption ? (
+        <div className="rounded-lg border border-slate-100 bg-slate-50/80 dark:border-border dark:bg-muted/30">
+          <button
+            type="button"
+            className="flex w-full items-center gap-2 px-2.5 py-2 text-left text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100/90 dark:text-muted-foreground dark:hover:bg-muted/50"
+            aria-expanded={captionOpen}
+            aria-controls={captionPanelId}
+            aria-label={captionOpen ? `Hide description for ${title}` : `Show description for ${title}`}
+            onClick={() => setCaptionOpen((v) => !v)}
+          >
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 text-slate-500 transition-transform dark:text-muted-foreground ${
+                captionOpen ? 'rotate-180' : ''
+              }`}
+              aria-hidden
+            />
+            Description
+          </button>
+          {captionOpen ? (
+            <div
+              id={captionPanelId}
+              className="border-t border-slate-100 py-2 pb-2.5 pl-[calc(0.625rem+1ch)] pr-2.5 text-justify text-xs leading-relaxed text-slate-500 whitespace-pre-line dark:border-border dark:text-muted-foreground"
+            >
+              {caption}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </figure>
   )
 }
