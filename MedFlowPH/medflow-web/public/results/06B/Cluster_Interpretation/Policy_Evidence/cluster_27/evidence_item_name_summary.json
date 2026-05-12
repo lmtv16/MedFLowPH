@@ -1,0 +1,15 @@
+{
+  "cluster_id": 27,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Item Name",
+  "column_name": "Item Name",
+  "resolved_column": "Item Name",
+  "numeric": false,
+  "top_value": "Antibiotic Standard",
+  "top_count": 12,
+  "cluster_rows": 31,
+  "top_share_within_cluster": 0.3870967741935484,
+  "global_count_of_top_value": 137,
+  "global_share_of_top_value": 0.0002809651254601573,
+  "lift_vs_global": 1377.7395808806216
+}

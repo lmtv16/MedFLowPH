@@ -5,11 +5,11 @@
   "column_name": "Quantity",
   "resolved_column": "Quantity",
   "numeric": true,
-  "top_value": "High",
-  "top_count": 14582,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.3871087631739627,
-  "global_count_of_top_value": 126920,
-  "global_share_of_top_value": 0.2602926549153516,
-  "lift_vs_global": 1.4872058656432403
+  "top_value": "Low",
+  "top_count": 149784,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.717016357186966,
+  "global_count_of_top_value": 215207,
+  "global_share_of_top_value": 0.4413551952912706,
+  "lift_vs_global": 1.6245789442079048
 }

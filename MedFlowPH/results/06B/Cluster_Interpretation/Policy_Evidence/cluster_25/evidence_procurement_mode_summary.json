@@ -1,0 +1,15 @@
+{
+  "cluster_id": 25,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Procurement Mode",
+  "column_name": "Procurement Mode",
+  "resolved_column": "Procurement Mode",
+  "numeric": false,
+  "top_value": "Negotiated Procurement - Emergency Cases (Sec. 53.2)",
+  "top_count": 23,
+  "cluster_rows": 39,
+  "top_share_within_cluster": 0.5897435897435898,
+  "global_count_of_top_value": 17491,
+  "global_share_of_top_value": 0.035871248243967965,
+  "lift_vs_global": 16.44056503784364
+}

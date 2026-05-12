@@ -6,10 +6,10 @@
   "resolved_column": "UNSPSC Description",
   "numeric": false,
   "top_value": "Medical Equipment and Accessories and Supplies",
-  "top_count": 21207,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.5629828240728451,
+  "top_count": 90111,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.43136156707308315,
   "global_count_of_top_value": 254804,
   "global_share_of_top_value": 0.5225623199105833,
-  "lift_vs_global": 1.0773505907758105
+  "lift_vs_global": 0.8254739207888052
 }

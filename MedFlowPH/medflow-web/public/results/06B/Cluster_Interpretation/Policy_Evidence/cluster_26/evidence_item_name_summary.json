@@ -1,0 +1,15 @@
+{
+  "cluster_id": 26,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Item Name",
+  "column_name": "Item Name",
+  "resolved_column": "Item Name",
+  "numeric": false,
+  "top_value": "Medical Supplies",
+  "top_count": 2,
+  "cluster_rows": 34,
+  "top_share_within_cluster": 0.058823529411764705,
+  "global_count_of_top_value": 16182,
+  "global_share_of_top_value": 0.03318669824960778,
+  "lift_vs_global": 1.7725032170821609
+}

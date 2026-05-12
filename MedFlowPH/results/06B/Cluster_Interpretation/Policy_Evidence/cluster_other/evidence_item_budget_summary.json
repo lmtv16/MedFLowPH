@@ -5,11 +5,11 @@
   "column_name": "Item Budget",
   "resolved_column": "Item Budget",
   "numeric": true,
-  "top_value": "Low",
-  "top_count": 11099,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.2946454644402559,
-  "global_count_of_top_value": 122004,
-  "global_share_of_top_value": 0.2502107238440951,
-  "lift_vs_global": 1.177589273207362
+  "top_value": "High",
+  "top_count": 71728,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.3433621032173443,
+  "global_count_of_top_value": 121253,
+  "global_share_of_top_value": 0.2486705427548938,
+  "lift_vs_global": 1.38079122445872
 }

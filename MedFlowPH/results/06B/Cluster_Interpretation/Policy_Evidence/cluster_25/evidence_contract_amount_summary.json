@@ -1,0 +1,15 @@
+{
+  "cluster_id": 25,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Contract Amount",
+  "column_name": "Contract Amount",
+  "resolved_column": "Contract Amount",
+  "numeric": true,
+  "top_value": "Medium",
+  "top_count": 33,
+  "cluster_rows": 39,
+  "top_share_within_cluster": 0.8461538461538461,
+  "global_count_of_top_value": 177645,
+  "global_share_of_top_value": 0.3643215307472237,
+  "lift_vs_global": 2.322546911840165
+}

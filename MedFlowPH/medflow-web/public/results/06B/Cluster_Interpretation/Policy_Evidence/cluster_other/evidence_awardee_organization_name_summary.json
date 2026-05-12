@@ -6,10 +6,10 @@
   "resolved_column": "Awardee Organization Name",
   "numeric": false,
   "top_value": "ENDURE MEDICAL, INC.",
-  "top_count": 9731,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.25832913005389047,
+  "top_count": 27944,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.13376799314501267,
   "global_count_of_top_value": 122342,
   "global_share_of_top_value": 0.2509039078762523,
-  "lift_vs_global": 1.0295938881163236
+  "lift_vs_global": 0.5331443191828964
 }

@@ -6,10 +6,10 @@
   "resolved_column": "Province",
   "numeric": false,
   "top_value": "Metro Manila",
-  "top_count": 8579,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.2277469537285301,
+  "top_count": 43581,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.20862234859908377,
   "global_count_of_top_value": 122873,
   "global_share_of_top_value": 0.2519929040924519,
-  "lift_vs_global": 0.9037832019467248
+  "lift_vs_global": 0.8278897747158142
 }

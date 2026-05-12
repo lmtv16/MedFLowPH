@@ -1,0 +1,15 @@
+{
+  "cluster_id": 0,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Awardee Organization Name",
+  "column_name": "Awardee Organization Name",
+  "resolved_column": "Awardee Organization Name",
+  "numeric": false,
+  "top_value": "ENDURE MEDICAL, INC.",
+  "top_count": 41,
+  "cluster_rows": 66,
+  "top_share_within_cluster": 0.6212121212121212,
+  "global_count_of_top_value": 122342,
+  "global_share_of_top_value": 0.2509039078762523,
+  "lift_vs_global": 2.475896555260143
+}

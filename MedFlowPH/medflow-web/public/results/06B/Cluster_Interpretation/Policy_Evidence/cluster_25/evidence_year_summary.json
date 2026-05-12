@@ -1,0 +1,15 @@
+{
+  "cluster_id": 25,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Year",
+  "column_name": "Year",
+  "resolved_column": "Year",
+  "numeric": false,
+  "top_value": "2020",
+  "top_count": 17,
+  "cluster_rows": 39,
+  "top_share_within_cluster": 0.4358974358974359,
+  "global_count_of_top_value": 32845,
+  "global_share_of_top_value": 0.06735985069882384,
+  "lift_vs_global": 6.4711758024286565
+}

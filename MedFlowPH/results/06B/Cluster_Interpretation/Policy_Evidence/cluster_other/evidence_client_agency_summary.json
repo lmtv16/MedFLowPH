@@ -6,10 +6,10 @@
   "resolved_column": "Client Agency",
   "numeric": false,
   "top_value": "DR. JOSE RIZAL MEMORIAL HOSPITAL",
-  "top_count": 37657,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.9996814356632775,
+  "top_count": 208709,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.9990904695570587,
   "global_count_of_top_value": 487273,
   "global_share_of_top_value": 0.9993191210098338,
-  "lift_vs_global": 1.0003625615139613
+  "lift_vs_global": 0.9997711927571805
 }

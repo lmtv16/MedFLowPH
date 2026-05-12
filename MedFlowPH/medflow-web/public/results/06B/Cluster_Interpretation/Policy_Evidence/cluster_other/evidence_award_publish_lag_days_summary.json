@@ -6,10 +6,10 @@
   "resolved_column": "award_publish_lag_days",
   "numeric": true,
   "top_value": "Medium",
-  "top_count": 10607,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.28158432663463323,
+  "top_count": 80888,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.3872110445717787,
   "global_count_of_top_value": 122116,
   "global_share_of_top_value": 0.25044041796125965,
-  "lift_vs_global": 1.1243565592443276
+  "lift_vs_global": 1.5461204214715691
 }

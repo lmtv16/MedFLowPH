@@ -5,11 +5,11 @@
   "column_name": "award_decision_lag_days",
   "resolved_column": "award_decision_lag_days",
   "numeric": true,
-  "top_value": "Medium",
-  "top_count": 12399,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.32915660091852716,
-  "global_count_of_top_value": 123874,
-  "global_share_of_top_value": 0.2540457952646097,
-  "lift_vs_global": 1.2956585271395
+  "top_value": "Low",
+  "top_count": 87687,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.41975787342208437,
+  "global_count_of_top_value": 123651,
+  "global_share_of_top_value": 0.25358845787061246,
+  "lift_vs_global": 1.6552719983661714
 }

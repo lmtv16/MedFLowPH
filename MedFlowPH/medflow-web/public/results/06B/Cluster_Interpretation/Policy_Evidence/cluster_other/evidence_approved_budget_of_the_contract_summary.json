@@ -5,11 +5,11 @@
   "column_name": "Approved Budget of the Contract",
   "resolved_column": "Approved Budget of the Contract",
   "numeric": true,
-  "top_value": "Medium",
-  "top_count": 10968,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.29116780376436857,
-  "global_count_of_top_value": 121894,
-  "global_share_of_top_value": 0.24998513140759426,
-  "lift_vs_global": 1.1647404872637286
+  "top_value": "Low",
+  "top_count": 67764,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.32438642597618944,
+  "global_count_of_top_value": 121909,
+  "global_share_of_top_value": 0.2500158940125716,
+  "lift_vs_global": 1.2974632163180722
 }
