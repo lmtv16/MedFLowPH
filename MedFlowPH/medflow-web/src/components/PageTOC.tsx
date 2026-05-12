@@ -62,7 +62,9 @@ export const TOC_EVALUATION_NAV: PageTOCSection[] = [
 ]
 
 export const TOC_INTERPRETATION: PageTOCSection[] = [
-  { id: 'formula-reference', label: 'Formula Reference' },
+  { id: 'interpretation-pca-3d', label: '3D PCA (pre‑clustering)' },
+  { id: 'interpretation-kmeans-3d', label: '3D K‑Means PCA' },
+  { id: 'interpretation-dbscan-3d', label: '3D DBSCAN PCA' },
 ]
 
 export const TOC_COMPARISON: PageTOCSection[] = [

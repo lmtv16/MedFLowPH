@@ -5,13 +5,15 @@ type IframePanelProps = {
   src: string
   title: string
   height?: number
+  /** Optional anchor id for in-page TOC / deep links */
+  id?: string
 }
 
-export function IframePanel({ src, title, height = 600 }: IframePanelProps) {
+export function IframePanel({ src, title, height = 600, id }: IframePanelProps) {
   const [loaded, setLoaded] = useState(false)
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section id={id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-mf-ink">{title}</h3>
       </div>

@@ -10,14 +10,13 @@ import {
 } from 'recharts'
 import { Cpu } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { IframePanel } from '../components/IframePanel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
 import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
-import { DATA_PATHS, IMAGES, INTERACTIVE } from '../data/fileManifest'
+import { DATA_PATHS, IMAGES } from '../data/fileManifest'
 import { useJsonData } from '../hooks/useCsvData'
 
 type ClusterCountFile = {
@@ -61,7 +60,7 @@ export function ClusteringPage() {
   return (
     <PageShell>
       <div className="space-y-12">
-        <SectionHeader title="Principal component analysis" subtitle="Variance capture, loadings, and interactive PC space." icon={Cpu} />
+        <SectionHeader title="Principal component analysis" subtitle="Variance capture and loadings; interactive 3D PCA views live on Interpretation." icon={Cpu} />
 
         <div className="grid gap-6 md:grid-cols-3">
           {IMAGES.clustering.pca.map((img, idx) => (
@@ -80,12 +79,6 @@ export function ClusteringPage() {
           ))}
         </div>
 
-        <IframePanel
-          src={INTERACTIVE.pca3d}
-          title="Interactive 3D PCA space (pre‑clustering)"
-          height={600}
-        />
-
         <SectionHeader title="K‑Means clustering in PCA space" subtitle="Numeric and semantic overlays on PC1–PC3." />
         <div className="grid gap-6 md:grid-cols-2">
           {IMAGES.clustering.kmeans.map((img, idx) => (
@@ -103,11 +96,6 @@ export function ClusteringPage() {
             />
           ))}
         </div>
-        <IframePanel
-          src={INTERACTIVE.kmeans3d}
-          title="Interactive 3D K‑Means PCA space"
-          height={600}
-        />
 
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-mf-ink">Figure K3: K‑Means cluster population mix</h3>
@@ -176,11 +164,6 @@ export function ClusteringPage() {
             />
           ))}
         </div>
-        <IframePanel
-          src={INTERACTIVE.dbscan3d}
-          title="Interactive 3D DBSCAN PCA space"
-          height={600}
-        />
 
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-mf-ink">Figure DB3: DBSCAN cluster cardinalities (presentation slice)</h3>
