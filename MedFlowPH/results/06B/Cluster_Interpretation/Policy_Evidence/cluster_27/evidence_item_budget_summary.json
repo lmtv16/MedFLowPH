@@ -1,0 +1,15 @@
+{
+  "cluster_id": 27,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Item Budget",
+  "column_name": "Item Budget",
+  "resolved_column": "Item Budget",
+  "numeric": true,
+  "top_value": "Medium",
+  "top_count": 22,
+  "cluster_rows": 31,
+  "top_share_within_cluster": 0.7096774193548387,
+  "global_count_of_top_value": 122448,
+  "global_share_of_top_value": 0.2511212969514258,
+  "lift_vs_global": 2.8260343824686087
+}

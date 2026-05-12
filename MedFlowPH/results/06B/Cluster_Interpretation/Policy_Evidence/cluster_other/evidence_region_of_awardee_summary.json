@@ -6,10 +6,10 @@
   "resolved_column": "Region of Awardee",
   "numeric": false,
   "top_value": "NCR",
-  "top_count": 22756,
-  "cluster_rows": 37669,
-  "top_share_within_cluster": 0.6041041705381083,
+  "top_count": 95231,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.45587101900918625,
   "global_count_of_top_value": 287874,
   "global_share_of_top_value": 0.590383609684068,
-  "lift_vs_global": 1.0232400775173662
+  "lift_vs_global": 0.7721606960822245
 }

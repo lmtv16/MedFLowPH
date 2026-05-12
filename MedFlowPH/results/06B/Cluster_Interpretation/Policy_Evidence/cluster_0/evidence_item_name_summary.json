@@ -1,0 +1,15 @@
+{
+  "cluster_id": 0,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Item Name",
+  "column_name": "Item Name",
+  "resolved_column": "Item Name",
+  "numeric": false,
+  "top_value": "Medical, Dental & Laboratory Supplies",
+  "top_count": 11,
+  "cluster_rows": 66,
+  "top_share_within_cluster": 0.16666666666666666,
+  "global_count_of_top_value": 446,
+  "global_share_of_top_value": 0.0009146747879943807,
+  "lift_vs_global": 182.21412556053812
+}
