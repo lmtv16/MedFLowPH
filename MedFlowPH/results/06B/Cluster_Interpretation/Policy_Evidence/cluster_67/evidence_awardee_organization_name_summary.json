@@ -1,0 +1,15 @@
+{
+  "cluster_id": 67,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Awardee Organization Name",
+  "column_name": "Awardee Organization Name",
+  "resolved_column": "Awardee Organization Name",
+  "numeric": false,
+  "top_value": "MMJS PHARMACY AND MEDICAL SUPPLIES",
+  "top_count": 154,
+  "cluster_rows": 2125,
+  "top_share_within_cluster": 0.07247058823529412,
+  "global_count_of_top_value": 1164,
+  "global_share_of_top_value": 0.002387178146245424,
+  "lift_vs_global": 30.358265615524562
+}

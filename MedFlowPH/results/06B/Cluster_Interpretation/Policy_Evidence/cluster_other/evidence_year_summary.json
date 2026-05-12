@@ -1,0 +1,15 @@
+{
+  "cluster_id": -2,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Year",
+  "column_name": "Year",
+  "resolved_column": "Year",
+  "numeric": false,
+  "top_value": "2023",
+  "top_count": 9762,
+  "cluster_rows": 37669,
+  "top_share_within_cluster": 0.25915208792375694,
+  "global_count_of_top_value": 125724,
+  "global_share_of_top_value": 0.25783984987848774,
+  "lift_vs_global": 1.0050893531232181
+}

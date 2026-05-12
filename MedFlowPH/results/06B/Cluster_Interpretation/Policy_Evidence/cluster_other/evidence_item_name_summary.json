@@ -1,0 +1,15 @@
+{
+  "cluster_id": -2,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Item Name",
+  "column_name": "Item Name",
+  "resolved_column": "Item Name",
+  "numeric": false,
+  "top_value": "Drugs and Medicines",
+  "top_count": 1689,
+  "cluster_rows": 37669,
+  "top_share_within_cluster": 0.044837930393692424,
+  "global_count_of_top_value": 23820,
+  "global_share_of_top_value": 0.0488510167040945,
+  "lift_vs_global": 0.9178505058613096
+}

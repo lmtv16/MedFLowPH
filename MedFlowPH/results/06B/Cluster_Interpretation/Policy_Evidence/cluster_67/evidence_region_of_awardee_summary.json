@@ -1,0 +1,15 @@
+{
+  "cluster_id": 67,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Region of Awardee",
+  "column_name": "Region of Awardee",
+  "resolved_column": "Region of Awardee",
+  "numeric": false,
+  "top_value": "Caraga",
+  "top_count": 366,
+  "cluster_rows": 2125,
+  "top_share_within_cluster": 0.17223529411764707,
+  "global_count_of_top_value": 5482,
+  "global_share_of_top_value": 0.011242706699069944,
+  "lift_vs_global": 15.31973560529648
+}

@@ -1,0 +1,15 @@
+{
+  "cluster_id": -2,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Approved Budget of the Contract",
+  "column_name": "Approved Budget of the Contract",
+  "resolved_column": "Approved Budget of the Contract",
+  "numeric": true,
+  "top_value": "Medium",
+  "top_count": 10968,
+  "cluster_rows": 37669,
+  "top_share_within_cluster": 0.29116780376436857,
+  "global_count_of_top_value": 121894,
+  "global_share_of_top_value": 0.24998513140759426,
+  "lift_vs_global": 1.1647404872637286
+}

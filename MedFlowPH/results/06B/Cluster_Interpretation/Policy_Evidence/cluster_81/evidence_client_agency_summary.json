@@ -1,0 +1,15 @@
+{
+  "cluster_id": 81,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Client Agency",
+  "column_name": "Client Agency",
+  "resolved_column": "Client Agency",
+  "numeric": false,
+  "top_value": "DR. JOSE RIZAL MEMORIAL HOSPITAL",
+  "top_count": 547,
+  "cluster_rows": 547,
+  "top_share_within_cluster": 1.0,
+  "global_count_of_top_value": 487273,
+  "global_share_of_top_value": 0.9993191210098338,
+  "lift_vs_global": 1.0006813429022334
+}

@@ -1,0 +1,15 @@
+{
+  "cluster_id": 5,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Quantity",
+  "column_name": "Quantity",
+  "resolved_column": "Quantity",
+  "numeric": true,
+  "top_value": "Very High",
+  "top_count": 48464,
+  "cluster_rows": 88712,
+  "top_share_within_cluster": 0.5463071512309496,
+  "global_count_of_top_value": 113983,
+  "global_share_of_top_value": 0.23376093354251903,
+  "lift_vs_global": 2.337033579358038
+}
