@@ -27,7 +27,6 @@
 }
 
 @media print {
-  .medflow-sidebar,
   .medflow-topbar,
   .medflow-scroll-progress,
   .medflow-no-print {

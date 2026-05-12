@@ -2,9 +2,9 @@ import {
   Award,
   Building2,
   Calendar,
-  ChevronDown,
   Database,
   DollarSign,
+  ExternalLink,
   FileText,
   Filter,
   Hash,
@@ -15,7 +15,7 @@ import {
   UserCheck,
   Users,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MetricCard } from '../components/MetricCard'
 import { PageShell } from '../components/PageShell'
@@ -24,6 +24,18 @@ import { SectionWrapper } from '../components/SectionWrapper'
 import { parsePhilgepsCleaningSummary, formatIntPh } from '../data/parsePhilgepsCleaningSummary'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
 import { useJsonData, useTextData } from '../hooks/useCsvData'
+
+/** Main-campus / Rizal St. location used for map search (College of Science, Legazpi). */
+const INSTITUTION_MAP_QUERY =
+  'Bicol University College of Science, Rizal Street, Legazpi City, 4500 Albay, Philippines'
+
+const INSTITUTION_MAP_EMBED_URL = `https://maps.google.com/maps?q=${encodeURIComponent(
+  INSTITUTION_MAP_QUERY,
+)}&z=16&output=embed`
+
+const INSTITUTION_MAP_OPEN_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  INSTITUTION_MAP_QUERY,
+)}`
 
 type KSelectionSummary = {
   chosen_k: number
@@ -74,24 +86,8 @@ const DATA_FIELD_CATEGORIES: { label: string; icon: typeof Building2 }[] = [
   { label: 'Supplier', icon: Users },
 ]
 
-const OBJECTIVE_ITEMS = [
-  {
-    q: 'How can procurement records be segmented?',
-    a: 'By applying K-Means clustering in PCA space, we identified 7 distinct procurement segments based on timing, quantity, and budget.',
-  },
-  {
-    q: 'What inherent patterns exist in timing and budgets?',
-    a: 'Analysis revealed consistent quarterly procurement cycles with volume peaks aligned to government budget release periods.',
-  },
-  {
-    q: 'How do K-Means and DBSCAN compare in this domain?',
-    a: 'K-Means produced cleaner, fully-assigned clusters suitable for reporting. DBSCAN added value by flagging outlier procurement records.',
-  },
-] as const
-
 export function Landing() {
   const navigate = useNavigate()
-  const [openObjective, setOpenObjective] = useState<number | null>(0)
 
   const { data: ks } = useJsonData<KSelectionSummary>(DATA_PATHS.kSelectionSummary)
   const { data: clusters } = useJsonData<ClusterCountsFile>(DATA_PATHS.clusterCountsKmeans)
@@ -141,39 +137,6 @@ export function Landing() {
                   uncovering underlying patterns in how public health resources are acquired and distributed.
                 </p>
 
-                <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-border dark:bg-card">
-                  <div className="grid gap-6 sm:grid-cols-3">
-                    <div>
-                      <a href="#references" className="text-sm font-semibold text-mf-primary hover:underline dark:text-primary">
-                        Cyrrhus L. Jesalva
-                      </a>
-                      <p className="mt-1 text-xs text-mf-muted dark:text-muted-foreground">Researcher</p>
-                    </div>
-                    <div>
-                      <a href="#references" className="text-sm font-semibold text-mf-primary hover:underline dark:text-primary">
-                        Wesly P. Lopera
-                      </a>
-                      <p className="mt-1 text-xs text-mf-muted dark:text-muted-foreground">Researcher</p>
-                    </div>
-                    <div>
-                      <a href="#references" className="text-sm font-semibold text-mf-primary hover:underline dark:text-primary">
-                        Louis Mathew T. Vergara
-                      </a>
-                      <p className="mt-1 text-xs text-mf-muted dark:text-muted-foreground">Researcher</p>
-                    </div>
-                  </div>
-                  <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-6 text-sm dark:border-border sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <p className="font-medium text-mf-ink dark:text-foreground">Institution: Bicol University College of Science</p>
-                      <p className="mt-1 text-mf-muted dark:text-muted-foreground">Legazpi City, Albay, Bicol, Philippines</p>
-                    </div>
-                    <div className="text-mf-muted dark:text-muted-foreground">
-                      <span className="font-medium text-mf-ink dark:text-foreground">Annotated by:</span> Cedric Conol (Data
-                      Analyst)
-                    </div>
-                  </div>
-                </div>
-
                 <div className="mt-8 flex flex-wrap gap-4">
                   <button
                     type="button"
@@ -210,53 +173,39 @@ export function Landing() {
               </div>
             </SectionWrapper>
 
-            <SectionWrapper id="objectives" title="Research Objectives">
-              <p className="text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
-                The primary objective of this study is to leverage unsupervised machine learning techniques to uncover latent
-                structures within Philippine public health procurement data, providing data-driven insights into purchasing behaviors,
-                inefficiencies, and standardized practices.
-              </p>
-              <div className="mt-6 space-y-3">
-                {OBJECTIVE_ITEMS.map((item, idx) => {
-                  const n = idx + 1
-                  const open = openObjective === idx
-                  return (
-                    <div
-                      key={item.q}
-                      className="rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setOpenObjective(open ? null : idx)}
-                        className="flex w-full items-start gap-3 p-4 text-left"
-                        aria-expanded={open}
-                        aria-controls={`objective-panel-${n}`}
-                        id={`objective-trigger-${n}`}
-                      >
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-mf-primary text-sm font-bold text-white dark:bg-primary dark:text-primary-foreground">
-                          {n}
-                        </span>
-                        <span className="min-w-0 flex-1 text-sm font-medium text-mf-ink dark:text-foreground">{item.q}</span>
-                        <ChevronDown
-                          className={`mt-0.5 h-5 w-5 shrink-0 text-mf-muted transition-transform dark:text-muted-foreground ${
-                            open ? 'rotate-180' : ''
-                          }`}
-                          aria-hidden
-                        />
-                      </button>
-                      {open ? (
-                        <div
-                          id={`objective-panel-${n}`}
-                          role="region"
-                          aria-labelledby={`objective-trigger-${n}`}
-                          className="border-t border-slate-100 px-4 pb-4 pl-[3.25rem] pt-2 text-sm leading-relaxed text-mf-muted dark:border-border dark:text-muted-foreground"
-                        >
-                          {item.a}
-                        </div>
-                      ) : null}
-                    </div>
-                  )
-                })}
+            <SectionWrapper id="objectives" title="Objectives of the Study">
+              <div className="space-y-8 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+                <div>
+                  <h3 className="font-heading text-base font-semibold text-mf-ink dark:text-foreground">General Objective</h3>
+                  <p className="mt-3">
+                    The objective of this study is to analyze aggregated and non-personal medical-related procurement and
+                    distribution data from public health facilities in the Philippines using unsupervised machine learning
+                    techniques, specifically clustering analysis, in order to identify distribution patterns and potential
+                    systemic risks related to medicine availability, such as shortages, uneven distribution, or inefficiencies in
+                    supply allocation.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-heading text-base font-semibold text-mf-ink dark:text-foreground">Specific Objectives</h3>
+                  <ol className="mt-3 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-mf-primary dark:marker:text-primary">
+                    <li>
+                      To analyze aggregated medical-related procurement and distribution data from Philippine public health
+                      facilities to identify overall procurement and distribution patterns.
+                    </li>
+                    <li>
+                      To apply unsupervised clustering algorithms, specifically K-means and DBSCAN, to group public health
+                      facilities based on similarities and variations in medicine procurement and distribution behavior.
+                    </li>
+                    <li>
+                      To develop a web-based analytical platform that presents clustering results through cluster summaries,
+                      visualizations, and comparative profiles.
+                    </li>
+                    <li>
+                      To evaluate and compare the clustering results of K-means and DBSCAN using appropriate validation metrics,
+                      such as silhouette score, cluster cohesion, and cluster separation.
+                    </li>
+                  </ol>
+                </div>
               </div>
             </SectionWrapper>
 
@@ -467,7 +416,40 @@ export function Landing() {
                   <p className="mt-3 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
                     Bicol University College of Science
                   </p>
-                  <p className="mt-2 text-sm text-mf-muted dark:text-muted-foreground">Legazpi City, Albay, Bicol, Philippines</p>
+                  <p className="mt-2 text-sm text-mf-muted dark:text-muted-foreground">
+                    Rizal Street, Legazpi City, 4500 Albay, Bicol, Philippines
+                  </p>
+                  <div className="group relative mt-4 overflow-hidden rounded-lg border border-slate-200 dark:border-border">
+                    <iframe
+                      title="Map preview: Bicol University College of Science, Legazpi City"
+                      src={INSTITUTION_MAP_EMBED_URL}
+                      className="pointer-events-none h-52 w-full border-0 bg-slate-100 dark:bg-muted/40"
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      tabIndex={-1}
+                    />
+                    <a
+                      href={INSTITUTION_MAP_OPEN_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute inset-0 z-10 flex items-end justify-center pb-3 outline-none transition-colors hover:bg-black/[0.04] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-mf-primary dark:hover:bg-white/[0.04] dark:focus-visible:ring-primary"
+                      aria-label="Open this location in Google Maps in a new tab"
+                    >
+                      <span className="pointer-events-none rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-mf-ink shadow-sm ring-1 ring-slate-200/80 dark:bg-card dark:text-foreground dark:ring-border">
+                        Tap to open in Google Maps
+                      </span>
+                    </a>
+                  </div>
+                  <a
+                    href={INSTITUTION_MAP_OPEN_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-mf-primary hover:underline dark:text-primary"
+                  >
+                    Open exact location in Google Maps
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                  </a>
                 </div>
               </div>
             </SectionWrapper>

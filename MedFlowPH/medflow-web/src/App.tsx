@@ -15,6 +15,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Landing />} />
           <Route path="/eda" element={<EDA />} />
+          <Route path="/data-understanding" element={<Navigate to="/eda" replace />} />
           <Route path="/preprocessing" element={<Preprocessing />} />
           <Route path="/clustering" element={<ClusteringPage />} />
           <Route path="/evaluation" element={<Evaluation />} />

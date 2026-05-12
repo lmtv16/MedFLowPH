@@ -25,18 +25,44 @@ export const TOC_LANDING: PageTOCSection[] = [
 ]
 
 export const TOC_EDA: PageTOCSection[] = [
-  { id: 'eda-overview', label: 'Overview' },
-  { id: 'eda-merged', label: 'Merged EDA Charts' },
-  { id: 'eda-quarter', label: 'By Quarter' },
+  { id: 'du-hero', label: 'Overview' },
+  { id: 'du-raw', label: 'Raw Dataset' },
+  { id: 'du-cleaning', label: 'Cleaning' },
+  { id: 'du-exploration', label: 'Exploration' },
+  { id: 'du-preprocessing', label: 'Preprocessing' },
+  { id: 'du-pca', label: 'PCA' },
+  { id: 'du-kmeans', label: 'K-Means' },
+  { id: 'du-dbscan', label: 'DBSCAN' },
+  { id: 'du-eval-kmeans', label: 'K-Means Eval' },
+  { id: 'du-eval-dbscan', label: 'DBSCAN Eval' },
+  { id: 'du-interp-kmeans', label: 'Interpretation' },
+  { id: 'du-interp-dbscan', label: 'DBSCAN Interp' },
+  { id: 'du-comparison', label: 'Comparison' },
+  { id: 'du-conclusion', label: 'Conclusion' },
+  { id: 'eda-overview', label: 'Interactive charts' },
+  { id: 'eda-merged', label: 'Merged charts' },
+  { id: 'eda-quarter', label: 'By quarter' },
 ]
 
-export const TOC_CLUSTERING: PageTOCSection[] = [
-  { id: 'clustering-overview', label: 'Overview' },
+/** Pipeline walkthrough anchors only (first part of the unified Data Understanding page). */
+export const DU_PIPELINE_SECTIONS: PageTOCSection[] = TOC_EDA.slice(0, 14)
+
+export const TOC_PREPROCESSING: PageTOCSection[] = [
+  { id: 'data-cleaning', label: 'Data Cleaning' },
   { id: 'feature-engineering', label: 'Feature Engineering' },
-  { id: 'pca', label: 'PCA' },
-  { id: 'kmeans', label: 'K-Means' },
-  { id: 'kmeans-interpretation', label: 'Interpretation' },
-  { id: 'dbscan', label: 'DBSCAN' },
+]
+
+/** In-page anchors present on the Clustering workflow page (PCA/K‑Means blocks lack SectionWrapper ids). */
+export const TOC_CLUSTERING_NAV: PageTOCSection[] = [
+  { id: 'clustering-approach-comparison', label: 'Approach comparison' },
+]
+
+export const TOC_EVALUATION_NAV: PageTOCSection[] = [
+  { id: 'evaluation-kmeans-context', label: 'Evaluation context' },
+]
+
+export const TOC_INTERPRETATION: PageTOCSection[] = [
+  { id: 'formula-reference', label: 'Formula Reference' },
 ]
 
 export const TOC_COMPARISON: PageTOCSection[] = [
@@ -51,7 +77,7 @@ export const TOC_COMPARISON: PageTOCSection[] = [
 ]
 
 const routeLinks = [
-  { path: '/eda', label: 'EDA Gallery' },
+  { path: '/eda', label: 'Data Understanding' },
   { path: '/clustering', label: 'Cluster Segmentation' },
   { path: '/comparison', label: 'Model Comparison' },
 ]

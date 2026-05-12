@@ -18,6 +18,8 @@ import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
+import { PageTOC, TOC_INTERPRETATION } from '../components/PageTOC'
+import PolicyThemeFormulaReference from '../components/PolicyThemeFormulaReference'
 import { SectionHeader } from '../components/SectionHeader'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
 import { useCsvData } from '../hooks/useCsvData'
@@ -136,7 +138,10 @@ export function Interpretation() {
 
   return (
     <PageShell>
-      <div className="space-y-12">
+      <div className="flex gap-8">
+        <div className="min-w-0 flex-1 space-y-12">
+        <PolicyThemeFormulaReference defaultOpen={true} />
+
         <SectionHeader
           title="K‑Means cluster interpretation"
           subtitle="Thermal narratives of cluster means / z‑scores anchored to thesis theme ontology."
@@ -158,7 +163,7 @@ export function Interpretation() {
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-mf-ink">Figure KI‑R1: Theme radar — K‑Means clusters</h3>
           <p className="mt-2 text-xs text-mf-muted">
-            Source: `/data/06/Interpretation/cluster_theme_profiles.csv` (z‑standardized theme signals).
+            Source: `/results/06/Interpretation/cluster_theme_profiles.csv` (z‑standardized theme signals).
           </p>
           <div className="mt-6 h-[420px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -232,7 +237,7 @@ export function Interpretation() {
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-mf-ink">Figure DBI‑R1: Theme radar — DBSCAN (top clusters)</h3>
           <p className="mt-2 text-xs text-mf-muted">
-            Source: `/data/06B/Interpretation/dbscan_cluster_theme_profiles.csv`.
+            Source: `/results/06B/Interpretation/dbscan_cluster_theme_profiles.csv`.
           </p>
           <div className="mt-6 h-[420px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -300,6 +305,11 @@ export function Interpretation() {
             ) : null}
           </div>
         </div>
+        </div>
+
+        <aside className="medflow-no-print hidden w-48 shrink-0 xl:block">
+          <PageTOC sections={TOC_INTERPRETATION} />
+        </aside>
       </div>
 
       <LightboxGallery

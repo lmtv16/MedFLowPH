@@ -280,9 +280,9 @@ export const DATA_PATHS = {
   dbscanMetricsGrid: '/data/05B/DBSCAN_Evaluation/dbscan_metrics_grid.csv',
   featureSelected: '/data/02/Feature Selection/philgeps_features_selected.csv',
   minMaxScaled: '/data/02/Min-Max Scaling/philgeps_min_max_scaled.csv',
-  clusterThemeProfiles: '/data/06/Interpretation/cluster_theme_profiles.csv',
-  clusterSemanticMap: '/data/06/Interpretation/cluster_semantic_map.csv',
-  dbscanThemeProfiles: '/data/06B/Interpretation/dbscan_cluster_theme_profiles.csv',
-  dbscanSemanticMap: '/data/06B/Interpretation/dbscan_cluster_semantic_map.csv',
+  clusterThemeProfiles: '/results/06/Interpretation/cluster_theme_profiles.csv',
+  clusterSemanticMap: '/results/06/Interpretation/cluster_semantic_map.csv',
+  dbscanThemeProfiles: '/results/06B/Interpretation/dbscan_cluster_theme_profiles.csv',
+  dbscanSemanticMap: '/results/06B/Interpretation/dbscan_cluster_semantic_map.csv',
   modelComparisonSummary: '/data/07/Model_Comparison/kmeans_vs_dbscan_summary.csv',
 } as const

@@ -1,0 +1,7 @@
+cluster_id,cluster_label,rationale_short
+0,Overstocking-heavy procurement segment,Strongest theme deviations vs cohort (z-scores on cluster mean theme vector): understocking=-0.54; overstocking=0.54; normal_inventory=0.38; high_risk_shortage=-0.13; low_risk_shortage=0.13
+1,Strong understocking / lean-stock segment,Strongest theme deviations vs cohort (z-scores on cluster mean theme vector): overstocking=-0.96; understocking=0.96; normal_inventory=-0.32; high_risk_shortage=-0.19; low_risk_shortage=0.19
+2,High shortage-risk segment,Strongest theme deviations vs cohort (z-scores on cluster mean theme vector): high_risk_shortage=1.30; low_risk_shortage=-1.30; understocking=0.50; overstocking=-0.50; equal_supply_regions=0.12
+3,Moderate understocking segment,Strongest theme deviations vs cohort (z-scores on cluster mean theme vector): understocking=0.48; overstocking=-0.48; low_risk_shortage=0.25; high_risk_shortage=-0.25; normal_inventory=0.22
+4,Severe surplus / extreme overstocking segment,Strongest theme deviations vs cohort (z-scores on cluster mean theme vector): understocking=-1.62; overstocking=1.62; normal_inventory=-1.37; low_risk_shortage=-0.20; high_risk_shortage=0.20
+5,Balanced baseline procurement segment,No theme z-score exceeds ±0.35; cluster mean sits near the cohort average on the engineered theme proxies.

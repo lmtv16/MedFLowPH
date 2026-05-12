@@ -1,21 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
-
-function useMinMd() {
-  const [isMd, setIsMd] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : false,
-  )
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    const sync = () => setIsMd(mq.matches)
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
-  return isMd
-}
 
 const ROUTE_META: Record<
   string,
@@ -24,8 +9,8 @@ const ROUTE_META: Record<
     crumbs: string[]
   }
 > = {
-  '/': { title: 'MedFlow PH — Overview', crumbs: ['Home', 'Overview'] },
-  '/eda': { title: 'Exploratory Data Analysis', crumbs: ['Home', 'Data Cleaning'] },
+  '/': { title: 'MedFlow PH', crumbs: ['Home'] },
+  '/eda': { title: 'Data Understanding', crumbs: ['Home', 'Data Understanding'] },
   '/preprocessing': {
     title: 'Preprocessing Pipeline',
     crumbs: ['Home', 'Preprocessing'],
@@ -47,30 +32,18 @@ const ROUTE_META: Record<
 
 export function Layout() {
   const location = useLocation()
-  const isMd = useMinMd()
-  const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [sidebarExpanded, setSidebarExpanded] = useState(() => {
-    if (typeof window === 'undefined') return true
-    return localStorage.getItem('medflow-sidebar-expanded') !== 'false'
-  })
   const [scrollPct, setScrollPct] = useState(0)
 
   const meta = useMemo(() => ROUTE_META[location.pathname], [location.pathname])
 
   useEffect(() => {
-    localStorage.setItem('medflow-sidebar-expanded', String(sidebarExpanded))
-  }, [sidebarExpanded])
-
-  const sidebarVisualOpen = isMd ? sidebarExpanded : mobileNavOpen
-
-  function toggleAppSidebar() {
-    if (isMd) setSidebarExpanded((e) => !e)
-    else setMobileNavOpen((o) => !o)
-  }
-
-  useEffect(() => {
-    if (isMd) setMobileNavOpen(false)
-  }, [isMd])
+    const raw = location.hash.replace(/^#/, '')
+    if (!raw) return
+    const t = window.setTimeout(() => {
+      document.getElementById(raw)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 120)
+    return () => window.clearTimeout(t)
+  }, [location.pathname, location.hash])
 
   useEffect(() => {
     const update = () => {
@@ -91,29 +64,12 @@ export function Layout() {
   return (
     <div className="min-h-screen bg-mf-bg text-mf-ink dark:bg-background dark:text-foreground">
       <div
-        className={`medflow-scroll-progress pointer-events-none fixed left-0 top-0 z-50 h-[3px] bg-[#1D4ED8] transition-[width] duration-100 ease-out ${
-          sidebarExpanded ? 'md:left-60' : 'md:left-0'
-        }`}
+        className="medflow-scroll-progress pointer-events-none fixed left-0 top-0 z-50 h-[3px] bg-[#1D4ED8] transition-[width] duration-100 ease-out"
         style={{ width: `${scrollPct}%` }}
         aria-hidden
       />
-      <Sidebar
-        expanded={sidebarExpanded}
-        mobileOpen={mobileNavOpen}
-        onClose={() => setMobileNavOpen(false)}
-      />
-      <Topbar
-        title={meta?.title ?? 'MedFlow PH'}
-        breadcrumb={meta?.crumbs ?? ['Home']}
-        appNavVisible={sidebarVisualOpen}
-        sidebarDockExpanded={sidebarExpanded}
-        onSidebarToggle={toggleAppSidebar}
-      />
-      <main
-        className={`medflow-main ml-0 min-h-screen max-w-none px-4 py-6 pt-[4.75rem] md:px-8 md:py-6 md:pt-[4.5rem] ${
-          sidebarExpanded ? 'md:ml-60' : 'md:ml-0'
-        }`}
-      >
+      <Topbar title={meta?.title ?? 'MedFlow PH'} breadcrumb={meta?.crumbs ?? ['Home']} />
+      <main className="medflow-main ml-0 min-h-screen max-w-none px-4 py-6 pt-24 md:px-8 md:py-6 md:pt-24">
         <Outlet />
       </main>
     </div>
