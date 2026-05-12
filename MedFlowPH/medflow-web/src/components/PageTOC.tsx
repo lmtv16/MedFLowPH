@@ -35,7 +35,7 @@ export const TOC_EDA: PageTOCSection[] = [
   { id: 'du-dbscan', label: 'DBSCAN' },
   { id: 'du-eval-kmeans', label: 'K-Means Eval' },
   { id: 'du-eval-dbscan', label: 'DBSCAN Eval' },
-  { id: 'du-interp-kmeans', label: 'Interpretation' },
+  { id: 'du-interp-kmeans', label: 'K-Means Interp' },
   { id: 'du-interp-dbscan', label: 'DBSCAN Interp' },
   { id: 'du-comparison', label: 'Comparison' },
   { id: 'du-conclusion', label: 'Conclusion' },
@@ -52,8 +52,11 @@ export const TOC_PREPROCESSING: PageTOCSection[] = [
   { id: 'feature-engineering', label: 'Feature Engineering' },
 ]
 
-/** In-page anchors present on the Clustering workflow page (PCA/K‑Means blocks lack SectionWrapper ids). */
+/** Clustering workflow page — scroll anchors for PCA, K‑Means, DBSCAN, and approach comparison. */
 export const TOC_CLUSTERING_NAV: PageTOCSection[] = [
+  { id: 'clustering-pca', label: 'Principal component analysis' },
+  { id: 'clustering-kmeans', label: 'K‑Means clustering' },
+  { id: 'clustering-dbscan', label: 'DBSCAN clustering' },
   { id: 'clustering-approach-comparison', label: 'Approach comparison' },
 ]
 
@@ -62,9 +65,13 @@ export const TOC_EVALUATION_NAV: PageTOCSection[] = [
 ]
 
 export const TOC_INTERPRETATION: PageTOCSection[] = [
+  { id: 'interpretation-overview', label: 'Overview' },
   { id: 'interpretation-pca-3d', label: '3D PCA (pre‑clustering)' },
   { id: 'interpretation-kmeans-3d', label: '3D K‑Means PCA' },
   { id: 'interpretation-dbscan-3d', label: '3D DBSCAN PCA' },
+  { id: 'interpretation-labels', label: 'Cluster insights' },
+  { id: 'interpretation-cluster-summary', label: 'Summary & Conclusion' },
+  { id: 'interpretation-policy', label: 'Evidences' },
 ]
 
 export const TOC_COMPARISON: PageTOCSection[] = [

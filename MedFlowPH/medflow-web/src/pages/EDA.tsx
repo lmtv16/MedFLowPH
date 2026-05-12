@@ -47,12 +47,10 @@ const PCA_INTERACTIVE = '/results/03/Clustering/pca_space_pc123_3d_interactive.h
 
 // K-Means
 const KMEANS_NUMERIC = '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_numeric.png'
-const KMEANS_SEMANTIC = '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_semantic.png'
 const KMEANS_INTERACTIVE = '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_interactive.html'
 
 // DBSCAN
 const DBSCAN_NUMERIC = '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_numeric.png'
-const DBSCAN_SEMANTIC = '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_semantic.png'
 const DBSCAN_INTERACTIVE = '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_interactive.html'
 const DBSCAN_LEGEND = '/results/04B/PCA_Cluster/dbscan_semantic_legend_table.txt'
 
@@ -362,11 +360,11 @@ export function EDA() {
                 visualization prior to clustering overlays.
               </p>
               <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={PCA_LOADINGS} title="PCA loadings (PC1–PC3)" />
-                <ImageCard src={PCA_VARIANCE} title="Cumulative explained variance" />
+                <ImageCard src={PCA_LOADINGS} title="PCA Feature Loadings" />
+                <ImageCard src={PCA_VARIANCE} title="PCA Explained Variance" />
               </div>
               <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={PCA_3D} title="PCA space — translucent view" />
+                <ImageCard src={PCA_3D} title="PCA 3D Scatter" />
                 <ImageCard src={PCA_3D_SOLID} title="PCA space — solid view" />
               </div>
               <IframePanel src={PCA_INTERACTIVE} title="Interactive PCA View" height={600} />
@@ -391,9 +389,8 @@ export function EDA() {
                   Smallest cluster: Cluster 2 — 38,657 records
                 </span>
               </div>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ImageCard src={KMEANS_NUMERIC} title="K‑Means clusters — numeric coloring" />
-                <ImageCard src={KMEANS_SEMANTIC} title="K‑Means clusters — semantic coloring" />
+              <div className="mb-6">
+                <ImageCard src={KMEANS_NUMERIC} title="K-means PCA Cluster Plot" />
               </div>
               <IframePanel src={KMEANS_INTERACTIVE} title="Interactive K-Means PCA View" height={600} />
             </SectionWrapper>
@@ -417,9 +414,8 @@ export function EDA() {
                   Largest cluster: Cluster 25 — 94,311 records
                 </span>
               </div>
-              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="mb-6">
                 <ImageCard src={DBSCAN_NUMERIC} title="DBSCAN clusters — numeric coloring" />
-                <ImageCard src={DBSCAN_SEMANTIC} title="DBSCAN clusters — semantic coloring" />
               </div>
               <IframePanel src={DBSCAN_INTERACTIVE} title="Interactive DBSCAN PCA View" height={600} />
 
@@ -536,8 +532,8 @@ export function EDA() {
                 as exploratory overlays rather than polished stakeholder segments.
               </p>
               <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
-                Where semantic coloring is shown, it inherits the same disclaimer as k-means: labels summarize thematic
-                contrasts post hoc and never steer the density estimator itself.
+                Any narrative semantic labels elsewhere in the workbook are post hoc guides only—they summarize thematic
+                contrasts after clustering and do not steer DBSCAN&apos;s density estimation.
               </p>
               <div className="rounded-xl border border-blue-200 bg-blue-50 p-5 dark:border-blue-900 dark:bg-blue-950/40">
                 <p className="text-sm leading-relaxed text-blue-950 dark:text-blue-50">

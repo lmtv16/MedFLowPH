@@ -1,5 +1,6 @@
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
+import { MEDFLOW_LIGHTBOX_PLUGINS, MEDFLOW_LIGHTBOX_ZOOM } from './medflowLightboxZoom'
 
 export type GalleryImage = { src: string; title: string }
 
@@ -17,6 +18,8 @@ export function LightboxGallery({ images, index, open, onClose }: LightboxGaller
       close={onClose}
       index={index}
       slides={images.map((img) => ({ src: img.src, title: img.title }))}
+      plugins={MEDFLOW_LIGHTBOX_PLUGINS}
+      zoom={{ ...MEDFLOW_LIGHTBOX_ZOOM }}
     />
   )
 }

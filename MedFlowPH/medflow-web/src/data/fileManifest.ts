@@ -126,36 +126,28 @@ export const IMAGES = {
   clustering: {
     pca: [
       {
-        src: '/results/03/Clustering/cumulative_variance_pca.png',
-        title: 'Cumulative variance (PCA)',
+        src: '/results/03/Clustering/pca_loadings_pc123.png',
+        title: 'PCA Feature Loadings',
       },
       {
-        src: '/results/03/Clustering/pca_loadings_pc123.png',
-        title: 'PCA loadings PC1–3',
+        src: '/results/03/Clustering/cumulative_variance_pca.png',
+        title: 'PCA Explained Variance',
       },
       {
         src: '/results/03/Clustering/pca_space_pc123_3d.png',
-        title: 'PCA space PC1–3 (static 3D view)',
+        title: 'PCA 3D Scatter',
       },
     ],
     kmeans: [
       {
         src: '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_numeric.png',
-        title: 'K‑Means PCA space — numeric colors',
-      },
-      {
-        src: '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_semantic.png',
-        title: 'K‑Means PCA space — semantic legend',
+        title: 'K-means PCA Cluster Plot',
       },
     ],
     dbscan: [
       {
         src: '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_numeric.png',
-        title: 'DBSCAN PCA space — numeric colors',
-      },
-      {
-        src: '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_semantic.png',
-        title: 'DBSCAN PCA space — semantic legend',
+        title: 'DBSCAN PCA',
       },
     ],
   },
@@ -214,26 +206,6 @@ export const IMAGES = {
       {
         src: '/results/05B/EDA/metric_rank_heatmap.png',
         title: 'Metric rank heatmap (DBSCAN)',
-      },
-    ],
-  },
-  interpretation: {
-    kmeans: [
-      {
-        src: '/results/06/Cluster_Interpretation/EDA/base_means_heatmap.png',
-        title: 'Base means heatmap',
-      },
-      {
-        src: '/results/06/Cluster_Interpretation/EDA/theme_means_heatmap.png',
-        title: 'Theme means heatmap',
-      },
-      {
-        src: '/results/06/Cluster_Interpretation/EDA/theme_z_heatmap.png',
-        title: 'Theme z‑score heatmap',
-      },
-      {
-        src: '/results/06/Cluster_Interpretation/EDA/cluster_size_bar.png',
-        title: 'Cluster sizes',
       },
     ],
   },

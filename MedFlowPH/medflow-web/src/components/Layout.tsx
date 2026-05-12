@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { ImageZoomLightboxProvider } from './ImageZoomLightboxContext'
 import { Topbar } from './Topbar'
 
 const ROUTE_META: Record<
@@ -70,7 +71,9 @@ export function Layout() {
       />
       <Topbar title={meta?.title ?? 'MedFlow PH'} breadcrumb={meta?.crumbs ?? ['Home']} />
       <main className="medflow-main ml-0 min-h-screen max-w-none px-4 py-6 pt-24 md:px-8 md:py-6 md:pt-24">
-        <Outlet />
+        <ImageZoomLightboxProvider>
+          <Outlet />
+        </ImageZoomLightboxProvider>
       </main>
     </div>
   )
