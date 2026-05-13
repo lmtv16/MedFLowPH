@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronDown, Moon, Sparkles, Sun } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
+  computeActiveTocSectionId,
+  SCROLL_SPY_VIEWPORT_TOP,
   TOC_CLUSTERING_NAV,
   TOC_COMPARISON,
   TOC_EDA,
@@ -47,10 +49,10 @@ function scrollToId(id: string) {
 
 /** Segment inside split nav control (no rounding; parent clips with rounded-lg). */
 function navSegmentClass(isActive: boolean) {
-  return `inline-flex items-center gap-1 whitespace-nowrap text-sm transition-colors ${
+  return `inline-flex items-center gap-1 whitespace-nowrap text-sm transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
     isActive
       ? 'bg-primary/10 font-semibold text-mf-primary dark:text-primary'
-      : 'text-mf-muted hover:bg-slate-100 hover:text-mf-ink dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground'
+      : 'text-mf-muted hover:bg-slate-100 hover:text-mf-ink hover:brightness-[1.03] dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground dark:hover:brightness-[1.05]'
   }`
 }
 
@@ -78,6 +80,56 @@ function NavPageDropdown({
   const navigate = useNavigate()
   const location = useLocation()
   const isActive = path === '/' ? location.pathname === '/' : location.pathname === path
+
+  const tocScrollSpyIds = useMemo(
+    () => sections.filter((sec) => !sec.linkTo).map((sec) => sec.id),
+    [sections],
+  )
+
+  const [tocDropdownScrollActiveId, setTocDropdownScrollActiveId] = useState<string | null>(
+    null,
+  )
+
+  /**
+   * IntersectionObserver complements smooth scrolling by re-evaluating entries when viewport
+   * visibility changes (synced via the same viewport-line heuristic as sidebar PageTOC).
+   */
+  useEffect(() => {
+    if (location.pathname !== path || tocScrollSpyIds.length === 0) {
+      setTocDropdownScrollActiveId(null)
+      return
+    }
+
+    const elements = tocScrollSpyIds
+      .map((id) => document.getElementById(id))
+      .filter((n): n is HTMLElement => Boolean(n))
+
+    if (elements.length === 0) return
+
+    const syncActive = () => {
+      const nextId = computeActiveTocSectionId(tocScrollSpyIds)
+      if (nextId) setTocDropdownScrollActiveId(nextId)
+    }
+
+    let frame = 0
+    const onIntersect: IntersectionObserverCallback = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(syncActive)
+    }
+
+    const observer = new IntersectionObserver(onIntersect, {
+      root: null,
+      threshold: [0, 0.05, 0.1],
+      rootMargin: `-${SCROLL_SPY_VIEWPORT_TOP}px 0px -48% 0px`,
+    })
+    elements.forEach((el) => observer.observe(el))
+    syncActive()
+
+    return () => {
+      cancelAnimationFrame(frame)
+      observer.disconnect()
+    }
+  }, [location.pathname, path, tocScrollSpyIds])
 
   const navLinkLabel = compact && compactLabel ? compactLabel : label
 
@@ -135,7 +187,7 @@ function NavPageDropdown({
           aria-label={`${label}: open table of contents for this page`}
         >
           <ChevronDown
-            className={`h-3.5 w-3.5 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-[280ms] ease-out motion-reduce:transition-none ${isOpen ? 'rotate-180' : ''}`}
             aria-hidden
           />
         </button>
@@ -152,17 +204,28 @@ function NavPageDropdown({
             aria-label={`${label} — page contents`}
           >
             <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Contents</p>
-            {sections.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                role="menuitem"
-                onClick={() => goToSection(s)}
-                className="flex w-full px-3 py-2 text-left text-sm text-mf-ink hover:bg-slate-50 dark:text-foreground dark:hover:bg-muted"
-              >
-                {s.label}
-              </button>
-            ))}
+            {sections.map((s) => {
+              const isScrollHere =
+                !s.linkTo &&
+                tocDropdownScrollActiveId !== null &&
+                tocDropdownScrollActiveId === s.id
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => goToSection(s)}
+                  className={`flex w-full border-l-2 px-3 py-2 text-left text-sm transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
+                    isScrollHere
+                      ? 'border-primary bg-primary/[0.08] font-semibold text-mf-primary dark:bg-primary/10 dark:text-primary'
+                      : 'border-transparent text-mf-ink hover:border-primary/30 hover:bg-slate-50 dark:text-foreground dark:hover:border-primary/30 dark:hover:bg-muted'
+                  }`}
+                  aria-current={isScrollHere ? 'location' : undefined}
+                >
+                  {s.label}
+                </button>
+              )
+            })}
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -294,12 +357,12 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
               setOpenNavKey(null)
               setMoreOpen((o) => !o)
             }}
-            className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1.5 text-sm text-mf-muted hover:bg-slate-100 hover:text-mf-ink dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground"
+            className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1.5 text-sm text-mf-muted transition-colors duration-[280ms] ease-out hover:bg-slate-100 hover:text-mf-ink motion-reduce:transition-none dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground"
             aria-expanded={moreOpen}
             aria-haspopup="menu"
           >
             More
-            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-[280ms] ease-out motion-reduce:transition-none ${moreOpen ? 'rotate-180' : ''}`} />
           </button>
           <AnimatePresence>
             {moreOpen ? (
@@ -317,10 +380,10 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                     to={r.path}
                     role="menuitem"
                     className={({ isActive }) =>
-                      `flex items-center gap-2 px-3 py-2 text-sm ${
+                      `flex items-center gap-2 border-l-2 px-3 py-2 text-sm transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
                         isActive
-                          ? 'bg-primary/10 font-semibold text-mf-primary dark:text-primary'
-                          : 'text-mf-ink hover:bg-slate-50 dark:text-foreground dark:hover:bg-muted'
+                          ? 'border-primary bg-primary/10 font-semibold text-mf-primary dark:text-primary'
+                          : 'border-transparent text-mf-ink hover:border-primary/30 hover:bg-slate-50 dark:text-foreground dark:hover:border-primary/30 dark:hover:bg-muted'
                       } ${r.highlight ? 'ring-1 ring-inset ring-sky-400/40' : ''}`
                     }
                     onClick={() => setMoreOpen(false)}

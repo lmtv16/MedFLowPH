@@ -21,8 +21,27 @@
     font-weight: 700;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   #root {
     @apply min-h-screen;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/**
+ * Sidebar / dropdown TOC scroll-spy enhancement (applied alongside existing Tailwind utilities).
+ */
+@layer components {
+  .medflow-scroll-active-indicator {
+    box-shadow: inset 3px 0 0 hsl(var(--primary) / 0.75);
   }
 }
 

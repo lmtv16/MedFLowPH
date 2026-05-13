@@ -184,6 +184,30 @@ function policyGalleryForCluster(clusterId: number): GalleryImage[] {
   }))
 }
 
+const DBSCAN_POLICY_EVIDENCE_ROOT = '/results/06B/Cluster_Interpretation/Policy_Evidence'
+
+/** Policy bar chart folders under 06B (DBSCAN interpretation outputs). */
+const DBSCAN_POLICY_EVIDENCE_TABS = [
+  { folder: 'cluster_0', label: 'Cluster 0' },
+  { folder: 'cluster_119', label: 'Cluster 119' },
+  { folder: 'cluster_25', label: 'Cluster 25' },
+  { folder: 'cluster_26', label: 'Cluster 26' },
+  { folder: 'cluster_27', label: 'Cluster 27' },
+  { folder: 'noise', label: 'Noise' },
+  { folder: 'cluster_other', label: 'Other (pooled)' },
+] as const
+
+function policyGalleryForDbscanPolicyFolder(
+  folder: (typeof DBSCAN_POLICY_EVIDENCE_TABS)[number]['folder'],
+  displayLabel: string
+): GalleryImage[] {
+  const root = `${DBSCAN_POLICY_EVIDENCE_ROOT}/${folder}`
+  return POLICY_BAR_FILES.map((f) => ({
+    src: `${root}/${f}`,
+    title: `${displayLabel} — ${policyChartTitle(f)}`,
+  }))
+}
+
 function formatShare(v: string | undefined): string {
   const n = Number(v)
   if (!Number.isFinite(n)) return '—'
@@ -1367,6 +1391,9 @@ export function Interpretation() {
   const { data: dbscanSemanticRows, loading: dbscanSemanticLoading } = useCsvData(DATA_PATHS.dbscanSemanticMap)
   const { data: dbscanThemeRows, loading: dbscanThemeLoading } = useCsvData(DATA_PATHS.dbscanThemeProfiles)
   const [policyCluster, setPolicyCluster] = useState<(typeof POLICY_CLUSTER_IDS)[number]>(0)
+  const [dbscanPolicyFolder, setDbscanPolicyFolder] = useState<
+    (typeof DBSCAN_POLICY_EVIDENCE_TABS)[number]['folder']
+  >('cluster_0')
   const [lightbox, setLightbox] = useState<{ open: boolean; idx: number; imgs: GalleryImage[] }>({
     open: false,
     idx: 0,
@@ -1374,6 +1401,12 @@ export function Interpretation() {
   })
 
   const policyClusterGallery = useMemo(() => policyGalleryForCluster(policyCluster), [policyCluster])
+
+  const dbscanPolicyClusterGallery = useMemo(() => {
+    const tab = DBSCAN_POLICY_EVIDENCE_TABS.find((t) => t.folder === dbscanPolicyFolder)
+    const label = tab?.label ?? 'Cluster 0'
+    return policyGalleryForDbscanPolicyFolder(dbscanPolicyFolder, label)
+  }, [dbscanPolicyFolder])
 
   const semanticById = useMemo(() => {
     const m = new Map<string, { label: string; rationale: string }>()
@@ -1464,20 +1497,16 @@ export function Interpretation() {
             title="Interactive 3D PCA space (pre‑clustering)"
             height={600}
           />
-          <IframePanel
-            id="interpretation-kmeans-3d"
-            src={INTERACTIVE.kmeans3d}
-            title="Interactive 3D K‑Means PCA space"
-            height={600}
-          />
-          <IframePanel
-            id="interpretation-dbscan-3d"
-            src={INTERACTIVE.dbscan3d}
-            title="Interactive 3D DBSCAN PCA space"
-            height={600}
-          />
 
-          <SectionWrapper id="interpretation-labels">
+          <SectionWrapper id="interpretation-section-kmeans">
+            <IframePanel
+              id="interpretation-kmeans-3d"
+              src={INTERACTIVE.kmeans3d}
+              title="Interactive 3D K‑Means PCA space"
+              height={600}
+            />
+
+            <SectionWrapper id="interpretation-labels">
             <SectionHeader
               title="Cluster Insights & Interpretation"
               subtitle="Derived from results/06/Interpretation: human‑readable cluster names, collapsible rationale, and label‑fit evidence; optional tabulated theme metrics appear per card when applicable."
@@ -1626,8 +1655,17 @@ export function Interpretation() {
               </SectionWrapper>
             </div>
           </SectionWrapper>
+          </SectionWrapper>
 
-          <SectionWrapper id="interpretation-dbscan-insights">
+          <SectionWrapper id="interpretation-section-dbscan">
+            <IframePanel
+              id="interpretation-dbscan-3d"
+              src={INTERACTIVE.dbscan3d}
+              title="Interactive 3D DBSCAN PCA space"
+              height={600}
+            />
+
+            <SectionWrapper id="interpretation-dbscan-insights">
             <SectionHeader
               title="DBSCAN Cluster Insights & Interpretation"
               subtitle="Derived from results/06B/Interpretation and per-cluster policy evidence under results/06B/Cluster_Interpretation/Policy_Evidence (clusters 0, 119, 25, 26, 27, noise, and pooled cluster_other)."
@@ -1786,9 +1824,11 @@ export function Interpretation() {
             </div>
           </SectionWrapper>
 
+          </SectionWrapper>
+
           <SectionWrapper id="interpretation-policy">
             <SectionHeader
-              title="Evidences"
+              title="Evidence(K-Means)"
               subtitle="results/06/Cluster_Interpretation/Policy_Evidence — per‑cluster distributions for procurement dimensions."
               icon={Scale}
             />
@@ -1821,6 +1861,48 @@ export function Interpretation() {
                       open: true,
                       idx,
                       imgs: [...policyClusterGallery],
+                    })
+                  }
+                />
+              ))}
+            </div>
+          </SectionWrapper>
+
+          <SectionWrapper id="interpretation-policy-dbscan">
+            <SectionHeader
+              title="Evidences (DBSCAN)"
+              subtitle="results/06B/Cluster_Interpretation/Policy_Evidence — same procurement-dimension bar charts for DBSCAN clusters 0, 119, 25–27, noise, and pooled cluster_other."
+              icon={Scale}
+            />
+
+            <div className="mb-4 flex flex-wrap gap-2">
+              {DBSCAN_POLICY_EVIDENCE_TABS.map(({ folder, label }) => (
+                <button
+                  key={folder}
+                  type="button"
+                  onClick={() => setDbscanPolicyFolder(folder)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    dbscanPolicyFolder === folder
+                      ? 'border-mf-primary bg-mf-primary text-white'
+                      : 'border-slate-200 bg-white text-mf-muted hover:border-slate-300'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {dbscanPolicyClusterGallery.map((img, idx) => (
+                <ImageCard
+                  key={img.src}
+                  src={img.src}
+                  title={img.title}
+                  onClick={() =>
+                    setLightbox({
+                      open: true,
+                      idx,
+                      imgs: [...dbscanPolicyClusterGallery],
                     })
                   }
                 />
