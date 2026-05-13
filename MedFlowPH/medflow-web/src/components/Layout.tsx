@@ -13,10 +13,12 @@ const ROUTE_META: Record<
 > = {
   '/': { title: 'MedFlow PH', crumbs: ['Home'] },
   '/eda': { title: 'Data Understanding', crumbs: ['Home', 'Data Understanding'] },
+  '/cleaning': { title: 'Data Cleaning', crumbs: ['Home', 'Cleaning'] },
   '/preprocessing': {
     title: 'Preprocessing Pipeline',
     crumbs: ['Home', 'Preprocessing'],
   },
+  '/pca': { title: 'Principal Component Analysis', crumbs: ['Home', 'PCA'] },
   '/clustering': { title: 'Clustering Workflow', crumbs: ['Home', 'Clustering'] },
   '/evaluation': {
     title: 'Model Evaluation',

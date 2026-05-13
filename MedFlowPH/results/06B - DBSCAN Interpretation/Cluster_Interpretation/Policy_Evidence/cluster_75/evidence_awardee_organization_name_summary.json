@@ -1,0 +1,15 @@
+{
+  "cluster_id": 75,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Awardee Organization Name",
+  "column_name": "Awardee Organization Name",
+  "resolved_column": "Awardee Organization Name",
+  "numeric": false,
+  "top_value": "ZUELLIG PHARMA CORPORATION",
+  "top_count": 46,
+  "cluster_rows": 854,
+  "top_share_within_cluster": 0.053864168618266976,
+  "global_count_of_top_value": 5037,
+  "global_share_of_top_value": 0.010330082751407389,
+  "lift_vs_global": 5.214301754836226
+}

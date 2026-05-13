@@ -1,0 +1,15 @@
+{
+  "cluster_id": 4,
+  "evidence_group": "supply_concentration",
+  "logical_column": "buyer_island",
+  "column_name": "buyer_island",
+  "resolved_column": "buyer_island",
+  "numeric": false,
+  "top_value": "Luzon",
+  "top_count": 33082,
+  "cluster_rows": 48437,
+  "top_share_within_cluster": 0.6829902760286558,
+  "global_count_of_top_value": 310092,
+  "global_share_of_top_value": 0.6359491801765773,
+  "lift_vs_global": 1.0739698977817962
+}

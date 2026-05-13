@@ -5,7 +5,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 const PAGE_ORDER = [
   '/',
   '/data-understanding',
+  '/cleaning',
   '/preprocessing',
+  '/pca',
   '/clustering',
   '/evaluation',
   '/interpretation',
@@ -17,7 +19,9 @@ type OrderedPath = (typeof PAGE_ORDER)[number]
 const PAGE_NAMES: Record<OrderedPath, string> = {
   '/': 'Home',
   '/data-understanding': 'Data Understanding',
+  '/cleaning': 'Cleaning',
   '/preprocessing': 'Preprocessing',
+  '/pca': 'PCA',
   '/clustering': 'Clustering',
   '/evaluation': 'Evaluation',
   '/interpretation': 'Interpretation',

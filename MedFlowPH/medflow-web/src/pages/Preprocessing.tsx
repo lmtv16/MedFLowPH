@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Clock, DollarSign, Hash, Layers } from 'lucide-react'
+import { AlertTriangle, Clock, DollarSign, Hash, Layers } from 'lucide-react'
+import { FigureCarousel } from '../components/FigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
@@ -8,6 +9,14 @@ import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
 import { useCsvData } from '../hooks/useCsvData'
+
+// Cleaned Dataset Exploration (merged EDA)
+const NUMERIC_CORR = '/results/01/Exploratory Data Analysis/merged/04_correlation_numeric.png'
+const CAT_CORR = '/results/01/Exploratory Data Analysis/merged/05_correlation_categorical_cramers_v.png'
+const DTYPE_COUNTS = '/results/01/Exploratory Data Analysis/merged/02_overview_dtype_counts.png'
+const ROWS_BY_YEAR = '/results/01/Exploratory Data Analysis/merged/06_rows_by_year_cleaned_medical.png'
+const RAW_VS_CLEANED = '/results/01/Exploratory Data Analysis/merged/07_raw_vs_cleaned_rows_by_year_grouped.png'
+const STACKED = '/results/01/Exploratory Data Analysis/merged/08_raw_vs_cleaned_stacked_by_year.png'
 
 const DATA_CLEANING_INTRO =
   'The analytical pipeline encompasses a rigorous end-to-end data science methodology: starting with deep data understanding of fragmented government records, proceeding through extensive cleaning and normalization, applying robust preprocessing techniques, reducing dimensionality via Principal Component Analysis (PCA), and ultimately comparing K-Means and DBSCAN clustering models to extract meaningful procurement behaviors.'
@@ -64,9 +73,17 @@ export function Preprocessing() {
     imgs: [],
     idx: 0,
   })
+  const [preprocessingSlideIdx, setPreprocessingSlideIdx] = useState(0)
 
   function openGallery(imgs: GalleryImage[], idx: number) {
     setGallery({ imgs, idx })
+  }
+
+  const preprocessingSlides = IMAGES.eda.preprocessingCarousel
+
+  function openPreprocessing(i: number) {
+    const images = preprocessingSlides.map((item) => ({ src: item.src, title: item.title }))
+    setGallery({ imgs: images, idx: i })
   }
 
   const scaledPreviewKeys = scaledRows.length ? Object.keys(scaledRows[0] ?? {}) : []
@@ -76,6 +93,130 @@ export function Preprocessing() {
   return (
     <PageShell>
       <div className="space-y-12">
+        <SectionWrapper id="preprocessing-overview" title="02 - Data Preprocessing">
+          <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+            Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding
+            captured categorical structure without collapsing rare procurement modes.
+          </p>
+          <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
+            Slides follow the §02 pipeline: feature selection, then min–max scaling diagnostics, then one-hot encoding
+            summaries. Open the lightbox from any slide; edit copy under{' '}
+            <span className="font-mono text-xs">IMAGES.eda.preprocessingCarousel</span>.
+          </p>
+          <FigureCarousel
+            items={preprocessingSlides}
+            activeIndex={preprocessingSlideIdx}
+            onActiveIndexChange={setPreprocessingSlideIdx}
+            getFigureLabel={(idx, item) => `Figure PP-DU${idx + 1}: ${item.title}`}
+            onSlideImageClick={openPreprocessing}
+            ariaPrevLabel="Previous preprocessing figure"
+            ariaNextLabel="Next preprocessing figure"
+          />
+
+          <div className="mt-10 rounded-r-xl border-l-4 border-amber-400 bg-amber-50 p-5 dark:border-amber-500 dark:bg-amber-950/40">
+            <div className="flex gap-3">
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+              <div>
+                <p className="font-semibold text-amber-900 dark:text-amber-100">
+                  Important Note About Policy Theme Scores
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-amber-950/90 dark:text-amber-50/90">
+                  Cluster IDs from later k-means runs are{' '}
+                  <strong className="font-semibold">not</strong> substitutes for these engineered themes: k-means
+                  partitions PCA space, while the theme scores are standalone proxies attached before scaling.
+                  Columns include{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
+                    high_risk_shortage
+                  </code>
+                  ,{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
+                    low_risk_shortage
+                  </code>
+                  ,{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">overstocking</code>,{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">understocking</code>,{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">normal_inventory</code>
+                  ,{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
+                    unequal_supply_regions
+                  </code>
+                  , and{' '}
+                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
+                    equal_supply_regions
+                  </code>{' '}
+                  — each constrained to [0, 1] and interpreted as procurement-process proxies rather than confirmed
+                  inventory ground truth.
+                </p>
+              </div>
+            </div>
+          </div>
+        </SectionWrapper>
+
+        <SectionWrapper id="cleaned-dataset-exploration" title="Cleaned Dataset Exploration">
+          <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+            Exploratory visuals validate relationships among numeric cadence features, categorical procurement codes,
+            volume by year, and the impact of cleaning on longitudinal coverage.
+          </p>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <ImageCard
+              src={NUMERIC_CORR}
+              title="Numeric feature correlation"
+              caption={`This heatmap shows how the cleaned numeric fields relate to each other. The strongest relationship is between Item Budget and Contract Amount with a correlation of 0.91, meaning higher planned item budgets usually correspond to higher awarded contract amounts.
+
+Most other numeric fields have weak relationships, so additional feature engineering, scaling, and PCA were needed before clustering.`}
+            />
+            <ImageCard
+              src={CAT_CORR}
+              title="Categorical association heatmap"
+              caption={`This heatmap shows how selected categorical fields are related using Cramér's V. The strongest relationship is between organization type and grouped organization type, which is expected because they describe similar information.
+
+Most other categorical fields show weak to moderate association, meaning they provide different procurement context. This helped guide which categorical variables could be encoded during preprocessing.`}
+            />
+            <ImageCard
+              src={DTYPE_COUNTS}
+              title="dtype counts"
+              caption={`Most columns in the cleaned PhilGEPS dataset are text or categorical fields. This is expected because procurement records include descriptions, locations, agencies, statuses, and supplier details.
+
+Since clustering requires numeric inputs, the next step converts selected categorical, date, and numeric fields into machine-learning-ready features.`}
+            />
+            <ImageCard
+              src={ROWS_BY_YEAR}
+              title="Rows by year (cleaned medical slice)"
+              caption={`This chart shows how many cleaned medical procurement records were available per year. The highest counts appear in 2023 and 2024, while 2020 and 2021 have fewer records.
+
+The lower count in 2025 should be interpreted carefully because the available 2025 data may not cover the full year.`}
+            />
+            <ImageCard
+              src={RAW_VS_CLEANED}
+              title="Raw vs cleaned rows by year"
+              caption={
+                <>
+                  This chart compares all loaded PhilGEPS records with the final cleaned medical procurement records.
+                  The cleaned dataset is smaller because the process filtered out non-medical procurement records.
+                  {'\n\n'}
+                  After Step 01, the dataset was reduced to{' '}
+                  <strong className="font-bold text-slate-700 dark:text-foreground">
+                    487,605 medical-related records
+                  </strong>
+                  , making it focused and ready for preprocessing and clustering.
+                </>
+              }
+            />
+            <ImageCard
+              src={STACKED}
+              title="Stacked raw vs cleaned composition"
+              caption={`This chart shows how the raw PhilGEPS records were reduced into the final cleaned medical dataset. The blue section shows records kept for analysis, while the gray section shows records removed because they were non-medical, duplicated, or not included in the final output.
+
+The final dataset is smaller, but more focused on medical procurement records needed for clustering.`}
+            />
+          </div>
+          <p className="mt-6 text-sm leading-relaxed text-slate-500 dark:text-muted-foreground">
+            Together these boards demonstrate that medical procurement signals remain structured enough for PCA while
+            also exposing heavy-tailed budgets and categorical leakage risks that motivate regularization in later
+            steps.
+          </p>
+        </SectionWrapper>
+
         <SectionWrapper id="data-cleaning" title="Data Cleaning">
           <p className="text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">{DATA_CLEANING_INTRO}</p>
 

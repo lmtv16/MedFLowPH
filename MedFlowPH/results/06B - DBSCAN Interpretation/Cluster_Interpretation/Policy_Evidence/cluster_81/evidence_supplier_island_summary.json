@@ -1,0 +1,15 @@
+{
+  "cluster_id": 81,
+  "evidence_group": "supply_concentration",
+  "logical_column": "supplier_island",
+  "column_name": "supplier_island",
+  "resolved_column": "supplier_island",
+  "numeric": false,
+  "top_value": "Mindanao",
+  "top_count": 197,
+  "cluster_rows": 547,
+  "top_share_within_cluster": 0.360146252285192,
+  "global_count_of_top_value": 47550,
+  "global_share_of_top_value": 0.09751745777832467,
+  "lift_vs_global": 3.6931464425977083
+}

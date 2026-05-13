@@ -1,4 +1,4 @@
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, LayoutGrid, MapPin, Scale } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, Flag, LayoutGrid, MapPin, Scale } from 'lucide-react'
 import type { PointerEvent, ReactNode } from 'react'
 import { Children, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ImageCard } from '../components/ImageCard'
@@ -1491,13 +1491,6 @@ export function Interpretation() {
             />
           </SectionWrapper>
 
-          <IframePanel
-            id="interpretation-pca-3d"
-            src={INTERACTIVE.pca3d}
-            title="Interactive 3D PCA space (pre‑clustering)"
-            height={600}
-          />
-
           <SectionWrapper id="interpretation-section-kmeans">
             <IframePanel
               id="interpretation-kmeans-3d"
@@ -1598,61 +1591,110 @@ export function Interpretation() {
                   icon={LayoutGrid}
                 />
 
-                <div className="space-y-6">
-                  <div className="space-y-3">
-                    <p className="text-sm leading-relaxed text-mf-muted">
-                      The six clusters show that medical-related procurement behavior is not uniform. Each cluster
-                      captures a different procurement pattern, such as high-value centralized procurement, routine
-                      high-quantity supply procurement, delayed medium-value procurement, stable routine procurement,
-                      high-volume high-budget procurement, and bulk low-to-medium cost procurement.
-                    </p>
+                <div className="space-y-3">
+                  <p className="text-sm leading-relaxed text-mf-muted">
+                    The six clusters show that medical-related procurement behavior is not uniform. Each cluster
+                    captures a different procurement pattern, such as high-value centralized procurement, routine
+                    high-quantity supply procurement, delayed medium-value procurement, stable routine procurement,
+                    high-volume high-budget procurement, and bulk low-to-medium cost procurement.
+                  </p>
 
-                    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-                      <table className="min-w-full text-left text-xs">
-                        <thead className="bg-slate-50 text-mf-muted">
-                          <tr>
-                            <th className="px-3 py-2 font-semibold whitespace-nowrap">Cluster</th>
-                            <th className="px-3 py-2 font-semibold">Suggested label</th>
-                            <th className="px-3 py-2 font-semibold">Main meaning</th>
+                  <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <table className="min-w-full text-left text-xs">
+                      <thead className="bg-slate-50 text-mf-muted">
+                        <tr>
+                          <th className="px-3 py-2 font-semibold whitespace-nowrap">Cluster</th>
+                          <th className="px-3 py-2 font-semibold">Suggested label</th>
+                          <th className="px-3 py-2 font-semibold">Main meaning</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-mf-ink">
+                        {OVERALL_CLUSTER_SUMMARY_ROWS.map((r) => (
+                          <tr key={r.cluster} className="odd:bg-white even:bg-slate-50/60">
+                            <td className="px-3 py-2 font-medium whitespace-nowrap tabular-nums">
+                              Cluster {r.cluster}
+                            </td>
+                            <td className="px-3 py-2 font-medium">{r.label}</td>
+                            <td className="px-3 py-2 leading-snug text-mf-muted">{r.meaning}</td>
                           </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 text-mf-ink">
-                          {OVERALL_CLUSTER_SUMMARY_ROWS.map((r) => (
-                            <tr key={r.cluster} className="odd:bg-white even:bg-slate-50/60">
-                              <td className="px-3 py-2 font-medium whitespace-nowrap tabular-nums">
-                                Cluster {r.cluster}
-                              </td>
-                              <td className="px-3 py-2 font-medium">{r.label}</td>
-                              <td className="px-3 py-2 leading-snug text-mf-muted">{r.meaning}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 border-t border-slate-200 pt-6">
-                    <h3 className="text-lg font-semibold tracking-tight text-mf-ink">Overall conclusion</h3>
-                    <p className="text-sm leading-relaxed text-mf-muted">
-                      The cluster results provide useful insights for understanding medical-related procurement
-                      behavior in the Philippine public health context. The clusters do not directly prove actual
-                      shortages, overstocking, or supply failure. However, they provide strong analytical signals that
-                      can guide further review.
-                    </p>
-                    <p className="text-sm font-medium text-mf-ink">For the Philippines, these clusters can support:</p>
-                    <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-mf-muted">
-                      {OVERALL_CONCLUSION_USES.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                    <p className="text-sm leading-relaxed text-mf-muted">
-                      Overall, the cluster interpretations help stakeholders understand where procurement activity is
-                      concentrated, which procurement groups may require closer monitoring, and how different
-                      medical-related procurement behaviors may affect public health supply planning.
-                    </p>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </SectionWrapper>
+            </div>
+
+            <div className="mt-14 border-t border-slate-200 pt-14 dark:border-border">
+              <SectionWrapper id="interpretation-overall-conclusion">
+                <SectionHeader
+                  title="Overall conclusion"
+                  subtitle="Key takeaways from the K-Means cluster interpretations and how they can support follow-up review in the Philippine public health context."
+                  icon={Flag}
+                />
+
+                <div className="space-y-3">
+                  <p className="text-sm leading-relaxed text-mf-muted">
+                    The cluster results provide useful insights for understanding medical-related procurement
+                    behavior in the Philippine public health context. The clusters do not directly prove actual
+                    shortages, overstocking, or supply failure. However, they provide strong analytical signals that
+                    can guide further review.
+                  </p>
+                  <p className="text-sm font-medium text-mf-ink">For the Philippines, these clusters can support:</p>
+                  <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-mf-muted">
+                    {OVERALL_CONCLUSION_USES.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <p className="text-sm leading-relaxed text-mf-muted">
+                    Overall, the cluster interpretations help stakeholders understand where procurement activity is
+                    concentrated, which procurement groups may require closer monitoring, and how different
+                    medical-related procurement behaviors may affect public health supply planning.
+                  </p>
+                </div>
+              </SectionWrapper>
+            </div>
+          </SectionWrapper>
+
+          <SectionWrapper id="interpretation-policy">
+            <SectionHeader
+              title="Evidence(K-Means)"
+              subtitle="results/06/Cluster_Interpretation/Policy_Evidence — per‑cluster distributions for procurement dimensions."
+              icon={Scale}
+            />
+
+            <div className="mb-4 flex flex-wrap gap-2">
+              {POLICY_CLUSTER_IDS.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setPolicyCluster(id)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    policyCluster === id
+                      ? 'border-mf-primary bg-mf-primary text-white'
+                      : 'border-slate-200 bg-white text-mf-muted hover:border-slate-300'
+                  }`}
+                >
+                  Cluster {id}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {policyClusterGallery.map((img, idx) => (
+                <ImageCard
+                  key={img.src}
+                  src={img.src}
+                  title={img.title}
+                  onClick={() =>
+                    setLightbox({
+                      open: true,
+                      idx,
+                      imgs: [...policyClusterGallery],
+                    })
+                  }
+                />
+              ))}
             </div>
           </SectionWrapper>
           </SectionWrapper>
@@ -1824,48 +1866,6 @@ export function Interpretation() {
             </div>
           </SectionWrapper>
 
-          </SectionWrapper>
-
-          <SectionWrapper id="interpretation-policy">
-            <SectionHeader
-              title="Evidence(K-Means)"
-              subtitle="results/06/Cluster_Interpretation/Policy_Evidence — per‑cluster distributions for procurement dimensions."
-              icon={Scale}
-            />
-
-            <div className="mb-4 flex flex-wrap gap-2">
-              {POLICY_CLUSTER_IDS.map((id) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setPolicyCluster(id)}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                    policyCluster === id
-                      ? 'border-mf-primary bg-mf-primary text-white'
-                      : 'border-slate-200 bg-white text-mf-muted hover:border-slate-300'
-                  }`}
-                >
-                  Cluster {id}
-                </button>
-              ))}
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {policyClusterGallery.map((img, idx) => (
-                <ImageCard
-                  key={img.src}
-                  src={img.src}
-                  title={img.title}
-                  onClick={() =>
-                    setLightbox({
-                      open: true,
-                      idx,
-                      imgs: [...policyClusterGallery],
-                    })
-                  }
-                />
-              ))}
-            </div>
           </SectionWrapper>
 
           <SectionWrapper id="interpretation-policy-dbscan">

@@ -1,228 +1,205 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronDown, FlaskConical, Menu, Moon, Sparkles, Sun, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, Moon, Sparkles, Sun } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import {
-  computeActiveTocSectionId,
-  SCROLL_SPY_VIEWPORT_TOP,
-  TOC_CLUSTERING_NAV,
-  TOC_COMPARISON,
-  TOC_EDA,
-  TOC_EVALUATION_NAV,
-  TOC_INTERPRETATION,
-  TOC_LANDING,
-  TOC_PREPROCESSING,
-  type PageTOCSection,
-} from './PageTOC'
 
-const TOPBAR_NAV: {
+/**
+ * Top-level navigation model.
+ *
+ * Groups (Data Preparation, Modeling, Results) are dropdowns containing page links.
+ * Direct links (Home, Model Comparison) navigate immediately.
+ *
+ * Important: every existing route remains reachable; the structure is reorganized only.
+ */
+type NavLeaf = { path: string; label: string }
+type NavGroupItem = {
+  kind: 'group'
+  key: string
+  label: string
+  matchPaths: readonly string[]
+  children: readonly NavLeaf[]
+}
+type NavLinkItem = {
+  kind: 'link'
+  key: string
   path: string
   label: string
-  /** Shorter label for the compact mobile nav strip (first four items). */
-  compactLabel?: string
-  sections: readonly PageTOCSection[]
   highlight?: boolean
-}[] = [
-  { path: '/', label: 'Home', sections: TOC_LANDING },
-  {
-    path: '/eda',
-    label: 'Data Understanding',
-    sections: TOC_EDA,
-  },
-  { path: '/preprocessing', label: 'Preprocessing', sections: TOC_PREPROCESSING },
-  { path: '/clustering', label: 'Clustering', sections: TOC_CLUSTERING_NAV },
-  { path: '/evaluation', label: 'Evaluation', sections: TOC_EVALUATION_NAV },
-  { path: '/interpretation', label: 'Interpretation', sections: TOC_INTERPRETATION },
-  { path: '/comparison', label: 'Comparison', sections: TOC_COMPARISON, highlight: true },
-]
+}
+type NavItem = NavLinkItem | NavGroupItem
 
-const MOBILE_MORE_NAV = TOPBAR_NAV.slice(4)
+const NAV_ITEMS: readonly NavItem[] = [
+  { kind: 'link', key: 'home', path: '/', label: 'Home' },
+  {
+    kind: 'group',
+    key: 'data-prep',
+    label: 'Data Preparation',
+    matchPaths: ['/eda', '/data-understanding', '/cleaning', '/preprocessing'],
+    children: [
+      { path: '/eda', label: 'Data Understanding' },
+      { path: '/cleaning', label: 'Cleaning' },
+      { path: '/preprocessing', label: 'Preprocessing' },
+    ],
+  },
+  {
+    kind: 'group',
+    key: 'modeling',
+    label: 'Modeling',
+    matchPaths: ['/pca', '/clustering', '/evaluation'],
+    children: [
+      { path: '/pca', label: 'PCA' },
+      { path: '/clustering', label: 'Clustering' },
+      { path: '/evaluation', label: 'Evaluation' },
+    ],
+  },
+  {
+    kind: 'group',
+    key: 'results',
+    label: 'Results',
+    matchPaths: ['/interpretation'],
+    children: [
+      { path: '/interpretation', label: 'Interpretation' },
+      // /clustering is also reachable under Modeling; surfaced here with its
+      // sidebar-route label ("Cluster Segmentation") so the segmentation outputs
+      // remain discoverable from the Results group.
+      { path: '/clustering', label: 'Cluster Segmentation' },
+      // In-page anchor on Home (preserves the existing #recommendations section).
+      { path: '/#recommendations', label: 'Recommendations' },
+    ],
+  },
+  {
+    kind: 'link',
+    key: 'comparison',
+    path: '/comparison',
+    label: 'Model Comparison',
+    highlight: true,
+  },
+]
 
 type TopbarProps = {
   title: string
   breadcrumb: string[]
 }
 
-function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+/** Tailwind class set for the pill-shaped top-level nav items (desktop). */
+function topNavPill(active: boolean) {
+  return [
+    'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm',
+    'transition-colors duration-200 ease-out motion-reduce:transition-none',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-card',
+    active
+      ? 'bg-primary/10 font-semibold text-mf-primary dark:bg-primary/15 dark:text-primary'
+      : 'text-mf-muted hover:bg-slate-100 hover:text-mf-ink dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground',
+  ].join(' ')
 }
 
-/** Segment inside split nav control (no rounding; parent clips with rounded-lg). */
-function navSegmentClass(isActive: boolean) {
-  return `inline-flex items-center gap-1 whitespace-nowrap text-sm transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
-    isActive
-      ? 'bg-primary/10 font-semibold text-mf-primary dark:text-primary'
-      : 'text-mf-muted hover:bg-slate-100 hover:text-mf-ink hover:brightness-[1.03] dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground dark:hover:brightness-[1.05]'
-  }`
+/** Split a "/path#hash" string used by leaf links into pathname + hash parts. */
+function splitPathHash(p: string): { pathname: string; hash?: string } {
+  const [pathname, hash] = p.split('#')
+  return { pathname: pathname || '/', hash: hash ? `#${hash}` : undefined }
 }
 
-function NavPageDropdown({
-  path,
-  label,
-  compactLabel,
-  sections,
-  highlight,
+/** Group is active when current pathname matches any of its registered paths. */
+function isGroupActive(group: NavGroupItem, pathname: string) {
+  return group.matchPaths.some((p) => pathname === p)
+}
+
+/**
+ * Desktop dropdown for a nav group. Renders a button trigger followed by a
+ * floating panel with the child page links. Closes on outside click, Escape,
+ * route change, or selection.
+ */
+function DesktopGroupDropdown({
+  item,
   isOpen,
   onOpenChange,
-  compact,
-  setRootEl,
 }: {
-  path: string
-  label: string
-  compactLabel?: string
-  sections: readonly PageTOCSection[]
-  highlight?: boolean
+  item: NavGroupItem
   isOpen: boolean
   onOpenChange: (open: boolean) => void
-  compact?: boolean
-  setRootEl?: (el: HTMLDivElement | null) => void
 }) {
   const navigate = useNavigate()
   const location = useLocation()
-  const isActive = path === '/' ? location.pathname === '/' : location.pathname === path
+  const rootRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const tocScrollSpyIds = useMemo(
-    () => sections.filter((sec) => !sec.linkTo).map((sec) => sec.id),
-    [sections],
-  )
+  const active = isGroupActive(item, location.pathname)
 
-  const [tocDropdownScrollActiveId, setTocDropdownScrollActiveId] = useState<string | null>(
-    null,
-  )
-
-  /**
-   * IntersectionObserver complements smooth scrolling by re-evaluating entries when viewport
-   * visibility changes (synced via the same viewport-line heuristic as sidebar PageTOC).
-   */
   useEffect(() => {
-    if (location.pathname !== path || tocScrollSpyIds.length === 0) {
-      setTocDropdownScrollActiveId(null)
-      return
+    if (!isOpen) return
+    function onDocMouseDown(e: MouseEvent) {
+      if (!rootRef.current?.contains(e.target as Node)) onOpenChange(false)
     }
-
-    const elements = tocScrollSpyIds
-      .map((id) => document.getElementById(id))
-      .filter((n): n is HTMLElement => Boolean(n))
-
-    if (elements.length === 0) return
-
-    const syncActive = () => {
-      const nextId = computeActiveTocSectionId(tocScrollSpyIds)
-      if (nextId) setTocDropdownScrollActiveId(nextId)
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        onOpenChange(false)
+        buttonRef.current?.focus()
+      }
     }
-
-    let frame = 0
-    const onIntersect: IntersectionObserverCallback = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(syncActive)
-    }
-
-    const observer = new IntersectionObserver(onIntersect, {
-      root: null,
-      threshold: [0, 0.05, 0.1],
-      rootMargin: `-${SCROLL_SPY_VIEWPORT_TOP}px 0px -48% 0px`,
-    })
-    elements.forEach((el) => observer.observe(el))
-    syncActive()
-
+    document.addEventListener('mousedown', onDocMouseDown)
+    document.addEventListener('keydown', onKeyDown)
     return () => {
-      cancelAnimationFrame(frame)
-      observer.disconnect()
+      document.removeEventListener('mousedown', onDocMouseDown)
+      document.removeEventListener('keydown', onKeyDown)
     }
-  }, [location.pathname, path, tocScrollSpyIds])
+  }, [isOpen, onOpenChange])
 
-  const navLinkLabel = compact && compactLabel ? compactLabel : label
-
-  function goToSection(s: PageTOCSection) {
+  function go(leaf: NavLeaf) {
     onOpenChange(false)
-    if (s.linkTo) {
-      const [pathname, h] = s.linkTo.split('#')
-      navigate({ pathname: pathname || '/', hash: h ? `#${h}` : undefined })
-      return
-    }
-    if (location.pathname === path) {
-      scrollToId(s.id)
-    } else {
-      navigate({ pathname: path, hash: `#${s.id}` })
-    }
+    const { pathname, hash } = splitPathHash(leaf.path)
+    navigate({ pathname, hash })
   }
 
-  const linkPad = compact ? 'pl-2 pr-1.5 py-1.5 text-xs' : 'pl-2.5 pr-2 py-1.5 text-sm'
-  const tocTriggerPad = compact ? 'px-1.5 py-1.5' : 'px-2 py-1.5'
-  const bordered = Boolean(highlight)
+  const menuId = `topnav-${item.key}-menu`
 
   return (
-    <div className="relative shrink-0" ref={setRootEl} data-nav-dropdown-root>
-      <div
-        className={`inline-flex items-stretch overflow-hidden rounded-lg ${
-          bordered ? 'ring-1 ring-sky-400/40' : ''
-        }`}
+    <div className="relative" ref={rootRef}>
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => onOpenChange(!isOpen)}
+        className={topNavPill(active)}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-controls={menuId}
       >
-        <NavLink
-          to={path}
-          end={path === '/'}
-          title={navLinkLabel !== label ? label : undefined}
-          className={`${navSegmentClass(isActive)} ${linkPad} ${
-            bordered ? 'border-r border-slate-200 dark:border-border' : ''
+        <span>{item.label}</span>
+        <ChevronDown
+          aria-hidden
+          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out motion-reduce:transition-none ${
+            isOpen ? 'rotate-180' : ''
           }`}
-          onClick={(e) => {
-            onOpenChange(false)
-            if (location.pathname === path) {
-              e.preventDefault()
-              window.scrollTo({ top: 0, behavior: 'smooth' })
-            }
-          }}
-        >
-          {navLinkLabel}
-          {highlight ? <Sparkles className="h-3.5 w-3.5 shrink-0 text-sky-500" aria-hidden /> : null}
-        </NavLink>
-        <button
-          type="button"
-          onClick={() => onOpenChange(!isOpen)}
-          className={`${navSegmentClass(isActive)} ${tocTriggerPad} min-w-[1.75rem] justify-center ${
-            bordered ? '-ml-px border-l border-slate-200 dark:border-border' : ''
-          }`}
-          aria-expanded={isOpen}
-          aria-haspopup="menu"
-          aria-label={`${label}: open table of contents for this page`}
-        >
-          <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-[280ms] ease-out motion-reduce:transition-none ${isOpen ? 'rotate-180' : ''}`}
-            aria-hidden
-          />
-        </button>
-      </div>
+        />
+      </button>
       <AnimatePresence>
         {isOpen ? (
           <motion.div
+            id={menuId}
+            role="menu"
+            aria-label={`${item.label} menu`}
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18 }}
-            className="absolute right-0 top-full z-50 mt-1 max-h-[min(70vh,22rem)] min-w-[12.5rem] overflow-y-auto rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-border dark:bg-card"
-            role="menu"
-            aria-label={`${label} — page contents`}
+            transition={{ duration: 0.16 }}
+            className="absolute left-0 top-full z-50 mt-2 min-w-[13rem] rounded-xl border border-slate-200 bg-white py-1.5 shadow-lg ring-1 ring-black/[0.02] dark:border-border dark:bg-card dark:ring-white/[0.04]"
           >
-            <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Contents</p>
-            {sections.map((s) => {
-              const isScrollHere =
-                !s.linkTo &&
-                tocDropdownScrollActiveId !== null &&
-                tocDropdownScrollActiveId === s.id
+            {item.children.map((leaf) => {
+              const { pathname, hash } = splitPathHash(leaf.path)
+              const leafActive =
+                location.pathname === pathname && (!hash || location.hash === hash)
               return (
                 <button
-                  key={s.id}
+                  key={`${leaf.path}-${leaf.label}`}
                   type="button"
                   role="menuitem"
-                  onClick={() => goToSection(s)}
-                  className={`flex w-full border-l-2 px-3 py-2 text-left text-sm transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
-                    isScrollHere
-                      ? 'border-primary bg-primary/[0.08] font-semibold text-mf-primary dark:bg-primary/10 dark:text-primary'
-                      : 'border-transparent text-mf-ink hover:border-primary/30 hover:bg-slate-50 dark:text-foreground dark:hover:border-primary/30 dark:hover:bg-muted'
+                  onClick={() => go(leaf)}
+                  className={`flex w-full items-center gap-2 border-l-2 px-3 py-2 text-left text-sm transition-colors duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none ${
+                    leafActive
+                      ? 'border-primary bg-primary/10 font-semibold text-mf-primary dark:text-primary'
+                      : 'border-transparent text-mf-ink hover:border-primary/30 hover:bg-primary/[0.06] hover:text-mf-primary focus-visible:border-primary/30 focus-visible:bg-primary/[0.06] focus-visible:text-mf-primary dark:text-foreground dark:hover:bg-muted dark:hover:text-primary dark:focus-visible:bg-muted dark:focus-visible:text-primary'
                   }`}
-                  aria-current={isScrollHere ? 'location' : undefined}
                 >
-                  {s.label}
+                  {leaf.label}
                 </button>
               )
             })}
@@ -233,14 +210,78 @@ function NavPageDropdown({
   )
 }
 
+/** Always-visible compact brand wordmark. Clicking returns to Home. */
+function BrandLogo() {
+  return (
+    <NavLink
+      to="/"
+      end
+      className="group inline-flex shrink-0 items-center gap-2 rounded-lg px-1.5 py-1 text-mf-ink transition-colors hover:text-mf-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:text-foreground dark:hover:text-primary"
+      aria-label="MedFlow PH — go to home"
+    >
+      <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-mf-primary dark:bg-primary/15 dark:text-primary">
+        <FlaskConical className="h-4 w-4" aria-hidden />
+      </span>
+      <span
+        className="whitespace-nowrap text-base font-bold leading-none md:text-lg"
+        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      >
+        MedFlow <span className="text-mf-primary dark:text-primary">PH</span>
+      </span>
+    </NavLink>
+  )
+}
+
+/**
+ * Slim, secondary row under the main navbar that surfaces the breadcrumb and
+ * the current page title. Hidden on the home page where the title is the
+ * brand name already shown in the logo.
+ */
+function PageContextBar({
+  title,
+  breadcrumb,
+  isRoot,
+}: {
+  title: string
+  breadcrumb: string[]
+  isRoot: boolean
+}) {
+  if (isRoot) return null
+  return (
+    <div className="medflow-no-print border-t border-slate-100 px-3 py-1.5 dark:border-border/60 md:px-5">
+      <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+        <nav
+          className="min-w-0 text-[11px] text-mf-muted dark:text-muted-foreground"
+          aria-label="Breadcrumb"
+        >
+          {breadcrumb.map((crumb, i) => (
+            <span key={`${crumb}-${i}`}>
+              {i > 0 ? (
+                <span className="mx-1 text-slate-300 dark:text-border">/</span>
+              ) : null}
+              <span>{crumb}</span>
+            </span>
+          ))}
+        </nav>
+        <h1 className="min-w-0 truncate text-sm font-semibold text-mf-ink dark:text-foreground md:text-base">
+          {title}
+        </h1>
+      </div>
+    </div>
+  )
+}
+
 export function Topbar({ title, breadcrumb }: TopbarProps) {
   const location = useLocation()
-  const [moreOpen, setMoreOpen] = useState(false)
-  const moreRef = useRef<HTMLDivElement>(null)
-  const [openNavKey, setOpenNavKey] = useState<string | null>(null)
-  const navRootByPath = useRef<Record<string, HTMLDivElement | null>>({})
+  const isRoot = location.pathname === '/'
 
-  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
+
+  const [dark, setDark] = useState(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('theme') === 'dark' : false,
+  )
 
   useEffect(() => {
     if (dark) document.documentElement.classList.add('dark')
@@ -248,166 +289,254 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
     localStorage.setItem('theme', dark ? 'dark' : 'light')
   }, [dark])
 
+  /** Reset any open menus whenever the route changes (covers in-app links). */
   useEffect(() => {
-    setMoreOpen(false)
-    setOpenNavKey(null)
-  }, [location.pathname])
+    setOpenGroup(null)
+    setMobileOpen(false)
+    setMobileExpanded(null)
+  }, [location.pathname, location.hash])
 
+  /** Lock body scroll while the mobile drawer is open. */
   useEffect(() => {
-    if (!moreOpen) return
-    const onDoc = (e: MouseEvent) => {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setMoreOpen(false)
+    if (!mobileOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
     }
-    document.addEventListener('mousedown', onDoc)
-    return () => document.removeEventListener('mousedown', onDoc)
-  }, [moreOpen])
+  }, [mobileOpen])
 
+  /** Escape closes the mobile drawer at the top level. */
   useEffect(() => {
-    if (!openNavKey) return
-    const onDoc = (e: MouseEvent) => {
-      const t = e.target as Node
-      if (Object.values(navRootByPath.current).some((el) => el?.contains(t))) return
-      setOpenNavKey(null)
+    if (!mobileOpen) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setMobileOpen(false)
     }
-    document.addEventListener('mousedown', onDoc)
-    return () => document.removeEventListener('mousedown', onDoc)
-  }, [openNavKey])
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [mobileOpen])
 
-  function setNavOpen(path: string, open: boolean) {
-    if (open) {
-      setMoreOpen(false)
-      setOpenNavKey(path)
-    } else {
-      setOpenNavKey((k) => (k === path ? null : k))
-    }
+  const navigate = useNavigate()
+
+  const groupOpenState = useMemo(
+    () => (key: string) => openGroup === key,
+    [openGroup],
+  )
+
+  function setGroupOpen(key: string, open: boolean) {
+    setOpenGroup((curr) => {
+      if (open) return key
+      return curr === key ? null : curr
+    })
+  }
+
+  function handleMobileLeaf(leaf: NavLeaf) {
+    setMobileOpen(false)
+    setMobileExpanded(null)
+    const { pathname, hash } = splitPathHash(leaf.path)
+    navigate({ pathname, hash })
   }
 
   return (
-    <header className="medflow-topbar fixed left-0 right-0 top-[3px] z-40 flex min-h-16 items-center gap-2 border-b border-slate-200 bg-white/95 px-2 py-2 backdrop-blur dark:border-border dark:bg-card/95 md:gap-3 md:px-4 md:py-2 lg:px-6">
-      <div className="flex min-w-0 flex-1 flex-col">
-        <nav className="hidden text-xs text-mf-muted dark:text-muted-foreground sm:block">
-          {breadcrumb.map((crumb, i) => (
-            <span key={`${crumb}-${i}`}>
-              {i > 0 ? <span className="mx-1 text-slate-300 dark:text-border">/</span> : null}
-              <span>{crumb}</span>
-            </span>
-          ))}
-        </nav>
-        <h1
-          className={
-            location.pathname === '/'
-              ? 'font-heading max-w-full min-w-0 text-balance break-words text-xl font-bold leading-tight text-mf-ink dark:text-foreground md:text-2xl lg:text-3xl'
-              : 'max-w-full min-w-0 text-balance break-words text-base font-semibold leading-snug text-mf-ink dark:text-foreground md:text-lg'
-          }
+    <header className="medflow-topbar fixed left-0 right-0 top-[3px] z-40 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-border dark:bg-card/95">
+      {/* Primary navbar row */}
+      <div className="relative flex h-14 items-center gap-2 px-3 md:gap-3 md:px-5">
+        <BrandLogo />
+
+        {/* Desktop nav */}
+        <nav
+          className="medflow-no-print ml-2 hidden flex-1 items-center justify-center gap-1 lg:flex xl:gap-1.5"
+          aria-label="Main navigation"
         >
-          {location.pathname === '/' ? (
-            <>
-              MedFlow <span className="text-mf-primary dark:text-primary">PH</span>
-            </>
-          ) : (
-            title
-          )}
-        </h1>
-      </div>
+          {NAV_ITEMS.map((item) => {
+            if (item.kind === 'link') {
+              return (
+                <NavLink
+                  key={item.key}
+                  to={item.path}
+                  end={item.path === '/'}
+                  className={({ isActive }) =>
+                    `${topNavPill(isActive)} ${
+                      item.highlight ? 'ring-1 ring-sky-400/40' : ''
+                    }`
+                  }
+                  onClick={(e) => {
+                    if (location.pathname === item.path && !location.hash) {
+                      e.preventDefault()
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                  }}
+                >
+                  <span>{item.label}</span>
+                  {item.highlight ? (
+                    <Sparkles className="h-3.5 w-3.5 shrink-0 text-sky-500" aria-hidden />
+                  ) : null}
+                </NavLink>
+              )
+            }
+            return (
+              <DesktopGroupDropdown
+                key={item.key}
+                item={item}
+                isOpen={groupOpenState(item.key)}
+                onOpenChange={(open) => setGroupOpen(item.key, open)}
+              />
+            )
+          })}
+        </nav>
 
-      {/* Desktop */}
-      <nav
-        className="medflow-no-print hidden min-w-0 max-w-[min(100vw-14rem,52rem)] shrink flex-nowrap items-center gap-0.5 overflow-x-auto overscroll-x-contain py-0.5 lg:flex xl:max-w-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600"
-        aria-label="Section navigation"
-      >
-        {TOPBAR_NAV.map((item) => (
-          <NavPageDropdown
-            key={item.path}
-            path={item.path}
-            label={item.label}
-            compactLabel={item.compactLabel}
-            sections={item.sections}
-            highlight={item.highlight}
-            isOpen={openNavKey === item.path}
-            onOpenChange={(open) => setNavOpen(item.path, open)}
-            setRootEl={(el) => {
-              navRootByPath.current[item.path] = el
-            }}
-          />
-        ))}
-      </nav>
-
-      {/* Mobile */}
-      <div className="medflow-no-print flex shrink-0 flex-wrap items-center gap-0.5 lg:hidden">
-        {TOPBAR_NAV.slice(0, 4).map((item) => (
-          <NavPageDropdown
-            key={`m-${item.path}`}
-            path={item.path}
-            label={item.label}
-            compactLabel={item.compactLabel}
-            sections={item.sections}
-            highlight={item.highlight}
-            isOpen={openNavKey === item.path}
-            onOpenChange={(open) => setNavOpen(item.path, open)}
-            compact
-            setRootEl={(el) => {
-              navRootByPath.current[`${item.path}:m`] = el
-            }}
-          />
-        ))}
-        <div className="relative" ref={moreRef}>
+        {/* Right side controls */}
+        <div className="medflow-no-print ml-auto flex shrink-0 items-center gap-1">
           <button
             type="button"
-            onClick={() => {
-              setOpenNavKey(null)
-              setMoreOpen((o) => !o)
-            }}
-            className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1.5 text-sm text-mf-muted transition-colors duration-[280ms] ease-out hover:bg-slate-100 hover:text-mf-ink motion-reduce:transition-none dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground"
-            aria-expanded={moreOpen}
-            aria-haspopup="menu"
+            onClick={() => setDark((d) => !d)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-mf-muted transition-colors hover:bg-slate-100 hover:text-mf-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground"
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            More
-            <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-[280ms] ease-out motion-reduce:transition-none ${moreOpen ? 'rotate-180' : ''}`} />
+            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <AnimatePresence>
-            {moreOpen ? (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
-                className="absolute right-0 z-50 mt-1 min-w-[11rem] rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-border dark:bg-card"
-                role="menu"
-              >
-                {MOBILE_MORE_NAV.map((r) => (
-                  <NavLink
-                    key={r.path}
-                    to={r.path}
-                    role="menuitem"
-                    className={({ isActive }) =>
-                      `flex items-center gap-2 border-l-2 px-3 py-2 text-sm transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
-                        isActive
-                          ? 'border-primary bg-primary/10 font-semibold text-mf-primary dark:text-primary'
-                          : 'border-transparent text-mf-ink hover:border-primary/30 hover:bg-slate-50 dark:text-foreground dark:hover:border-primary/30 dark:hover:bg-muted'
-                      } ${r.highlight ? 'ring-1 ring-inset ring-sky-400/40' : ''}`
-                    }
-                    onClick={() => setMoreOpen(false)}
-                  >
-                    {r.label}
-                    {r.highlight ? <Sparkles className="ml-auto h-3.5 w-3.5 shrink-0 text-sky-500" aria-hidden /> : null}
-                  </NavLink>
-                ))}
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((o) => !o)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-mf-muted transition-colors hover:bg-slate-100 hover:text-mf-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground lg:hidden"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="medflow-mobile-menu"
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 
-      <div className="medflow-no-print flex shrink-0 items-center gap-1">
-        <button
-          type="button"
-          onClick={() => setDark((d) => !d)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-mf-muted transition-colors hover:bg-slate-100 hover:text-mf-ink dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground"
-          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </button>
-      </div>
+      {/* Secondary breadcrumb / page title row (hidden on Home) */}
+      <PageContextBar title={title} breadcrumb={breadcrumb} isRoot={isRoot} />
+
+      {/* Mobile drawer (overlay + panel anchored to bottom of header) */}
+      <AnimatePresence>
+        {mobileOpen ? (
+          <>
+            <motion.div
+              key="overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="medflow-no-print absolute left-0 right-0 top-full -z-10 h-[100vh] bg-slate-900/40 backdrop-blur-[1px] lg:hidden"
+              onClick={() => setMobileOpen(false)}
+              aria-hidden
+            />
+            <motion.div
+              key="panel"
+              id="medflow-mobile-menu"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="medflow-no-print absolute left-0 right-0 top-full max-h-[calc(100vh-3.5rem)] overflow-y-auto overscroll-contain border-b border-slate-200 bg-white shadow-lg dark:border-border dark:bg-card lg:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site navigation"
+            >
+              <nav className="flex flex-col gap-1 px-3 py-3" aria-label="Mobile navigation">
+                {NAV_ITEMS.map((item) => {
+                  if (item.kind === 'link') {
+                    return (
+                      <NavLink
+                        key={`m-${item.key}`}
+                        to={item.path}
+                        end={item.path === '/'}
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) =>
+                          `flex min-h-[44px] items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-base transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                            isActive
+                              ? 'bg-primary/10 font-semibold text-mf-primary dark:bg-primary/15 dark:text-primary'
+                              : 'text-mf-ink hover:bg-slate-100 dark:text-foreground dark:hover:bg-muted'
+                          } ${item.highlight ? 'ring-1 ring-sky-400/40' : ''}`
+                        }
+                      >
+                        <span>{item.label}</span>
+                        {item.highlight ? (
+                          <Sparkles className="h-4 w-4 shrink-0 text-sky-500" aria-hidden />
+                        ) : null}
+                      </NavLink>
+                    )
+                  }
+
+                  const expanded = mobileExpanded === item.key
+                  const groupActive = isGroupActive(item, location.pathname)
+                  const panelId = `m-group-${item.key}`
+                  return (
+                    <div key={`m-${item.key}`} className="flex flex-col">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setMobileExpanded((curr) => (curr === item.key ? null : item.key))
+                        }
+                        className={`flex min-h-[44px] items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-base transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                          groupActive
+                            ? 'bg-primary/10 font-semibold text-mf-primary dark:bg-primary/15 dark:text-primary'
+                            : 'text-mf-ink hover:bg-slate-100 dark:text-foreground dark:hover:bg-muted'
+                        }`}
+                        aria-expanded={expanded}
+                        aria-controls={panelId}
+                      >
+                        <span>{item.label}</span>
+                        <ChevronDown
+                          aria-hidden
+                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ease-out motion-reduce:transition-none ${
+                            expanded ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {expanded ? (
+                          <motion.div
+                            id={panelId}
+                            key={panelId}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div
+                              className="my-1 ml-3 flex flex-col gap-0.5 border-l border-slate-200 pl-3 dark:border-border"
+                              role="group"
+                              aria-label={`${item.label} pages`}
+                            >
+                              {item.children.map((leaf) => {
+                                const { pathname, hash } = splitPathHash(leaf.path)
+                                const leafActive =
+                                  location.pathname === pathname &&
+                                  (!hash || location.hash === hash)
+                                return (
+                                  <button
+                                    key={`m-${item.key}-${leaf.path}-${leaf.label}`}
+                                    type="button"
+                                    onClick={() => handleMobileLeaf(leaf)}
+                                    className={`flex min-h-[44px] items-center rounded-lg px-3 py-2 text-left text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                                      leafActive
+                                        ? 'bg-primary/10 font-semibold text-mf-primary dark:bg-primary/15 dark:text-primary'
+                                        : 'text-mf-ink hover:bg-slate-100 dark:text-foreground dark:hover:bg-muted'
+                                    }`}
+                                  >
+                                    {leaf.label}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })}
+              </nav>
+            </motion.div>
+          </>
+        ) : null}
+      </AnimatePresence>
     </header>
   )
 }

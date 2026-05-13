@@ -430,7 +430,6 @@ export const DATA_PATHS = {
   kSelectionSummary: '/data/05/KSelection/k_selection_summary.json',
   clusterCountsKmeans: '/results/04/Summaries/cluster_counts.json',
   clusterCountsDbscan: '/results/04B/Summaries/dbscan_cluster_counts.json',
-  kMetricsLong: '/data/05/KSelection/k_metrics_long.csv',
   dbscanMetricsGrid: '/data/05B/DBSCAN_Evaluation/dbscan_metrics_grid.csv',
   featureSelected: '/data/02/Feature Selection/philgeps_features_selected.csv',
   minMaxScaled: '/data/02/Min-Max Scaling/philgeps_min_max_scaled.csv',

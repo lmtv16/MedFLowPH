@@ -1,0 +1,65 @@
+{
+  "note": "participation_share normalizes sum_k loading_{k,j}^2 (k=PC1..3) across features. High share means that feature's coordinates figure strongly in the 3D loading basis; with StandardScaler, correlation and PCA geometry use comparable scaling.",
+  "standardized_before_pca": true,
+  "pc123_squared_loading_sum_per_feature": {
+    "award_decision_lag_days": 0.9642294467512107,
+    "log1p_Quantity": 0.5736395466864848,
+    "log1p_Approved_Budget_of_the_Contract": 0.5099917642349036,
+    "log1p_Item_Budget": 0.45563431425554224,
+    "log1p_Contract_Amount": 0.49650492807185725
+  },
+  "pc123_participation_share": {
+    "award_decision_lag_days": 0.32140981558373705,
+    "log1p_Quantity": 0.19121318222882833,
+    "log1p_Approved_Budget_of_the_Contract": 0.16999725474496793,
+    "log1p_Item_Budget": 0.1518781047518475,
+    "log1p_Contract_Amount": 0.16550164269061915
+  },
+  "feature_with_largest_pc123_participation": "award_decision_lag_days",
+  "feature_pearson_correlation": {
+    "columns": [
+      "award_decision_lag_days",
+      "log1p_Quantity",
+      "log1p_Approved_Budget_of_the_Contract",
+      "log1p_Item_Budget",
+      "log1p_Contract_Amount"
+    ],
+    "matrix": [
+      [
+        1.0,
+        -0.005190310393789708,
+        -0.05735198581388916,
+        -0.15014364276564984,
+        0.012115469225919398
+      ],
+      [
+        -0.005190310393789708,
+        1.0,
+        0.31794110233980744,
+        -0.06628300916919501,
+        -0.16286053629380176
+      ],
+      [
+        -0.05735198581388915,
+        0.31794110233980744,
+        1.0,
+        0.24239993058796636,
+        0.14718754816953028
+      ],
+      [
+        -0.15014364276564984,
+        -0.06628300916919501,
+        0.24239993058796636,
+        1.0,
+        0.5531301811341865
+      ],
+      [
+        0.012115469225919398,
+        -0.16286053629380176,
+        0.14718754816953028,
+        0.5531301811341865,
+        1.0
+      ]
+    ]
+  }
+}

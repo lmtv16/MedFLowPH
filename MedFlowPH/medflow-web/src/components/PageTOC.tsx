@@ -106,35 +106,43 @@ export const TOC_LANDING: PageTOCSection[] = [
 export const TOC_EDA: PageTOCSection[] = [
   { id: 'du-hero', label: 'Overview' },
   { id: 'du-raw', label: 'Raw Dataset' },
-  { id: 'du-cleaning', label: 'Cleaning' },
-  { id: 'du-exploration', label: 'Exploration' },
-  { id: 'du-preprocessing', label: 'Preprocessing' },
-  { id: 'du-pca', label: 'PCA' },
-  { id: 'du-kmeans', label: 'K-Means' },
-  { id: 'du-dbscan', label: 'DBSCAN' },
-  { id: 'du-eval-kmeans', label: 'K-Means Eval' },
-  { id: 'du-eval-dbscan', label: 'DBSCAN Eval' },
-  { id: 'du-interp-kmeans', label: 'K-Means Interp' },
-  { id: 'du-interp-dbscan', label: 'DBSCAN Interp' },
-  { id: 'du-comparison', label: 'Comparison' },
   { id: 'du-conclusion', label: 'Conclusion' },
   { id: 'eda-overview', label: 'Interactive charts' },
   { id: 'eda-merged', label: 'Merged charts' },
   { id: 'eda-quarter', label: 'By quarter' },
 ]
 
-/** Pipeline walkthrough anchors only (first part of the unified Data Understanding page). */
-export const DU_PIPELINE_SECTIONS: PageTOCSection[] = TOC_EDA.slice(0, 14)
+/** Pipeline walkthrough anchors only (through Conclusion; before interactive EDA chart sections). */
+export const DU_PIPELINE_SECTIONS: PageTOCSection[] = TOC_EDA.slice(0, 3)
+
+/** Data Cleaning page — schema, missingness, and cleaning summary anchors. */
+export const TOC_CLEANING: PageTOCSection[] = [
+  { id: 'cleaning-overview', label: 'Overview' },
+  { id: 'cleaning-schema', label: 'Schema' },
+  { id: 'cleaning-missingness', label: 'Missingness' },
+  { id: 'cleaning-summary', label: 'Summary' },
+]
 
 export const TOC_PREPROCESSING: PageTOCSection[] = [
+  { id: 'preprocessing-overview', label: 'Overview' },
+  { id: 'cleaned-dataset-exploration', label: 'Cleaned Dataset Exploration' },
   { id: 'data-cleaning', label: 'Data Cleaning' },
   { id: 'feature-engineering', label: 'Feature Engineering' },
 ]
 
-/** Clustering workflow page — scroll anchors for PCA, K‑Means, DBSCAN, and approach comparison. */
+/** Principal Component Analysis page — loadings, 3D projections, and interactive view. */
+export const TOC_PCA: PageTOCSection[] = [
+  { id: 'pca-overview', label: 'Overview' },
+  { id: 'pca-loadings', label: 'Loadings & Variance' },
+  { id: 'pca-3d', label: '3D Projections' },
+  { id: 'pca-interactive', label: 'Interactive PCA' },
+]
+
+/** Clustering workflow page — scroll anchors for K‑Means, DBSCAN, and approach comparison. */
 export const TOC_CLUSTERING_NAV: PageTOCSection[] = [
-  { id: 'clustering-pca', label: 'Principal component analysis' },
+  { id: 'du-kmeans', label: '04A - K-Means' },
   { id: 'clustering-kmeans', label: 'K‑Means clustering' },
+  { id: 'du-dbscan', label: '04B - DBSCAN' },
   { id: 'clustering-dbscan', label: 'DBSCAN clustering' },
   {
     id: 'interpretation-dbscan-insights',
@@ -147,11 +155,12 @@ export const TOC_CLUSTERING_NAV: PageTOCSection[] = [
 
 export const TOC_EVALUATION_NAV: PageTOCSection[] = [
   { id: 'evaluation-kmeans-context', label: 'Evaluation context' },
+  { id: 'du-eval-kmeans', label: 'K-Means Eval', nested: true },
+  { id: 'du-eval-dbscan', label: 'DBSCAN Eval', nested: true },
 ]
 
 export const TOC_INTERPRETATION: PageTOCSection[] = [
   { id: 'interpretation-overview', label: 'Overview' },
-  { id: 'interpretation-pca-3d', label: '3D PCA (pre‑clustering)' },
   { id: 'interpretation-section-kmeans', label: 'K‑Means', sectionJump: true },
   {
     id: 'interpretation-kmeans-3d',
@@ -161,8 +170,19 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
   { id: 'interpretation-labels', label: 'K-Means cluster insights', nested: true },
   {
     id: 'interpretation-cluster-summary',
-    label: 'K-Means summary & conclusion',
+    label: 'K-Means cluster summary',
     nested: true,
+  },
+  {
+    id: 'interpretation-overall-conclusion',
+    label: 'K-Means overall conclusion',
+    nested: true,
+  },
+
+  {
+    id: 'interpretation-policy',
+    label: 'Evidence (K‑Means)',
+    tocParentId: 'interpretation-section-kmeans',
   },
 
   { id: 'interpretation-section-dbscan', label: 'DBSCAN', sectionJump: true },
@@ -178,16 +198,7 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
     nested: true,
   },
 
-  {
-    id: 'interpretation-policy',
-    label: 'Evidence (K‑Means)',
-    tocParentId: 'interpretation-section-kmeans',
-  },
-  {
-    id: 'interpretation-policy-dbscan',
-    label: 'DBSCAN evidences',
-    tocParentId: 'interpretation-section-dbscan',
-  },
+  { id: 'interpretation-policy-dbscan', label: 'DBSCAN evidences' },
 ]
 
 export const TOC_COMPARISON: PageTOCSection[] = [
