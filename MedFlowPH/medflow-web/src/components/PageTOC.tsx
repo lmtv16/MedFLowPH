@@ -159,15 +159,15 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
     label: '3D K‑Means PCA',
     nested: true,
   },
-  { id: 'interpretation-labels', label: 'K-Means cluster insights', nested: true },
+  { id: 'interpretation-labels', label: 'Cluster Insights & Interpretation (K‑Means)', nested: true },
   {
     id: 'interpretation-cluster-summary',
-    label: 'K-Means cluster summary',
+    label: 'Overall cluster summary (K‑Means)',
     nested: true,
   },
   {
     id: 'interpretation-overall-conclusion',
-    label: 'K-Means overall conclusion',
+    label: 'Overall conclusion (K‑Means)',
     nested: true,
   },
 
@@ -183,10 +183,15 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
     label: '3D DBSCAN PCA',
     nested: true,
   },
-  { id: 'interpretation-dbscan-insights', label: 'DBSCAN cluster insights', nested: true },
+  { id: 'interpretation-dbscan-insights', label: 'Cluster Insights & Interpretation (DBSCAN)', nested: true },
   {
-    id: 'interpretation-dbscan-summary-conclusion',
-    label: 'DBSCAN summary & conclusion',
+    id: 'interpretation-dbscan-cluster-summary',
+    label: 'Overall cluster summary (DBSCAN)',
+    nested: true,
+  },
+  {
+    id: 'interpretation-dbscan-overall-conclusion',
+    label: 'Overall conclusion (DBSCAN)',
     nested: true,
   },
 
@@ -202,7 +207,6 @@ export const TOC_COMPARISON: PageTOCSection[] = [
   { id: 'comparison-verdict', label: 'Verdict' },
   { id: 'comparison-findings', label: 'Findings' },
   { id: 'comparison-summary', label: 'Summary Metrics' },
-  { id: 'comparison-charts', label: 'Chart Comparison' },
   { id: 'comparison-gallery', label: 'Visual Gallery' },
   { id: 'comparison-conclusion', label: 'Conclusion' },
   { id: 'comparison-recommendation', label: 'Recommendation' },
@@ -341,7 +345,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
 
   return (
     <nav
-      className="sticky top-24 z-[30] flex w-full max-w-[12rem] flex-col gap-0.5 self-start overflow-visible"
+      className="sticky top-24 z-[30] flex w-full max-w-[12rem] flex-col gap-0.5 self-start overflow-visible rounded-xl ring-1 ring-slate-900/[0.04] shadow-sm dark:ring-white/[0.08]"
       aria-label="Page contents"
     >
       <div className="mb-3 flex items-center gap-1.5 px-3">

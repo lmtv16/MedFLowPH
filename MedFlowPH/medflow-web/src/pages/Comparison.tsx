@@ -1,17 +1,3 @@
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  PolarAngleAxis,
-  PolarGrid,
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
 import { useEffect, useMemo, useState } from 'react'
 import { BarChart2, Search, Sparkles, Target } from 'lucide-react'
 import { ImageCard } from '../components/ImageCard'
@@ -35,19 +21,6 @@ type ParsedRow = {
   noise_share: number
   cluster_count: number
   strengths: string
-}
-
-function normalizePair(k: number, d: number, higherBetter: boolean) {
-  if (!Number.isFinite(k) || !Number.isFinite(d)) return { k: 0, d: 0 }
-  if (Math.abs(k - d) < 1e-9) return { k: 0.5, d: 0.5 }
-  if (higherBetter) {
-    const lo = Math.min(k, d)
-    const hi = Math.max(k, d)
-    return { k: (k - lo) / (hi - lo), d: (d - lo) / (hi - lo) }
-  }
-  const lo = Math.min(k, d)
-  const hi = Math.max(k, d)
-  return { k: (hi - k) / (hi - lo), d: (hi - d) / (hi - lo) }
 }
 
 export function Comparison() {
@@ -86,63 +59,6 @@ export function Comparison() {
     return { kmeans, dbscan }
   }, [data])
 
-  const groupedBars = useMemo(() => {
-    if (!parsed.kmeans || !parsed.dbscan) return []
-    return [
-      { metric: 'Silhouette', kmeans: parsed.kmeans.silhouette, dbscan: parsed.dbscan.silhouette },
-      {
-        metric: 'Davies–Bouldin',
-        kmeans: parsed.kmeans.davies_bouldin,
-        dbscan: parsed.dbscan.davies_bouldin,
-      },
-      {
-        metric: 'Calinski–Harabasz',
-        kmeans: parsed.kmeans.calinski_harabasz,
-        dbscan: parsed.dbscan.calinski_harabasz,
-      },
-      {
-        metric: 'Noise share',
-        kmeans: parsed.kmeans.noise_share,
-        dbscan: parsed.dbscan.noise_share,
-      },
-      {
-        metric: 'Clusters (excl. noise)',
-        kmeans: parsed.kmeans.cluster_count,
-        dbscan: parsed.dbscan.cluster_count,
-      },
-    ]
-  }, [parsed])
-
-  const radarRows = useMemo(() => {
-    if (!parsed.kmeans || !parsed.dbscan) return []
-    const metricsDef = [
-      { metric: 'Silhouette', k: parsed.kmeans.silhouette, d: parsed.dbscan.silhouette, higher: true },
-      {
-        metric: 'Davies–Bouldin (inv.)',
-        k: parsed.kmeans.davies_bouldin,
-        d: parsed.dbscan.davies_bouldin,
-        higher: false,
-      },
-      {
-        metric: 'Calinski–Harabasz',
-        k: parsed.kmeans.calinski_harabasz,
-        d: parsed.dbscan.calinski_harabasz,
-        higher: true,
-      },
-      { metric: 'Noise share', k: parsed.kmeans.noise_share, d: parsed.dbscan.noise_share, higher: false },
-      {
-        metric: 'Cluster count',
-        k: parsed.kmeans.cluster_count,
-        d: parsed.dbscan.cluster_count,
-        higher: false,
-      },
-    ]
-    return metricsDef.map(({ metric, k, d, higher }) => {
-      const scaled = normalizePair(k, d, higher)
-      return { metric, kmeans: scaled.k, dbscan: scaled.d }
-    })
-  }, [parsed])
-
   const chosenK = clusterMeta?.k ?? 6
   const readmeConclusion = readme
     .split(/Final conclusion:/i)
@@ -153,6 +69,9 @@ export function Comparison() {
     ?.trim()
 
   const galleryImages = IMAGES.comparison.map((item) => ({ src: item.src, title: item.title }))
+  const sideBySideGalleryIdx = IMAGES.comparison.findIndex((img) => img.src.includes('side_by_side'))
+  const sideBySideAsset =
+    sideBySideGalleryIdx >= 0 ? IMAGES.comparison[sideBySideGalleryIdx] : undefined
 
   return (
     <PageShell>
@@ -160,17 +79,26 @@ export function Comparison() {
         <main className="min-w-0 flex-1 overflow-x-hidden">
           <div className="space-y-10">
             <SectionWrapper id="comparison-aspects" title="K‑Means vs DBSCAN — qualitative comparison">
-              <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
-                <table className="w-full min-w-[20rem] text-left text-mf-body">
-                  <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
-                    <tr>
-                      <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Aspect</th>
-                      <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">K‑Means</th>
-                      <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">DBSCAN</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
+              <div className="space-y-6">
+                {sideBySideAsset ? (
+                  <ImageCard
+                    src={sideBySideAsset.src}
+                    title={sideBySideAsset.title}
+                    figure={`Figure MC‑G${sideBySideGalleryIdx + 1}: ${sideBySideAsset.title}`}
+                    onClick={() => setGallery({ imgs: galleryImages, idx: sideBySideGalleryIdx })}
+                  />
+                ) : null}
+                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
+                  <table className="w-full min-w-[20rem] text-left text-mf-body">
+                    <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
+                      <tr>
+                        <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Aspect</th>
+                        <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">K‑Means</th>
+                        <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">DBSCAN</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
                       {
                         a: 'Cluster Assignment',
                         k: 'Every record assigned to exactly one cluster',
@@ -224,8 +152,9 @@ export function Comparison() {
                         <td className="px-4 py-3 text-mf-muted dark:text-muted-foreground">{row.d}</td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </SectionWrapper>
 
@@ -341,68 +270,20 @@ export function Comparison() {
               </div>
             </SectionWrapper>
 
-            <SectionWrapper id="comparison-charts" title="Chart comparison">
-              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
-                <h3 className="text-mf-card-title font-semibold text-mf-ink dark:text-foreground">Figure MC1: Grouped metric comparison</h3>
-                <p className="mt-2 text-mf-caption text-mf-muted dark:text-muted-foreground">
-                  Source: `/data/07/Model_Comparison/kmeans_vs_dbscan_summary.csv` (raw engineering units).
-                </p>
-                <div className="mt-6 w-full min-w-0 overflow-x-auto">
-                  <div className="medflow-recharts-container mx-auto min-w-[17rem]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={groupedBars} margin={{ top: 8, right: 8, left: 4, bottom: 56 }}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="metric"
-                        tick={{ fontSize: 12 }}
-                        interval={0}
-                        angle={-32}
-                        textAnchor="end"
-                        height={68}
-                      />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="kmeans" fill="#1D4ED8" name="K‑Means" radius={[6, 6, 0, 0]} />
-                      <Bar dataKey="dbscan" fill="#0F766E" name="DBSCAN" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                  </div>
-                </div>
-              </section>
-
-              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
-                <h3 className="text-mf-card-title font-semibold text-mf-ink dark:text-foreground">
-                  Figure MC2: Normalised capability radar (within‑metric min–max)
-                </h3>
-                <div className="mt-6 w-full min-w-0 overflow-x-auto">
-                  <div className="medflow-recharts-container mx-auto min-w-[17rem]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarRows} margin={{ top: 16, right: 24, bottom: 16, left: 24 }}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="metric" tick={{ fontSize: 12 }} />
-                      <Tooltip formatter={(value) => (value == null ? '' : Number(value).toFixed(3))} />
-                      <Legend />
-                      <Radar name="K‑Means" dataKey="kmeans" stroke="#1D4ED8" fill="#1D4ED8" fillOpacity={0.2} />
-                      <Radar name="DBSCAN" dataKey="dbscan" stroke="#0F766E" fill="#0F766E" fillOpacity={0.15} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                  </div>
-                </div>
-              </section>
-            </SectionWrapper>
-
             <SectionWrapper id="comparison-gallery" title="Visual gallery">
-              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {IMAGES.comparison.map((img, idx) => (
-                  <ImageCard
-                    key={img.src}
-                    src={img.src}
-                    title={img.title}
-                    figure={`Figure MC‑G${idx + 1}: ${img.title}`}
-                    onClick={() => setGallery({ imgs: galleryImages, idx })}
-                  />
-                ))}
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {IMAGES.comparison
+                  .map((img, manifestIdx) => ({ img, manifestIdx }))
+                  .filter(({ img }) => !img.src.includes('side_by_side'))
+                  .map(({ img, manifestIdx }) => (
+                    <ImageCard
+                      key={img.src}
+                      src={img.src}
+                      title={img.title}
+                      titleDisclosure
+                      onClick={() => setGallery({ imgs: galleryImages, idx: manifestIdx })}
+                    />
+                  ))}
               </div>
             </SectionWrapper>
 
