@@ -84,7 +84,7 @@ type TopbarProps = {
 /** Tailwind class set for the pill-shaped top-level nav items (desktop). */
 function topNavPill(active: boolean) {
   return [
-    'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm',
+    'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-mf-nav',
     'transition-colors duration-200 ease-out motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-card',
     active
@@ -102,6 +102,22 @@ function splitPathHash(p: string): { pathname: string; hash?: string } {
 /** Group is active when current pathname matches any of its registered paths. */
 function isGroupActive(group: NavGroupItem, pathname: string) {
   return group.matchPaths.some((p) => pathname === p)
+}
+
+function isNavTargetActive(
+  loc: { pathname: string; hash: string },
+  targetPath: string,
+): boolean {
+  const { pathname, hash } = splitPathHash(targetPath)
+  return loc.pathname === pathname && (!hash || loc.hash === hash)
+}
+
+const desktopMenuItemClass = (active: boolean) => {
+  const base =
+    'flex w-full items-center gap-2 border-l-2 px-3 py-2 text-left text-mf-nav transition-colors duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none'
+  return active
+    ? `${base} border-primary bg-primary/10 font-semibold text-mf-primary dark:text-primary`
+    : `${base} border-transparent text-mf-ink hover:border-primary/30 hover:bg-primary/[0.06] hover:text-mf-primary focus-visible:border-primary/30 focus-visible:bg-primary/[0.06] focus-visible:text-mf-primary dark:text-foreground dark:hover:bg-muted dark:hover:text-primary dark:focus-visible:bg-muted dark:focus-visible:text-primary`
 }
 
 /**
@@ -144,9 +160,9 @@ function DesktopGroupDropdown({
     }
   }, [isOpen, onOpenChange])
 
-  function go(leaf: NavLeaf) {
+  function go(target: { path: string }) {
     onOpenChange(false)
-    const { pathname, hash } = splitPathHash(leaf.path)
+    const { pathname, hash } = splitPathHash(target.path)
     navigate({ pathname, hash })
   }
 
@@ -184,20 +200,14 @@ function DesktopGroupDropdown({
             className="absolute left-0 top-full z-50 mt-2 max-w-[min(20rem,calc(100vw-1.5rem))] min-w-[13rem] rounded-xl border border-slate-200 bg-white py-1.5 shadow-lg ring-1 ring-black/[0.02] dark:border-border dark:bg-card dark:ring-white/[0.04]"
           >
             {item.children.map((leaf) => {
-              const { pathname, hash } = splitPathHash(leaf.path)
-              const leafActive =
-                location.pathname === pathname && (!hash || location.hash === hash)
+              const leafActive = isNavTargetActive(location, leaf.path)
               return (
                 <button
                   key={`${leaf.path}-${leaf.label}`}
                   type="button"
                   role="menuitem"
                   onClick={() => go(leaf)}
-                  className={`flex w-full items-center gap-2 border-l-2 px-3 py-2 text-left text-sm transition-colors duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none ${
-                    leafActive
-                      ? 'border-primary bg-primary/10 font-semibold text-mf-primary dark:text-primary'
-                      : 'border-transparent text-mf-ink hover:border-primary/30 hover:bg-primary/[0.06] hover:text-mf-primary focus-visible:border-primary/30 focus-visible:bg-primary/[0.06] focus-visible:text-mf-primary dark:text-foreground dark:hover:bg-muted dark:hover:text-primary dark:focus-visible:bg-muted dark:focus-visible:text-primary'
-                  }`}
+                  className={desktopMenuItemClass(leafActive)}
                 >
                   {leaf.label}
                 </button>
@@ -223,7 +233,7 @@ function BrandLogo() {
         <FlaskConical className="h-4 w-4" aria-hidden />
       </span>
       <span
-        className="whitespace-nowrap text-base font-bold leading-none md:text-lg"
+        className="whitespace-nowrap text-mf-card-title font-bold leading-none md:text-[1.125rem]"
         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
       >
         MedFlow <span className="text-mf-primary dark:text-primary">PH</span>
@@ -251,7 +261,7 @@ function PageContextBar({
     <div className="medflow-no-print border-t border-slate-100 px-3 py-1.5 dark:border-border/60 md:px-5">
       <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
         <nav
-          className="min-w-0 text-[11px] text-mf-muted dark:text-muted-foreground"
+          className="min-w-0 text-mf-caption text-mf-muted dark:text-muted-foreground"
           aria-label="Breadcrumb"
         >
           {breadcrumb.map((crumb, i) => (
@@ -263,7 +273,7 @@ function PageContextBar({
             </span>
           ))}
         </nav>
-        <h1 className="min-w-0 break-words text-sm font-semibold text-mf-ink dark:text-foreground md:text-base">
+        <h1 className="min-w-0 break-words text-mf-nav font-semibold text-mf-ink dark:text-foreground md:text-mf-card-title">
           {title}
         </h1>
       </div>
@@ -330,10 +340,10 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
     })
   }
 
-  function handleMobileLeaf(leaf: NavLeaf) {
+  function handleMobileLeaf(target: { path: string }) {
     setMobileOpen(false)
     setMobileExpanded(null)
-    const { pathname, hash } = splitPathHash(leaf.path)
+    const { pathname, hash } = splitPathHash(target.path)
     navigate({ pathname, hash })
   }
 
@@ -506,16 +516,13 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                               aria-label={`${item.label} pages`}
                             >
                               {item.children.map((leaf) => {
-                                const { pathname, hash } = splitPathHash(leaf.path)
-                                const leafActive =
-                                  location.pathname === pathname &&
-                                  (!hash || location.hash === hash)
+                                const leafActive = isNavTargetActive(location, leaf.path)
                                 return (
                                   <button
                                     key={`m-${item.key}-${leaf.path}-${leaf.label}`}
                                     type="button"
                                     onClick={() => handleMobileLeaf(leaf)}
-                                    className={`flex min-h-[44px] items-center rounded-lg px-3 py-2 text-left text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                                    className={`flex min-h-[44px] items-center rounded-lg px-3 py-2 text-left text-mf-nav transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                                       leafActive
                                         ? 'bg-primary/10 font-semibold text-mf-primary dark:bg-primary/15 dark:text-primary'
                                         : 'text-mf-ink hover:bg-slate-100 dark:text-foreground dark:hover:bg-muted'

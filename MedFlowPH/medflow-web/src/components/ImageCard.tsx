@@ -58,7 +58,7 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
               imgError ? 'flex border-2 border-dashed border-slate-300' : 'hidden'
             }`}
           >
-            <span className="text-center px-4 text-xs text-slate-400">
+            <span className="px-4 text-center text-mf-caption text-slate-400">
               {title} — image not yet available
             </span>
           </div>
@@ -69,19 +69,19 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
           ) : null}
         </div>
         {hideInlineTitle ? null : (
-          <figcaption className="border-t border-slate-100 bg-white px-3 py-2 text-left text-xs font-bold text-mf-muted">
+          <figcaption className="border-t border-slate-100 bg-white px-3 py-2 text-left text-mf-caption font-bold text-mf-muted dark:border-border dark:bg-card dark:text-muted-foreground">
             {title}
           </figcaption>
         )}
       </button>
       {figure ? (
-        <p className="text-xs text-slate-500 dark:text-muted-foreground">{figure}</p>
+        <p className="text-mf-caption text-slate-500 dark:text-muted-foreground">{figure}</p>
       ) : null}
       {caption ? (
         <div className="rounded-lg border border-slate-100 bg-slate-50/80 dark:border-border dark:bg-muted/30">
           <button
             type="button"
-            className="flex w-full items-center gap-2 px-2.5 py-2 text-left text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100/90 dark:text-muted-foreground dark:hover:bg-muted/50"
+            className="flex w-full items-center gap-2 px-2.5 py-2 text-left text-mf-caption font-medium text-slate-600 transition-colors hover:bg-slate-100/90 dark:text-muted-foreground dark:hover:bg-muted/50"
             aria-expanded={captionOpen}
             aria-controls={captionPanelId}
             aria-label={captionOpen ? `Hide description for ${title}` : `Show description for ${title}`}
@@ -98,7 +98,7 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
           {captionOpen ? (
             <div
               id={captionPanelId}
-              className="border-t border-slate-100 py-2 pb-2.5 pl-[calc(0.625rem+1ch)] pr-2.5 text-justify text-xs leading-relaxed text-slate-500 whitespace-pre-line dark:border-border dark:text-muted-foreground"
+              className="border-t border-slate-100 py-2 pb-2.5 pl-[calc(0.625rem+1ch)] pr-2.5 text-justify text-mf-body leading-relaxed text-slate-500 whitespace-pre-line dark:border-border dark:text-muted-foreground"
             >
               {caption}
             </div>

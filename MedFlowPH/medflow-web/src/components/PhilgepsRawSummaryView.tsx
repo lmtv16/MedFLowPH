@@ -56,7 +56,7 @@ function PreambleRows({ lines }: { lines: string[] }) {
 
   return (
     <div className="mb-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
-      <table className="mb-0 w-full min-w-[16rem] border-collapse text-left text-xs text-slate-700 dark:text-foreground">
+      <table className="mb-0 w-full min-w-[16rem] border-collapse text-left text-mf-caption text-slate-700 dark:text-foreground">
       <tbody>
         {rows.map((r, idx) => (
           <tr key={idx} className="border-b border-slate-200 dark:border-border">

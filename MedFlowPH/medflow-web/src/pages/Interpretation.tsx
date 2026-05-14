@@ -1121,7 +1121,7 @@ function DbscanClusterOtherInsightCard() {
 
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <p className="text-sm font-semibold uppercase tracking-wide text-mf-primary">
+      <p className="text-mf-caption font-semibold uppercase tracking-wide text-mf-primary">
         Other clusters (pooled)
       </p>
       <p className="mt-1 font-medium text-mf-ink">Broad Mixed Medical Procurement Segment</p>
@@ -1507,9 +1507,9 @@ export function Interpretation() {
             />
 
             <div className="mb-8 space-y-3">
-              <h3 className="text-sm font-semibold text-mf-ink">K-means</h3>
+              <h3 className="text-mf-card-title font-semibold text-mf-ink">K-means</h3>
               {semanticLoading ? (
-                <p className="text-sm text-mf-muted">Loading cluster labels…</p>
+                <p className="text-mf-body text-mf-muted">Loading cluster labels…</p>
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {POLICY_CLUSTER_IDS.map((id) => {
@@ -1524,7 +1524,7 @@ export function Interpretation() {
                         key={id}
                         className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
                       >
-                        <p className="text-sm font-semibold uppercase tracking-wide text-mf-primary">
+                        <p className="text-mf-caption font-semibold uppercase tracking-wide text-mf-primary">
                           Cluster {id}
                         </p>
                         <p className="mt-1 font-medium text-mf-ink">{meta?.label ?? '—'}</p>
@@ -1592,7 +1592,7 @@ export function Interpretation() {
                 />
 
                 <div className="space-y-3">
-                  <p className="text-sm leading-relaxed text-mf-muted">
+                  <p className="text-mf-body leading-relaxed text-mf-muted">
                     The six clusters show that medical-related procurement behavior is not uniform. Each cluster
                     captures a different procurement pattern, such as high-value centralized procurement, routine
                     high-quantity supply procurement, delayed medium-value procurement, stable routine procurement,
@@ -1634,19 +1634,19 @@ export function Interpretation() {
                 />
 
                 <div className="space-y-3">
-                  <p className="text-sm leading-relaxed text-mf-muted">
+                  <p className="text-mf-body leading-relaxed text-mf-muted">
                     The cluster results provide useful insights for understanding medical-related procurement
                     behavior in the Philippine public health context. The clusters do not directly prove actual
                     shortages, overstocking, or supply failure. However, they provide strong analytical signals that
                     can guide further review.
                   </p>
-                  <p className="text-sm font-medium text-mf-ink">For the Philippines, these clusters can support:</p>
-                  <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-mf-muted">
+                  <p className="text-mf-body font-medium text-mf-ink">For the Philippines, these clusters can support:</p>
+                  <ul className="list-disc space-y-1.5 pl-5 text-mf-body leading-relaxed text-mf-muted">
                     {OVERALL_CONCLUSION_USES.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
-                  <p className="text-sm leading-relaxed text-mf-muted">
+                  <p className="text-mf-body leading-relaxed text-mf-muted">
                     Overall, the cluster interpretations help stakeholders understand where procurement activity is
                     concentrated, which procurement groups may require closer monitoring, and how different
                     medical-related procurement behaviors may affect public health supply planning.
@@ -1714,9 +1714,9 @@ export function Interpretation() {
               icon={MapPin}
             />
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-mf-ink">DBSCAN</h3>
+              <h3 className="text-mf-card-title font-semibold text-mf-ink">DBSCAN</h3>
               {dbscanSemanticLoading ? (
-                <p className="text-sm text-mf-muted">Loading DBSCAN cluster labels…</p>
+                <p className="text-mf-body text-mf-muted">Loading DBSCAN cluster labels…</p>
               ) : null}
               <DbscanInsightsGridPageCarousel>
                 {!dbscanSemanticLoading
@@ -1733,7 +1733,7 @@ export function Interpretation() {
                         key={cardKey}
                         className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
                       >
-                        <p className="text-sm font-semibold uppercase tracking-wide text-mf-primary">
+                        <p className="text-mf-caption font-semibold uppercase tracking-wide text-mf-primary">
                           {clusterTitle}
                         </p>
                         <p className="mt-1 font-medium text-mf-ink">{meta?.label ?? '—'}</p>
@@ -1799,7 +1799,7 @@ export function Interpretation() {
                 <h3 className="text-lg font-semibold tracking-tight text-mf-ink dark:text-foreground">
                   Overall DBSCAN Interpretation Summary
                 </h3>
-                <p className="text-sm leading-relaxed text-mf-muted">
+                <p className="text-mf-body leading-relaxed text-mf-muted">
                   DBSCAN revealed several dense procurement behavior groups and one large set of
                   noise records. Compared with K-means, DBSCAN is more useful for identifying
                   density-based patterns, small specialized clusters, and outlier-like records.
@@ -1807,7 +1807,7 @@ export function Interpretation() {
               </div>
 
               <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-border">
-                <table className="min-w-[36rem] w-full border-collapse text-left text-sm">
+                <table className="min-w-[36rem] w-full border-collapse text-left text-mf-body">
                   <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-mf-muted dark:bg-muted/40">
                     <tr>
                       <th className="px-4 py-3">DBSCAN Group</th>
@@ -1833,29 +1833,29 @@ export function Interpretation() {
                 <h3 className="text-lg font-semibold tracking-tight text-mf-ink dark:text-foreground">
                   Overall Conclusion
                 </h3>
-                <p className="text-sm leading-relaxed text-mf-muted">
+                <p className="text-mf-body leading-relaxed text-mf-muted">
                   The DBSCAN results provide a supporting view of medical-related procurement behavior
                   in the Philippines. While K-means gives the main six-cluster segmentation, DBSCAN
                   helps reveal smaller dense groups and records that behave differently from the
                   majority.
                 </p>
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-mf-ink dark:text-foreground">
+                  <p className="text-mf-body font-medium text-mf-ink dark:text-foreground">
                     The main benefit of DBSCAN is its ability to identify:
                   </p>
-                  <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-mf-muted">
+                  <ul className="list-disc space-y-1 pl-5 text-mf-body leading-relaxed text-mf-muted">
                     {DBSCAN_OVERALL_IDENTIFY_BULLETS.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </div>
-                <p className="text-sm leading-relaxed text-mf-muted">
+                <p className="text-mf-body leading-relaxed text-mf-muted">
                   These results do not directly prove actual shortages, oversupply, or procurement
                   failure. However, they provide useful analytical signals for procurement
                   monitoring, delay review, supplier concentration analysis, and resource allocation
                   planning.
                 </p>
-                <p className="text-sm leading-relaxed text-mf-muted">
+                <p className="text-mf-body leading-relaxed text-mf-muted">
                   For the Philippines, the DBSCAN cluster insights can help public health
                   decision-makers identify which procurement records follow common dense patterns and
                   which records appear unusual or irregular. This can support better procurement

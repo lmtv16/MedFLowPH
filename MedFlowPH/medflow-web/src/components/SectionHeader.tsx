@@ -10,10 +10,12 @@ export function SectionHeader({ title, subtitle, icon: Icon }: SectionHeaderProp
   return (
     <header className="mb-6 border-l-4 border-mf-primary pl-4">
       <div className="flex items-center gap-2">
-        {Icon ? <Icon className="h-5 w-5 text-mf-primary" aria-hidden /> : null}
-        <h2 className="text-xl font-semibold text-mf-ink">{title}</h2>
+        {Icon ? <Icon className="h-5 w-5 shrink-0 text-mf-primary" aria-hidden /> : null}
+        <h2 className="font-heading text-mf-section font-semibold text-mf-ink dark:text-foreground">{title}</h2>
       </div>
-      {subtitle ? <p className="mt-1 text-sm text-mf-muted">{subtitle}</p> : null}
+      {subtitle ? (
+        <p className="mt-1.5 text-mf-caption text-mf-muted dark:text-muted-foreground">{subtitle}</p>
+      ) : null}
     </header>
   )
 }

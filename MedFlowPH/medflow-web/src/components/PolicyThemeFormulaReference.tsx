@@ -123,7 +123,7 @@ export default function PolicyThemeFormulaReference({ defaultOpen = true }: Prop
             <h2 className="mb-2 border-l-4 border-blue-700 pl-3 font-heading text-xl font-semibold text-slate-800 dark:text-foreground">
               Policy Theme Proxy Formula Reference
             </h2>
-            <p className="text-sm leading-relaxed text-slate-500 dark:text-muted-foreground">
+            <p className="text-mf-body leading-relaxed text-slate-500 dark:text-muted-foreground">
               The policy-theme scores are{' '}
               <span className="rounded bg-amber-50 px-1 font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
                 proxy indicators
@@ -240,7 +240,7 @@ export default function PolicyThemeFormulaReference({ defaultOpen = true }: Prop
               <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
               <div>
                 <h4 className="mb-2 font-heading font-semibold text-amber-800 dark:text-amber-300">Interpretation Note</h4>
-                <p className="text-sm leading-relaxed text-amber-700 dark:text-amber-200/90">
+                <p className="text-mf-body leading-relaxed text-amber-700 dark:text-amber-200/90">
                   The policy theme scores were computed as <span className="font-semibold">proxy indicators</span> rather than{' '}
                   <span className="font-semibold">direct proof</span> of actual shortage, overstocking, understocking, or
                   equity. The shortage-risk proxy used weighted procurement-stress indicators: bid notice status, procurement

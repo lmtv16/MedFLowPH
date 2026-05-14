@@ -3,7 +3,6 @@ import { BarChart3 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { PageTOC, TOC_EDA } from '../components/PageTOC'
 import { SectionHeader } from '../components/SectionHeader'
-import { FigureCarousel } from '../components/FigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
@@ -60,7 +59,7 @@ function RawSchemaPngFigure({ src, title }: { src: string; title: string }) {
 
   if (missing) {
     return (
-      <p className="mb-4 text-xs text-slate-500 dark:text-muted-foreground">
+      <p className="mb-4 text-mf-caption text-slate-500 dark:text-muted-foreground">
         Raw dataset schema image is not available. The monospace export below lists the same columns.
       </p>
     )
@@ -82,7 +81,6 @@ function RawSchemaPngFigure({ src, title }: { src: string; title: string }) {
 
 export function EDA() {
   const [quarterKey, setQuarterKey] = useState<string | null>(null)
-  const [mergedSlideIdx, setMergedSlideIdx] = useState(0)
   const [gallery, setGallery] = useState<{ images: GalleryImage[]; idx: number }>({
     images: [],
     idx: 0,
@@ -96,33 +94,10 @@ export function EDA() {
     [quarterKey],
   )
 
-  const merged = IMAGES.eda.merged
-
-  useEffect(() => {
-    setMergedSlideIdx(0)
-  }, [quarterKey])
-
-  useEffect(() => {
-    setMergedSlideIdx((i) => Math.max(0, Math.min(merged.length - 1, i)))
-  }, [merged.length])
-
-  function openMerged(i: number) {
-    const images = merged.map((item) => ({ src: item.src, title: item.title }))
-    setGallery({ images, idx: i })
-  }
-
   function openQuarterly(i: number) {
     const images = quarterlyImages.map((item) => ({ src: item.src, title: item.title }))
     setGallery({ images, idx: i })
   }
-
-  function openQuarterlyMerged(i: number) {
-    const base = [...quarterlyImages, ...merged]
-    const images = base.map((item) => ({ src: item.src, title: item.title }))
-    setGallery({ images, idx: i })
-  }
-
-  const figureOffset = quarterlyImages.length
 
   return (
     <PageShell>
@@ -130,13 +105,13 @@ export function EDA() {
         <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <motion.div className="space-y-12">
             <SectionWrapper id="du-hero">
-              <h1 className="mb-2 font-heading text-3xl font-bold text-slate-800 dark:text-foreground">
+              <h1 className="mb-2 font-heading text-mf-page-title font-bold text-slate-800 dark:text-foreground">
                 Data Understanding
               </h1>
-              <p className="mb-3 text-lg font-medium text-blue-700 dark:text-blue-400">
+              <p className="mb-3 text-mf-page-lead font-medium text-blue-700 dark:text-blue-400">
                 Exploring and preparing PhilGEPS medical procurement data before clustering.
               </p>
-              <p className="mb-6 max-w-3xl leading-relaxed text-slate-600 dark:text-muted-foreground">
+              <p className="mb-6 max-w-3xl text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
                 This section explains how the raw PhilGEPS procurement records were examined, cleaned, transformed, and
                 prepared for unsupervised clustering. The process started from millions of raw procurement records,
                 filtered them into medical-related purchases, handled data quality issues, engineered useful features,
@@ -147,39 +122,39 @@ export function EDA() {
                   <MetricCard key={m.label} label={m.label} value={m.value} />
                 ))}
               </div>
-              <p className="text-xs italic text-slate-400 dark:text-muted-foreground">
+              <p className="text-mf-caption italic text-slate-400 dark:text-muted-foreground">
                 These numbers describe the dataset preparation stage and are not yet the final clustering result.
               </p>
             </SectionWrapper>
 
             <SectionWrapper id="du-raw" title="00 - Raw Dataset Understanding">
-              <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+              <p className="mb-6 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
                 The raw PhilGEPS extract spans tens of millions of procurement rows with dozens of administrative fields.
                 Before modeling, we documented column roles, key identifiers, and obvious quality risks directly from the
                 raw schema summary.
               </p>
               <RawSchemaPngFigure src={RAW_SCHEMA} title="Raw dataset schema (tabular overview)" />
               <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-border dark:bg-muted/40">
-                <p className="mb-3 text-xs font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
-                  Schema table (text export — <code className="text-[11px]">philgeps_raw_schema_table.txt</code>)
+                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
+                  Schema table (text export — <code className="text-mf-caption font-mono">philgeps_raw_schema_table.txt</code>)
                 </p>
                 {rawSchemaTable.text ? (
-                  <pre className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-slate-200 bg-white p-3 font-mono text-[11px] leading-snug text-slate-800 whitespace-pre dark:border-border dark:bg-card dark:text-foreground">
+                  <pre className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-slate-200 bg-white p-3 font-mono text-mf-caption leading-snug text-slate-800 whitespace-pre dark:border-border dark:bg-card dark:text-foreground">
                     {rawSchemaTable.text}
                   </pre>
                 ) : rawSchemaTable.failed ? (
-                  <p className="text-xs text-slate-400">Schema table file could not be loaded.</p>
+                  <p className="text-mf-caption text-slate-400">Schema table file could not be loaded.</p>
                 ) : (
-                  <p className="text-xs text-slate-400">Loading schema table…</p>
+                  <p className="text-mf-caption text-slate-400">Loading schema table…</p>
                 )}
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-slate-500 dark:text-muted-foreground">
+              <p className="mt-4 text-mf-body leading-relaxed text-slate-500 dark:text-muted-foreground">
                 The schema table anchors terminology for later cleaning rules—especially procurement modes, dates,
                 budgets, and agency identifiers—so every downstream transformation can be traced back to an explicit raw
                 column definition.
               </p>
               <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-border dark:bg-muted/40">
-                <p className="mb-3 text-xs font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
+                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
                   Raw summary
                 </p>
                 {rawSummary.text ? (
@@ -187,22 +162,22 @@ export function EDA() {
                     <PhilgepsRawSummaryView text={rawSummary.text} />
                   </div>
                 ) : rawSummary.failed ? (
-                  <p className="text-xs text-slate-400">Summary file could not be loaded.</p>
+                  <p className="text-mf-caption text-slate-400">Summary file could not be loaded.</p>
                 ) : (
-                  <p className="text-xs text-slate-400">Loading summary…</p>
+                  <p className="text-mf-caption text-slate-400">Loading summary…</p>
                 )}
               </div>
             </SectionWrapper>
 
             <SectionWrapper id="du-conclusion" title="Data Understanding Summary">
-              <div className="rounded-2xl bg-slate-800 p-8 text-white dark:bg-slate-900">
+              <div className="rounded-2xl bg-slate-800 p-8 text-mf-body text-white dark:bg-slate-900">
                 <p className="leading-relaxed">
                   This walkthrough traced PhilGEPS medical procurement data from raw chaos—millions of heterogeneous rows
                   and forty-six administrative columns—through disciplined cleaning, exploratory validation, and structured
                   preprocessing that prepares a{' '}
                   <span className="font-semibold text-blue-300">487,605</span>-row tensor ready for PCA-backed clustering.
                 </p>
-                <p className="mt-4 leading-relaxed">
+                <p className="mt-4 text-mf-body leading-relaxed">
                   <span className="font-semibold text-blue-300">K-means</span> delivers a compact six-cluster story that
                   pairs cleanly with policy-theme overlays, whereas{' '}
                   <span className="font-semibold text-teal-300">DBSCAN</span> exposes dense procurement islands alongside a
@@ -223,29 +198,11 @@ export function EDA() {
                   subtitle="Quarterly explorers highlight slice evolution; merged boards synthesize longitudinal behavior."
                   icon={BarChart3}
                 />
-                <p className="mt-4 text-sm text-mf-muted dark:text-muted-foreground">
+                <p className="mt-4 text-mf-body text-mf-muted dark:text-muted-foreground">
                   This gallery supports the data cleaning narrative: read consolidated boards for the full study window, then
                   optionally filter to a single quarter to narrate procurement seasonality before moving downstream to
                   preprocessing and modeling.
                 </p>
-              </SectionWrapper>
-
-              <SectionWrapper id="eda-merged" title="Merged charts">
-                <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
-                  Consolidated figures (merged board) aggregate every quarter in the PhilGEPS medical slice. Use the
-                  carousel to focus one figure at a time; open the lightbox for a larger view.
-                </p>
-                <FigureCarousel
-                  items={merged}
-                  activeIndex={mergedSlideIdx}
-                  onActiveIndexChange={setMergedSlideIdx}
-                  getFigureLabel={(idx, item) => `Figure ${idx + figureOffset + 1}: ${item.title}`}
-                  onSlideImageClick={(idx) =>
-                    quarterKey ? openQuarterlyMerged(figureOffset + idx) : openMerged(idx)
-                  }
-                  ariaPrevLabel="Previous merged figure"
-                  ariaNextLabel="Next merged figure"
-                />
               </SectionWrapper>
 
               <SectionWrapper id="eda-quarter" title="By quarter">

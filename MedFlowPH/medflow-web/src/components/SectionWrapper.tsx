@@ -17,7 +17,7 @@ export function SectionWrapper({ title, id, children }: SectionWrapperProps) {
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         {title ? (
-          <h2 className="mb-4 border-l-4 border-blue-700 pl-3 font-heading text-lg font-semibold leading-snug text-mf-ink dark:border-primary dark:text-foreground sm:text-xl">
+          <h2 className="mb-4 border-l-4 border-blue-700 pl-3 font-heading text-mf-section font-semibold text-mf-ink dark:border-primary dark:text-foreground">
             {title}
           </h2>
         ) : null}

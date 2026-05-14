@@ -48,13 +48,13 @@ export function PCAPage() {
         <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <motion.div className="space-y-12">
             <SectionWrapper id="pca-overview">
-              <h1 className="mb-2 font-heading text-3xl font-bold text-slate-800 dark:text-foreground">
+              <h1 className="mb-2 font-heading text-mf-page-title font-bold text-slate-800 dark:text-foreground">
                 Principal Component Analysis (PCA)
               </h1>
-              <p className="mb-3 text-lg font-medium text-blue-700 dark:text-blue-400">
+              <p className="mb-3 text-mf-page-lead font-medium text-blue-700 dark:text-blue-400">
                 Compressing scaled features into orthogonal axes for clustering and 3D visualization.
               </p>
-              <p className="max-w-3xl leading-relaxed text-slate-600 dark:text-muted-foreground">
+              <p className="max-w-3xl text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
                 PCA compresses the scaled feature block into orthogonal axes that preserve bulk variance while enabling 3D
                 visualization prior to clustering overlays.
               </p>

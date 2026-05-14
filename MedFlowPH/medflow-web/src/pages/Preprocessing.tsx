@@ -94,11 +94,11 @@ export function Preprocessing() {
     <PageShell>
       <div className="min-w-0 space-y-12 overflow-x-hidden">
         <SectionWrapper id="preprocessing-overview" title="02 - Data Preprocessing">
-          <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+          <p className="mb-6 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
             Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding
             captured categorical structure without collapsing rare procurement modes.
           </p>
-          <p className="mb-4 text-sm text-mf-muted dark:text-muted-foreground">
+          <p className="mb-4 text-mf-body text-mf-muted dark:text-muted-foreground">
             Slides follow the §02 pipeline: feature selection, then min–max scaling diagnostics, then one-hot encoding
             summaries. Open the lightbox from any slide; edit copy under{' '}
             <span className="font-mono text-xs">IMAGES.eda.preprocessingCarousel</span>.
@@ -120,7 +120,7 @@ export function Preprocessing() {
                 <p className="font-semibold text-amber-900 dark:text-amber-100">
                   Important Note About Policy Theme Scores
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-amber-950/90 dark:text-amber-50/90">
+                <p className="mt-2 text-mf-body leading-relaxed text-amber-950/90 dark:text-amber-50/90">
                   Cluster IDs from later k-means runs are{' '}
                   <strong className="font-semibold">not</strong> substitutes for these engineered themes: k-means
                   partitions PCA space, while the theme scores are standalone proxies attached before scaling.
@@ -153,7 +153,7 @@ export function Preprocessing() {
         </SectionWrapper>
 
         <SectionWrapper id="cleaned-dataset-exploration" title="Cleaned Dataset Exploration">
-          <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+          <p className="mb-6 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
             Exploratory visuals validate relationships among numeric cadence features, categorical procurement codes,
             volume by year, and the impact of cleaning on longitudinal coverage.
           </p>
@@ -210,7 +210,7 @@ The lower count in 2025 should be interpreted carefully because the available 20
 The final dataset is smaller, but more focused on medical procurement records needed for clustering.`}
             />
           </div>
-          <p className="mt-6 text-sm leading-relaxed text-slate-500 dark:text-muted-foreground">
+          <p className="mt-6 text-mf-body leading-relaxed text-slate-500 dark:text-muted-foreground">
             Together these boards demonstrate that medical procurement signals remain structured enough for PCA while
             also exposing heavy-tailed budgets and categorical leakage risks that motivate regularization in later
             steps.
@@ -218,7 +218,7 @@ The final dataset is smaller, but more focused on medical procurement records ne
         </SectionWrapper>
 
         <SectionWrapper id="data-cleaning" title="Data Cleaning">
-          <p className="text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">{DATA_CLEANING_INTRO}</p>
+          <p className="text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">{DATA_CLEANING_INTRO}</p>
 
           <div className="relative mt-8 border-l-2 border-slate-200 pl-8 dark:border-border">
             {DATA_CLEANING_STEPS.map((step) => (
@@ -229,15 +229,15 @@ The final dataset is smaller, but more focused on medical procurement records ne
                 <div className="absolute -left-[1.54rem] top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-mf-primary bg-white text-xs font-bold text-mf-primary dark:border-primary dark:bg-card dark:text-primary">
                   {step.n}
                 </div>
-                <h3 className="font-heading text-base font-semibold text-mf-ink dark:text-foreground">{step.title}</h3>
-                <p className="mt-2 text-sm text-mf-muted dark:text-muted-foreground">{step.body}</p>
+                <h3 className="font-heading text-mf-card-title font-semibold text-mf-ink dark:text-foreground">{step.title}</h3>
+                <p className="mt-2 text-mf-body text-mf-muted dark:text-muted-foreground">{step.body}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-8 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 p-4 dark:bg-amber-950/30">
-            <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">Note on 2022 data</p>
-            <p className="mt-2 text-sm leading-relaxed text-amber-900/90 dark:text-amber-100/90">
+            <p className="text-mf-card-title font-semibold text-amber-900 dark:text-amber-200">Note on 2022 data</p>
+            <p className="mt-2 text-mf-body leading-relaxed text-amber-900/90 dark:text-amber-100/90">
               The 2022 raw exports were treated as headerless files and read using a fixed 46-column PhilGEPS schema so
               that key fields would remain aligned across years.
             </p>
@@ -245,7 +245,7 @@ The final dataset is smaller, but more focused on medical procurement records ne
         </SectionWrapper>
 
         <SectionWrapper id="feature-engineering" title="Feature Engineering">
-          <p className="text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
+          <p className="text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
             Several procurement fields were transformed into numerical features before clustering. Monetary columns were
             converted to numeric values, clipped at zero, and transformed using log1p. This reduced the effect of
             extremely large procurement values while preserving meaningful differences between small and large purchases.
@@ -270,8 +270,8 @@ The final dataset is smaller, but more focused on medical procurement records ne
             ].map(({ icon: Icon, name, text }) => (
               <div key={name} className="rounded-xl border border-slate-200 bg-white p-4 dark:border-border dark:bg-card">
                 <Icon className="h-6 w-6 text-mf-primary dark:text-primary" aria-hidden />
-                <p className="mt-3 font-mono text-sm font-semibold text-mf-primary dark:text-primary">{name}</p>
-                <p className="mt-2 text-sm text-mf-muted dark:text-muted-foreground">{text}</p>
+                <p className="mt-3 font-mono text-mf-body font-semibold text-mf-primary dark:text-primary">{name}</p>
+                <p className="mt-2 text-mf-body text-mf-muted dark:text-muted-foreground">{text}</p>
               </div>
             ))}
           </div>
@@ -308,7 +308,7 @@ The final dataset is smaller, but more focused on medical procurement records ne
             <code>{DATA_PATHS.featureSelected}</code>
           </p>
           <div className="mt-4 max-h-[420px] overflow-auto rounded-xl border border-slate-100 text-xs">
-            <table className="min-w-full divide-y divide-slate-100 text-left text-sm">
+            <table className="min-w-full divide-y divide-slate-100 text-left text-mf-body">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-mf-muted">
                 <tr>
                   {featureCols.map((col) => (

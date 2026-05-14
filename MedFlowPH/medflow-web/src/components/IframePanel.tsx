@@ -15,7 +15,7 @@ export function IframePanel({ src, title, height = 600, id }: IframePanelProps) 
   return (
     <section id={id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
       <div className="mb-3 flex min-w-0 items-center justify-between gap-2">
-        <h3 className="min-w-0 text-sm font-semibold text-mf-ink dark:text-foreground">{title}</h3>
+        <h3 className="min-w-0 text-mf-card-title font-semibold text-mf-ink dark:text-foreground">{title}</h3>
       </div>
       <div className="relative w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-slate-100 bg-slate-50 dark:border-border dark:bg-muted/30">
         {!loaded ? (

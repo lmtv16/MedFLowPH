@@ -55,7 +55,7 @@ const DBSCAN_PCA_CAPTIONS: FigureCaptions = [
 const DBSCAN_BARS_CAPTIONS: FigureCaptions = [
   'Top 60 clusters by size after sorting (noise appears when present in the extract). Hundreds of smaller DBSCAN components exist beyond what the axis can label legibly.',
   <>
-    Source: <code className="rounded bg-slate-100 px-1 py-0.5 text-xs text-slate-700 dark:bg-muted dark:text-foreground">/results/04B/Summaries/dbscan_cluster_counts.json</code> — truncated here for presentation only.
+    Source: <code className="rounded bg-slate-100 px-1 py-0.5 text-mf-caption font-mono text-slate-700 dark:bg-muted dark:text-foreground">/results/04B/Summaries/dbscan_cluster_counts.json</code> — truncated here for presentation only.
   </>,
 ]
 
@@ -94,7 +94,7 @@ export function ClusteringPage() {
       <div className="flex gap-8">
         <div className="min-w-0 flex-1 space-y-12 overflow-x-hidden">
           <SectionWrapper id="du-kmeans" title="04A - K-Means Clustering">
-            <div className="mb-4 space-y-3 leading-relaxed text-slate-600 dark:text-muted-foreground">
+            <div className="mb-4 space-y-3 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
               <p>
                 This plot shows the six K-means clusters in the 3D PCA space. Each point represents a medical procurement
                 record, and each color represents one assigned cluster.
@@ -107,16 +107,16 @@ export function ClusteringPage() {
               </p>
             </div>
             <div className="mb-6 flex flex-wrap gap-3">
-              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
+              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-mf-caption font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
                 Total records: 487,605
               </span>
-              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
+              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-mf-caption font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
                 Selected K: 6
               </span>
-              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
+              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-mf-caption font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
                 Largest cluster: Cluster 3 — 163,091 records
               </span>
-              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
+              <span className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-mf-caption font-medium text-blue-900 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-100">
                 Smallest cluster: Cluster 2 — 38,657 records
               </span>
             </div>
@@ -152,7 +152,7 @@ export function ClusteringPage() {
           </SectionWrapper>
 
           <SectionWrapper id="du-dbscan" title="04B - DBSCAN Clustering">
-            <div className="mb-4 space-y-3 leading-relaxed text-slate-600 dark:text-muted-foreground">
+            <div className="mb-4 space-y-3 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
               <p>
                 This plot shows the DBSCAN clusters in 3D PCA space. Because DBSCAN produced{' '}
                 <strong className="font-semibold text-mf-ink dark:text-foreground">386 clusters</strong>, only the top
@@ -166,16 +166,16 @@ export function ClusteringPage() {
               </p>
             </div>
             <div className="mb-6 flex flex-wrap gap-3">
-              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-mf-caption font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
                 Non-noise clusters: 386
               </span>
-              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-mf-caption font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
                 Noise records: 357,290
               </span>
-              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-mf-caption font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
                 Noise share: 73.27%
               </span>
-              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+              <span className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-mf-caption font-medium text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
                 Largest cluster: Cluster 25 — 94,311 records
               </span>
             </div>
@@ -184,7 +184,7 @@ export function ClusteringPage() {
             </div>
 
             <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-5 dark:border-blue-900 dark:bg-blue-950/40">
-              <p className="text-sm leading-relaxed text-blue-950 dark:text-blue-50">
+              <p className="text-mf-body leading-relaxed text-blue-950 dark:text-blue-50">
                 Because DBSCAN produced 386 clusters, the visualization shows only the top five largest non-noise clusters
                 separately. Smaller clusters are grouped as &quot;Other DBSCAN clusters,&quot; while noise records are
                 shown separately.
@@ -246,15 +246,15 @@ export function ClusteringPage() {
           </SectionWrapper>
 
           <SectionWrapper id="clustering-approach-comparison">
-            <h3 className="font-heading text-base font-semibold text-mf-ink dark:text-foreground">
+            <h3 className="font-heading text-mf-card-title font-semibold text-mf-ink dark:text-foreground">
               K-Means vs DBSCAN: Approach Comparison
             </h3>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div className="rounded-xl border-2 border-mf-primary bg-blue-50/40 p-6 dark:border-primary dark:bg-blue-950/20">
-                <h4 className="font-heading text-sm font-semibold uppercase tracking-wide text-mf-primary dark:text-primary">
+                <h4 className="font-heading text-mf-caption font-semibold uppercase tracking-wide text-mf-primary dark:text-primary">
                   K-Means Approach
                 </h4>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-mf-muted dark:text-muted-foreground">
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-mf-body text-mf-muted dark:text-muted-foreground">
                   <li>Requires a fixed number of clusters (K)</li>
                   <li>Assigns every record to a cluster</li>
                   <li>Works well for compact, spherical groups</li>
@@ -262,10 +262,10 @@ export function ClusteringPage() {
                 </ul>
               </div>
               <div className="rounded-xl border border-slate-300 bg-slate-50 p-6 dark:border-border dark:bg-muted/40">
-                <h4 className="font-heading text-sm font-semibold uppercase tracking-wide text-mf-muted dark:text-foreground">
+                <h4 className="font-heading text-mf-caption font-semibold uppercase tracking-wide text-mf-muted dark:text-foreground">
                   DBSCAN Approach
                 </h4>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-mf-muted dark:text-muted-foreground">
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-mf-body text-mf-muted dark:text-muted-foreground">
                   <li>No fixed number of clusters needed</li>
                   <li>Marks low-density records as noise</li>
                   <li>Discovers arbitrarily shaped clusters</li>

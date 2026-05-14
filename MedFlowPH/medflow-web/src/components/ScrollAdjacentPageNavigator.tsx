@@ -201,7 +201,7 @@ export function ScrollAdjacentPageNavigator() {
       role="status"
       aria-live="polite"
       aria-atomic="true"
-      className={`medflow-scroll-adjacent-toast pointer-events-none fixed left-1/2 z-[160] max-w-[min(90vw,20rem)] -translate-x-1/2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-center font-sans text-sm font-medium leading-snug text-mf-ink shadow-lg transition-opacity duration-300 ease-out dark:border-border dark:bg-card dark:text-foreground ${positionClass}`}
+      className={`medflow-scroll-adjacent-toast pointer-events-none fixed left-1/2 z-[160] max-w-[min(90vw,20rem)] -translate-x-1/2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-center font-sans text-mf-nav font-medium leading-snug text-mf-ink shadow-lg transition-opacity duration-300 ease-out dark:border-border dark:bg-card dark:text-foreground ${positionClass}`}
     >
       {toast.label}
     </div>

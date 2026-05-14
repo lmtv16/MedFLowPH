@@ -10,7 +10,7 @@ export function tocPreviewFromElement(el: HTMLElement | null): string {
   if (!el) return ''
   const fromHintAttr = el.getAttribute('data-toc-preview')?.trim()
   if (fromHintAttr) return truncatePreviewText(fromHintAttr, TOC_PREVIEW_CHARS)
-  const subtitle = el.querySelector('header > p.mt-1')
+  const subtitle = el.querySelector('header > p')
   const subTxt = subtitle?.textContent?.replace(/\s+/g, ' ').trim()
   if (subTxt) return truncatePreviewText(subTxt, TOC_PREVIEW_CHARS)
   const iframeHeading = el.querySelector(':scope > div.mb-3 h3')
@@ -109,18 +109,17 @@ export const TOC_EDA: PageTOCSection[] = [
   { id: 'du-raw', label: 'Raw Dataset' },
   { id: 'du-conclusion', label: 'Conclusion' },
   { id: 'eda-overview', label: 'Interactive charts' },
-  { id: 'eda-merged', label: 'Merged charts' },
   { id: 'eda-quarter', label: 'By quarter' },
 ]
 
 /** Pipeline walkthrough anchors only (through Conclusion; before interactive EDA chart sections). */
 export const DU_PIPELINE_SECTIONS: PageTOCSection[] = TOC_EDA.slice(0, 3)
 
-/** Data Cleaning page — schema, missingness, and cleaning summary anchors. */
+/** Data Cleaning page — schema, merged EDA figures, and cleaning summary anchors. */
 export const TOC_CLEANING: PageTOCSection[] = [
   { id: 'cleaning-overview', label: 'Overview' },
-  { id: 'cleaning-schema', label: 'Schema' },
-  { id: 'cleaning-missingness', label: 'Missingness' },
+  { id: 'cleaning-schema', label: 'Cleaned Dataset Schema' },
+  { id: 'cleaning-merged', label: 'Exploratory Data Analysis (EDA)' },
   { id: 'cleaning-summary', label: 'Summary' },
 ]
 
@@ -323,19 +322,19 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
     let rowClass: string
     const motionSafe = 'motion-reduce:transition-none'
     if (s.sectionJump) {
-      rowClass = `mx-2 mb-1 mt-3 rounded-lg border py-2.5 px-3 text-left text-[11px] font-semibold tracking-wide transition-all duration-[280ms] ease-out ${motionSafe} hover:brightness-[1.02] dark:hover:brightness-[1.05] ${
+      rowClass = `mx-2 mb-1 mt-3 rounded-lg border py-2.5 px-3 text-left text-mf-toc font-semibold tracking-wide transition-all duration-[280ms] ease-out ${motionSafe} hover:brightness-[1.02] dark:hover:brightness-[1.05] ${
         relaxed
           ? `border-primary bg-primary/15 text-primary ${motionSafe}`
           : 'border-border bg-muted/50 text-foreground hover:border-primary/40 hover:bg-muted'
       }`
     } else if (s.nested) {
-      rowClass = `rounded-lg px-3 py-1 pl-6 text-left text-[11px] transition-colors duration-[280ms] ease-out ${motionSafe} hover:text-foreground hover:brightness-[1.02] dark:hover:brightness-[1.05] ${
+      rowClass = `rounded-lg px-3 py-1 pl-6 text-left text-mf-toc transition-colors duration-[280ms] ease-out ${motionSafe} hover:text-foreground hover:brightness-[1.02] dark:hover:brightness-[1.05] ${
         relaxed
           ? `border-l-2 border-primary bg-primary/10 pl-[1.375rem] font-semibold text-primary ${motionSafe}`
           : 'border-l-2 border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
       }`
     } else {
-      rowClass = `rounded-lg px-3 py-1.5 text-left text-xs transition-colors duration-[280ms] ease-out ${motionSafe} hover:text-foreground hover:brightness-[1.02] dark:hover:brightness-[1.05] ${
+      rowClass = `rounded-lg px-3 py-1.5 text-left text-mf-toc transition-colors duration-[280ms] ease-out ${motionSafe} hover:text-foreground hover:brightness-[1.02] dark:hover:brightness-[1.05] ${
         relaxed
           ? `border-l-2 border-primary bg-primary/10 pl-2.5 font-semibold text-primary ${motionSafe}`
           : 'border-l-2 border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
@@ -352,7 +351,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
       <div className="mb-3 flex items-center gap-1.5 px-3">
         <FlaskConical className="h-3.5 w-3.5 text-primary" aria-hidden />
         <span
-          className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70"
+          className="text-mf-caption font-bold uppercase tracking-widest text-muted-foreground/70"
           style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
         >
           Contents
@@ -390,7 +389,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                 <div
                   role="tooltip"
                   id={tipId}
-                  className="pointer-events-none absolute top-1/2 right-[calc(100%+0.625rem)] z-[60] hidden max-h-[min(42vh,18rem)] w-[15.5rem] -translate-y-1/2 overflow-y-auto rounded-xl border border-border bg-popover p-3 text-left text-[11px] leading-relaxed text-popover-foreground shadow-lg xl:block"
+                  className="pointer-events-none absolute top-1/2 right-[calc(100%+0.625rem)] z-[60] hidden max-h-[min(42vh,18rem)] w-[15.5rem] -translate-y-1/2 overflow-y-auto rounded-xl border border-border bg-popover p-3 text-left text-mf-caption leading-relaxed text-popover-foreground shadow-lg xl:block"
                 >
                   {previewText}
                 </div>
@@ -405,7 +404,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
         const groupActive =
           active === parent.id || children.some((c) => c.id === active)
         const barClass =
-          `flex overflow-hidden rounded-lg border text-[11px] font-semibold tracking-wide transition-all duration-[280ms] ease-out motion-reduce:transition-none hover:brightness-[1.02] dark:hover:brightness-[1.05] ` +
+          `flex overflow-hidden rounded-lg border text-mf-toc font-semibold tracking-wide transition-all duration-[280ms] ease-out motion-reduce:transition-none hover:brightness-[1.02] dark:hover:brightness-[1.05] ` +
           (groupActive
             ? 'border-primary bg-primary/15 text-primary'
             : 'border-border bg-muted/50 text-foreground hover:border-primary/40 hover:bg-muted')
@@ -467,7 +466,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                 <div
                   role="tooltip"
                   id={parentTipId}
-                  className="pointer-events-none absolute bottom-full right-0 z-[61] mb-2 hidden max-h-[min(42vh,18rem)] w-[15.5rem] overflow-y-auto rounded-xl border border-border bg-popover p-3 text-left text-[11px] leading-relaxed text-popover-foreground shadow-lg xl:block"
+                  className="pointer-events-none absolute bottom-full right-0 z-[61] mb-2 hidden max-h-[min(42vh,18rem)] w-[15.5rem] overflow-y-auto rounded-xl border border-border bg-popover p-3 text-left text-mf-caption leading-relaxed text-popover-foreground shadow-lg xl:block"
                 >
                   {parentPreview}
                 </div>
@@ -482,7 +481,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
               >
                 {children.map((c) => {
                   const relaxed = active === c.id
-                  const subClass = `w-full rounded-md px-2 py-1.5 text-left text-[11px] transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
+                  const subClass = `w-full rounded-md px-2 py-1.5 text-left text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
                     relaxed
                       ? `bg-primary/15 font-semibold text-primary medflow-scroll-active-indicator`
                       : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground hover:brightness-[1.03] dark:hover:brightness-[1.05]'
@@ -516,7 +515,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                         <div
                           role="tooltip"
                           id={ctId}
-                          className="pointer-events-none absolute top-0 right-[calc(100%+0.625rem)] z-[60] hidden max-h-[min(42vh,18rem)] w-[15.5rem] overflow-y-auto rounded-xl border border-border bg-popover p-3 text-left text-[11px] leading-relaxed text-popover-foreground shadow-lg xl:block"
+                          className="pointer-events-none absolute top-0 right-[calc(100%+0.625rem)] z-[60] hidden max-h-[min(42vh,18rem)] w-[15.5rem] overflow-y-auto rounded-xl border border-border bg-popover p-3 text-left text-mf-caption leading-relaxed text-popover-foreground shadow-lg xl:block"
                         >
                           {previewText}
                         </div>
@@ -533,13 +532,13 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
       {showRouteLinks ? (
         <>
           <div className="mx-3 my-3 h-px bg-border" />
-          <p className="mb-1 px-3 text-[10px] uppercase tracking-widest text-muted-foreground/60">Pages</p>
+          <p className="mb-1 px-3 text-mf-caption uppercase tracking-widest text-muted-foreground/60">Pages</p>
           {routeLinks.map((r) => (
             <NavLink
               key={r.path}
               to={r.path}
               className={({ isActive }) =>
-                `rounded-lg px-3 py-1.5 text-xs transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
+                `rounded-lg px-3 py-1.5 text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
                   isActive
                     ? 'bg-primary/10 font-semibold text-primary'
                     : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'

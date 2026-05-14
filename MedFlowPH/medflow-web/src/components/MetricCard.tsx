@@ -16,13 +16,19 @@ export function MetricCard({ label, value, unit, delta, highlight, className = '
         className,
       ].join(' ')}
     >
-      <p className="text-[11px] font-medium uppercase leading-snug tracking-wide text-mf-muted sm:text-xs">{label}</p>
+      <p className="text-mf-caption font-medium uppercase leading-snug tracking-wide text-mf-muted dark:text-muted-foreground">
+        {label}
+      </p>
       <div className="mt-auto min-w-0 pt-3">
-        <p className="break-words text-2xl font-semibold tabular-nums text-mf-ink sm:text-3xl">
+        <p className="break-words text-mf-metric font-semibold tabular-nums text-mf-ink dark:text-foreground">
           {value}
-          {unit ? <span className="text-lg font-medium text-mf-muted"> {unit}</span> : null}
+          {unit ? (
+            <span className="text-mf-card-title font-medium text-mf-muted dark:text-muted-foreground"> {unit}</span>
+          ) : null}
         </p>
-        {delta ? <p className="mt-1 text-xs text-mf-secondary">{delta}</p> : null}
+        {delta ? (
+          <p className="mt-1 text-mf-caption text-mf-secondary dark:text-secondary">{delta}</p>
+        ) : null}
       </div>
     </div>
   )

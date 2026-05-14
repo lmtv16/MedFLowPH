@@ -66,7 +66,7 @@ export function FigureCarousel({
           >
             <ChevronLeft className="h-5 w-5" aria-hidden />
           </button>
-          <span className="min-w-[4.5rem] text-center text-sm font-medium tabular-nums text-mf-muted dark:text-muted-foreground">
+          <span className="min-w-[4.5rem] text-center text-mf-caption font-medium tabular-nums text-mf-muted dark:text-muted-foreground">
             {activeIndex + 1} / {n}
           </span>
           <button
@@ -98,13 +98,13 @@ export function FigureCarousel({
       </div>
 
       <div
-        className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50/90 p-4 dark:border-slate-600 dark:bg-muted/25"
+        className="mt-6 rounded-xl border border-dashed border-slate-300 bg-slate-50/90 p-5 md:p-7 dark:border-slate-600 dark:bg-muted/25"
         aria-live="polite"
       >
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-muted-foreground">
+        <p className="text-mf-card-title font-semibold uppercase tracking-wide text-slate-600 dark:text-muted-foreground">
           {heading}
         </p>
-        <p className="mt-2 text-sm leading-relaxed whitespace-pre-line text-slate-700 dark:text-foreground">
+        <p className="mt-3 text-mf-body leading-relaxed whitespace-pre-line text-slate-700 dark:text-foreground">
           {slide?.explanation ?? fallbackExplanation}
         </p>
       </div>

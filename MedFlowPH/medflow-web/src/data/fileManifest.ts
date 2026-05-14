@@ -7,8 +7,32 @@ export type ImageManifestItem = {
   interpretationHeading?: string
 }
 
-const mergedFigureExplanationPlaceholder =
-  'Placeholder — Add a short interpretation: what the chart shows, notable patterns, and why it matters for the PhilGEPS medical slice.'
+const mergedMissingnessExplanation =
+  'This chart shows that all columns in the cleaned PhilGEPS medical procurement dataset have 0 percent missing values. The cleaning process produced a complete dataset with 487,605 records, making it ready for preprocessing, feature engineering, and clustering.'
+
+const mergedDtypeOverviewExplanation = `Most columns in the cleaned PhilGEPS dataset are text or categorical fields. This is expected because procurement records include descriptions, locations, agencies, statuses, and supplier details.
+
+Since clustering requires numeric inputs, the next step converts selected categorical, date, and numeric fields into machine-learning-ready features.`
+
+const mergedNumericCorrelationExplanation = `This heatmap shows how the cleaned numeric fields relate to each other. The strongest relationship is between Item Budget and Contract Amount with a correlation of 0.91, meaning higher planned item budgets usually correspond to higher awarded contract amounts.
+
+Most other numeric fields have weak relationships, so additional feature engineering, scaling, and PCA were needed before clustering.`
+
+const mergedCategoricalAssociationExplanation = `This heatmap shows how selected categorical fields are related using Cramer's V. The strongest relationship is between organization type and grouped organization type, which is expected because they describe similar information.
+
+Most other categorical fields show weak to moderate association, meaning they provide different procurement context. This helped guide which categorical variables could be encoded during preprocessing.`
+
+const mergedCleanedRecordsByYearExplanation = `This chart shows how many cleaned medical procurement records were available per year. The highest counts appear in 2023 and 2024, while 2020 and 2021 have fewer records.
+
+The lower count in 2025 should be interpreted carefully because the available 2025 data may not cover the full year.`
+
+const mergedRawVsCleanedGroupedExplanation = `This chart compares all loaded PhilGEPS records with the final cleaned medical procurement records. The cleaned dataset is smaller because the process filtered out non-medical procurement records.
+
+After Step 01, the dataset was reduced to 487,605 medical-related records, making it focused and ready for preprocessing and clustering.`
+
+const mergedKeptVsRemovedExplanation = `This chart shows how the raw PhilGEPS records were reduced into the final cleaned medical dataset. The blue section shows records kept for analysis, while the gray section shows records removed because they were non-medical, duplicated, or not included in the final output.
+
+The final dataset is smaller, but more focused on medical procurement records needed for clustering.`
 
 const kMeansEvaluationFigurePlaceholder =
   'Placeholder — Add a short interpretation: how this diagnostic supports choosing k and validating the K-means configuration on the PhilGEPS medical slice.'
@@ -102,37 +126,44 @@ export const IMAGES = {
       {
         src: `${mergedBase}/01_overview_missingness_pct.png`,
         title: 'Missingness Overview',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Missing Values After Cleaning',
+        explanation: mergedMissingnessExplanation,
       },
       {
         src: `${mergedBase}/02_overview_dtype_counts.png`,
         title: 'Dtype counts overview',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Column Data Types',
+        explanation: mergedDtypeOverviewExplanation,
       },
       {
         src: `${mergedBase}/04_correlation_numeric.png`,
         title: 'Numeric correlation',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Numeric Correlation',
+        explanation: mergedNumericCorrelationExplanation,
       },
       {
         src: `${mergedBase}/05_correlation_categorical_cramers_v.png`,
         title: 'Categorical Cramer’s V correlation',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Categorical Association',
+        explanation: mergedCategoricalAssociationExplanation,
       },
       {
         src: `${mergedBase}/06_rows_by_year_cleaned_medical.png`,
         title: 'Rows by year — cleaned medical',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Cleaned Records by Year',
+        explanation: mergedCleanedRecordsByYearExplanation,
       },
       {
         src: `${mergedBase}/07_raw_vs_cleaned_rows_by_year_grouped.png`,
         title: 'Raw vs cleaned rows by year (grouped)',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Raw vs Cleaned Records',
+        explanation: mergedRawVsCleanedGroupedExplanation,
       },
       {
         src: `${mergedBase}/08_raw_vs_cleaned_stacked_by_year.png`,
         title: 'Raw vs cleaned stacked by year',
-        explanation: mergedFigureExplanationPlaceholder,
+        interpretationHeading: 'Kept vs Removed Records',
+        explanation: mergedKeptVsRemovedExplanation,
       },
     ],
     /** Ordered slides for the Data Understanding K-means evaluation carousel (distinct from `evaluation.kmeans` gallery order). */

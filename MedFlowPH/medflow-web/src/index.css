@@ -18,9 +18,8 @@
   }
 
   body {
-    @apply m-0 min-h-screen bg-mf-bg font-sans text-mf-ink antialiased;
+    @apply m-0 min-h-screen bg-mf-bg font-sans text-mf-body text-mf-ink antialiased;
     font-family: 'Inter', sans-serif;
-    line-height: 1.6;
   }
 
   img,
