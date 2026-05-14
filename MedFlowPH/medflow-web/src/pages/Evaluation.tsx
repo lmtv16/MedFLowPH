@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import { useMemo, useState } from 'react'
 import { LineChart as LineIcon } from 'lucide-react'
+import { ChartReveal } from '../components/ChartReveal'
 import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { PageTOC, TOC_EVALUATION_NAV } from '../components/PageTOC'
 import { SectionHeader } from '../components/SectionHeader'
@@ -262,7 +263,7 @@ export function Evaluation() {
             Source: `/data/05B/DBSCAN_Evaluation/dbscan_metrics_grid.csv`.
           </p>
           <div className="mt-6 w-full min-w-0 overflow-x-auto">
-            <div className="medflow-recharts-container mx-auto min-w-[17rem]">
+            <ChartReveal className="medflow-recharts-container mx-auto min-w-[17rem]">
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 12, right: 12, left: 4, bottom: 48 }}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -293,7 +294,7 @@ export function Evaluation() {
                 ))}
               </ScatterChart>
             </ResponsiveContainer>
-            </div>
+            </ChartReveal>
           </div>
         </section>
         </div>

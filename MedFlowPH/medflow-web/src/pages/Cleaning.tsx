@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { ImageCard } from '../components/ImageCard'
@@ -90,7 +89,7 @@ export function Cleaning() {
     <PageShell>
       <div className="flex gap-8">
         <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
-          <motion.div className="space-y-12">
+          <div className="space-y-12">
             <SectionWrapper id="cleaning-overview">
               <h1 className="mb-2 font-heading text-mf-page-title font-bold text-slate-800 dark:text-foreground">
                 Data Cleaning
@@ -199,7 +198,7 @@ export function Cleaning() {
               open={gallery.images.length > 0}
               onClose={() => setGallery({ images: [], idx: 0 })}
             />
-          </motion.div>
+          </div>
         </main>
 
         <aside className="medflow-no-print hidden w-48 shrink-0 xl:block">

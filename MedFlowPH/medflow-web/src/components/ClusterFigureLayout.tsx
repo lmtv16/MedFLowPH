@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ChartReveal } from './ChartReveal'
 
 export type FigureCaptions = readonly ReactNode[]
 
@@ -28,7 +29,7 @@ export function ClusterFigureLayout({
           <h3 className="text-mf-card-title font-semibold leading-snug text-mf-ink dark:text-foreground">{title}</h3>
         </div>
       </header>
-      {children}
+      <ChartReveal className="min-w-0">{children}</ChartReveal>
       <footer className="border-t border-slate-200 pt-4 dark:border-border">
         <div className="flex flex-col gap-3">
           {footerParagraphs.map((para, pi) => (

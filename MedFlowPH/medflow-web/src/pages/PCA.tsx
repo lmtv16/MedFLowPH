@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { ClusterFigureLayout, type FigureCaptions } from '../components/ClusterFigureLayout'
 import { LazyIframePanel } from '../components/LazyIframePanel'
 import { ImageCard } from '../components/ImageCard'
@@ -46,7 +45,7 @@ export function PCAPage() {
     <PageShell>
       <div className="flex gap-8">
         <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
-          <motion.div className="space-y-12">
+          <div className="space-y-12">
             <SectionWrapper id="pca-overview">
               <h1 className="mb-2 font-heading text-mf-page-title font-bold text-slate-800 dark:text-foreground">
                 Principal Component Analysis (PCA)
@@ -103,7 +102,7 @@ export function PCAPage() {
             <SectionWrapper id="pca-interactive" title="Interactive PCA">
               <LazyIframePanel src={PCA_INTERACTIVE} title="Interactive PCA View" height={600} />
             </SectionWrapper>
-          </motion.div>
+          </div>
         </main>
 
         <aside className="medflow-no-print hidden w-48 shrink-0 xl:block">
