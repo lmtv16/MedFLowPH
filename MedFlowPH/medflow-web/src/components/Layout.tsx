@@ -1,5 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import {
+  clearAdjacentNavScrollToTopMarker,
+  consumeAdjacentNavScrollToTop,
+  lockAdjacentPageNavForProgrammaticScroll,
+} from '../utils/scrollNavGuards'
 import { ImageZoomLightboxProvider } from './ImageZoomLightboxContext'
 import { ScrollAdjacentPageNavigator } from './ScrollAdjacentPageNavigator'
 import { Topbar } from './Topbar'
@@ -40,9 +45,29 @@ export function Layout() {
 
   const meta = useMemo(() => ROUTE_META[location.pathname], [location.pathname])
 
+  /**
+   * After scroll-adjacent `navigate()`, the browser/RR can restore the previous
+   * scroll depth so the new page opens at the bottom. Consume a one-shot marker
+   * and jump to top (hash URLs skip this so hash scrolling still runs).
+   */
+  useLayoutEffect(() => {
+    const rawHash = location.hash.replace(/^#/, '')
+    if (rawHash) {
+      clearAdjacentNavScrollToTopMarker()
+      return
+    }
+    if (!consumeAdjacentNavScrollToTop(location.pathname)) return
+    lockAdjacentPageNavForProgrammaticScroll(400)
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    })
+  }, [location.pathname, location.search, location.hash])
+
   useEffect(() => {
     const raw = location.hash.replace(/^#/, '')
     if (!raw) return
+    lockAdjacentPageNavForProgrammaticScroll()
     const t = window.setTimeout(() => {
       document.getElementById(raw)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 120)
@@ -66,7 +91,7 @@ export function Layout() {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen bg-mf-bg text-mf-ink dark:bg-background dark:text-foreground">
+    <div className="min-h-screen w-full min-w-0 bg-mf-bg text-mf-ink dark:bg-background dark:text-foreground">
       <div
         className="medflow-scroll-progress pointer-events-none fixed left-0 top-0 z-50 h-[3px] bg-[#1D4ED8] transition-[width] duration-100 ease-out"
         style={{ width: `${scrollPct}%` }}
@@ -74,7 +99,7 @@ export function Layout() {
       />
       <Topbar title={meta?.title ?? 'MedFlow PH'} breadcrumb={meta?.crumbs ?? ['Home']} />
       <ScrollAdjacentPageNavigator />
-      <main className="medflow-main ml-0 min-h-screen max-w-none px-4 py-6 pt-24 md:px-8 md:py-6 md:pt-24">
+      <main className="medflow-main ml-0 min-h-screen max-w-none min-w-0 px-3 py-6 pt-24 sm:px-4 md:px-8 md:py-6 md:pt-24">
         <ImageZoomLightboxProvider>
           <Outlet />
         </ImageZoomLightboxProvider>

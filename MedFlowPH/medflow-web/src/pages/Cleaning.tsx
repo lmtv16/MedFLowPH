@@ -12,7 +12,7 @@ export function Cleaning() {
   return (
     <PageShell>
       <div className="flex gap-8">
-        <main className="min-w-0 flex-1 space-y-12 pb-16">
+        <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <motion.div className="space-y-12">
             <SectionWrapper id="cleaning-overview">
               <h1 className="mb-2 font-heading text-3xl font-bold text-slate-800 dark:text-foreground">

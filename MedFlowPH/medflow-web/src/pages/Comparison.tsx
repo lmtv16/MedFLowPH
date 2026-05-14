@@ -157,11 +157,11 @@ export function Comparison() {
   return (
     <PageShell>
       <div className="flex gap-8">
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 overflow-x-hidden">
           <div className="space-y-10">
             <SectionWrapper id="comparison-aspects" title="K‑Means vs DBSCAN — qualitative comparison">
-              <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
-                <table className="w-full text-left text-sm">
+              <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
+                <table className="w-full min-w-[20rem] text-left text-sm">
                   <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
                     <tr>
                       <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Aspect</th>
@@ -347,11 +347,19 @@ export function Comparison() {
                 <p className="mt-2 text-xs text-mf-muted dark:text-muted-foreground">
                   Source: `/data/07/Model_Comparison/kmeans_vs_dbscan_summary.csv` (raw engineering units).
                 </p>
-                <div className="mt-6 h-[420px]">
+                <div className="mt-6 w-full min-w-0 overflow-x-auto">
+                  <div className="medflow-recharts-container mx-auto min-w-[17rem]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={groupedBars}>
+                    <BarChart data={groupedBars} margin={{ top: 8, right: 8, left: 4, bottom: 56 }}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="metric" tick={{ fontSize: 11 }} />
+                      <XAxis
+                        dataKey="metric"
+                        tick={{ fontSize: 10 }}
+                        interval={0}
+                        angle={-32}
+                        textAnchor="end"
+                        height={68}
+                      />
                       <YAxis tick={{ fontSize: 11 }} />
                       <Tooltip />
                       <Legend />
@@ -359,6 +367,7 @@ export function Comparison() {
                       <Bar dataKey="dbscan" fill="#0F766E" name="DBSCAN" radius={[6, 6, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
+                  </div>
                 </div>
               </section>
 
@@ -366,9 +375,10 @@ export function Comparison() {
                 <h3 className="text-sm font-semibold text-mf-ink dark:text-foreground">
                   Figure MC2: Normalised capability radar (within‑metric min–max)
                 </h3>
-                <div className="mt-6 h-[420px]">
+                <div className="mt-6 w-full min-w-0 overflow-x-auto">
+                  <div className="medflow-recharts-container mx-auto min-w-[17rem]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarRows}>
+                    <RadarChart data={radarRows} margin={{ top: 16, right: 24, bottom: 16, left: 24 }}>
                       <PolarGrid />
                       <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11 }} />
                       <Tooltip formatter={(value) => (value == null ? '' : Number(value).toFixed(3))} />
@@ -377,6 +387,7 @@ export function Comparison() {
                       <Radar name="DBSCAN" dataKey="dbscan" stroke="#0F766E" fill="#0F766E" fillOpacity={0.15} />
                     </RadarChart>
                   </ResponsiveContainer>
+                  </div>
                 </div>
               </section>
             </SectionWrapper>

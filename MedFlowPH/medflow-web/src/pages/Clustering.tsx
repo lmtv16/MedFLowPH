@@ -92,7 +92,7 @@ export function ClusteringPage() {
       />
 
       <div className="flex gap-8">
-        <div className="min-w-0 flex-1 space-y-12">
+        <div className="min-w-0 flex-1 space-y-12 overflow-x-hidden">
           <SectionWrapper id="du-kmeans" title="04A - K-Means Clustering">
             <div className="mb-4 space-y-3 leading-relaxed text-slate-600 dark:text-muted-foreground">
               <p>
@@ -226,9 +226,10 @@ export function ClusteringPage() {
                 footerParagraphs={DBSCAN_BARS_CAPTIONS}
               >
                 <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="h-[420px]">
+                  <div className="w-full min-w-0 overflow-x-auto">
+                    <div className="medflow-recharts-container mx-auto min-w-[17rem]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={dbscanBars}>
+                      <BarChart data={dbscanBars} margin={{ top: 8, right: 8, left: 4, bottom: 8 }}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="cluster" tick={{ fontSize: 9 }} interval={0} angle={-55} textAnchor="end" height={110} />
                         <YAxis tick={{ fontSize: 11 }} />
@@ -237,6 +238,7 @@ export function ClusteringPage() {
                         <Bar dataKey="count" fill="#0F766E" name="Observations" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
+                    </div>
                   </div>
                 </div>
               </ClusterFigureLayout>

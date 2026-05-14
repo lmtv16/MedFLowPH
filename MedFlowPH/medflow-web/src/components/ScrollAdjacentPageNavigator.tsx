@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { isAdjacentPageNavLocked, markAdjacentNavScrollToTop } from '../utils/scrollNavGuards'
 
 const PAGE_ORDER = [
   '/',
@@ -28,7 +29,8 @@ const PAGE_NAMES: Record<OrderedPath, string> = {
   '/comparison': 'Comparison',
 }
 
-const EDGE_BUFFER_PX = 5
+/** Pixels from max scroll to treat as “at document bottom” for overscroll intent. */
+const EDGE_BUFFER_PX = 2
 /** Cooldown between scroll-chain navigations (ms). */
 const COOLDOWN_MS = 800
 /** Toast visible before navigating (ms). */
@@ -45,6 +47,22 @@ function scrollDocumentHeight(): number {
   return Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
 }
 
+function maxScrollY(): number {
+  const h = scrollDocumentHeight()
+  const innerH = window.innerHeight
+  return Math.max(0, h - innerH)
+}
+
+function isAtDocumentBottom(): boolean {
+  const y = window.scrollY || window.pageYOffset
+  return y >= maxScrollY() - EDGE_BUFFER_PX
+}
+
+/** Browser pathname after navigation (SPA redirects `/data-understanding` → `/eda`). */
+function orderedPathToBrowserPath(p: OrderedPath): string {
+  return p === '/data-understanding' ? '/eda' : p
+}
+
 export function ScrollAdjacentPageNavigator() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -56,7 +74,7 @@ export function ScrollAdjacentPageNavigator() {
   const cooldownUntilRef = useRef(0)
   const pendingNavRef = useRef(false)
   const navTimerRef = useRef<number | null>(null)
-  const wasAtBottomRef = useRef(false)
+  const pendingPlacementRef = useRef<'top' | 'bottom' | null>(null)
 
   const routeSig = `${location.pathname}${location.search}`
 
@@ -77,49 +95,49 @@ export function ScrollAdjacentPageNavigator() {
     function queueNavigation(targetPath: OrderedPath, placement: 'top' | 'bottom', label: ReactNode) {
       if (!canTrigger()) return
       pendingNavRef.current = true
+      pendingPlacementRef.current = placement
       cooldownUntilRef.current = Date.now() + COOLDOWN_MS
       setToast({ placement, label })
       navTimerRef.current = window.setTimeout(() => {
-        navigate(targetPath)
+        const browserPath = orderedPathToBrowserPath(targetPath)
+        markAdjacentNavScrollToTop(browserPath)
+        navigate(browserPath)
         setToast(null)
         pendingNavRef.current = false
+        pendingPlacementRef.current = null
         navTimerRef.current = null
       }, TOAST_MS)
     }
 
-    function syncWasAtBottomFromViewport() {
-      const y = window.scrollY || window.pageYOffset
-      const innerH = window.innerHeight
-      const h = scrollDocumentHeight()
-      wasAtBottomRef.current = innerH + y >= h - EDGE_BUFFER_PX
-    }
+    /**
+     * Next page only when the user tries to scroll *past* the document end
+     * (wheel down while already at the bottom). Relying on scroll position
+     * alone caused premature navigations while scrolling through long pages.
+     */
+    function maybeAdvanceFromBottomWheel(ev: WheelEvent) {
+      if (isAdjacentPageNavLocked()) return
+      if (ev.deltaY <= 0) return
+      if (!isAtDocumentBottom()) return
 
-    function maybeAdvanceFromBottom() {
       const canon = normalizeToOrderedPath(location.pathname)
       if (!canon) return
 
       const idx = PAGE_ORDER.indexOf(canon)
       if (idx < 0 || idx >= PAGE_ORDER.length - 1) return
 
-      const y = window.scrollY || window.pageYOffset
-      const innerH = window.innerHeight
-      const h = scrollDocumentHeight()
-      const atBottom = innerH + y >= h - EDGE_BUFFER_PX
-
-      if (atBottom && !wasAtBottomRef.current) {
-        const next = PAGE_ORDER[idx + 1]!
-        queueNavigation(
-          next,
-          'bottom',
-          <>Next: {PAGE_NAMES[next]} →</>,
-        )
-      }
-      wasAtBottomRef.current = atBottom
+      const next = PAGE_ORDER[idx + 1]!
+      queueNavigation(
+        next,
+        'bottom',
+        <>Next: {PAGE_NAMES[next]} →</>,
+      )
     }
 
     function maybeRetreatFromTopWheel(ev: WheelEvent) {
+      if (isAdjacentPageNavLocked()) return
       if (ev.deltaY >= 0) return
-      if (window.scrollY !== 0) return
+      const y = window.scrollY || window.pageYOffset
+      if (y > 1) return
 
       const canon = normalizeToOrderedPath(location.pathname)
       if (!canon) return
@@ -135,24 +153,41 @@ export function ScrollAdjacentPageNavigator() {
       )
     }
 
-    syncWasAtBottomFromViewport()
-
-    const onScroll = () => {
-      maybeAdvanceFromBottom()
+    /** Cancel a queued edge navigation if the user scrolls away from that edge. */
+    function onScrollOrResize() {
+      if (!pendingNavRef.current || navTimerRef.current == null) return
+      const placement = pendingPlacementRef.current
+      if (placement === 'bottom' && !isAtDocumentBottom()) {
+        clearNavTimer()
+        pendingNavRef.current = false
+        pendingPlacementRef.current = null
+        setToast(null)
+        return
+      }
+      if (placement === 'top' && (window.scrollY || window.pageYOffset) > 8) {
+        clearNavTimer()
+        pendingNavRef.current = false
+        pendingPlacementRef.current = null
+        setToast(null)
+      }
     }
 
-    const onWheel = (ev: WheelEvent) => maybeRetreatFromTopWheel(ev)
+    const onWheel = (ev: WheelEvent) => {
+      maybeRetreatFromTopWheel(ev)
+      maybeAdvanceFromBottomWheel(ev)
+    }
 
-    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
     window.addEventListener('wheel', onWheel, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
+    window.addEventListener('resize', onScrollOrResize, { passive: true })
 
     return () => {
-      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('scroll', onScrollOrResize)
       window.removeEventListener('wheel', onWheel)
-      window.removeEventListener('resize', onScroll)
+      window.removeEventListener('resize', onScrollOrResize)
       clearNavTimer()
       pendingNavRef.current = false
+      pendingPlacementRef.current = null
       setToast(null)
     }
   }, [navigate, routeSig])

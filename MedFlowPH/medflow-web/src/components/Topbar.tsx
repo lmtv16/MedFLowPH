@@ -181,7 +181,7 @@ function DesktopGroupDropdown({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
-            className="absolute left-0 top-full z-50 mt-2 min-w-[13rem] rounded-xl border border-slate-200 bg-white py-1.5 shadow-lg ring-1 ring-black/[0.02] dark:border-border dark:bg-card dark:ring-white/[0.04]"
+            className="absolute left-0 top-full z-50 mt-2 max-w-[min(20rem,calc(100vw-1.5rem))] min-w-[13rem] rounded-xl border border-slate-200 bg-white py-1.5 shadow-lg ring-1 ring-black/[0.02] dark:border-border dark:bg-card dark:ring-white/[0.04]"
           >
             {item.children.map((leaf) => {
               const { pathname, hash } = splitPathHash(leaf.path)
@@ -263,7 +263,7 @@ function PageContextBar({
             </span>
           ))}
         </nav>
-        <h1 className="min-w-0 truncate text-sm font-semibold text-mf-ink dark:text-foreground md:text-base">
+        <h1 className="min-w-0 break-words text-sm font-semibold text-mf-ink dark:text-foreground md:text-base">
           {title}
         </h1>
       </div>
@@ -340,7 +340,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
   return (
     <header className="medflow-topbar fixed left-0 right-0 top-[3px] z-40 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-border dark:bg-card/95">
       {/* Primary navbar row */}
-      <div className="relative flex h-14 items-center gap-2 px-3 md:gap-3 md:px-5">
+      <div className="relative flex min-w-0 h-14 items-center gap-2 px-3 md:gap-3 md:px-5">
         <BrandLogo />
 
         {/* Desktop nav */}
@@ -422,7 +422,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="medflow-no-print absolute left-0 right-0 top-full -z-10 h-[100vh] bg-slate-900/40 backdrop-blur-[1px] lg:hidden"
+              className="medflow-no-print absolute inset-x-0 top-full -z-10 min-h-[100vh] min-h-[100dvh] bg-slate-900/40 backdrop-blur-[1px] lg:hidden"
               onClick={() => setMobileOpen(false)}
               aria-hidden
             />
@@ -433,7 +433,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
-              className="medflow-no-print absolute left-0 right-0 top-full max-h-[calc(100vh-3.5rem)] overflow-y-auto overscroll-contain border-b border-slate-200 bg-white shadow-lg dark:border-border dark:bg-card lg:hidden"
+              className="medflow-no-print pointer-events-auto absolute inset-x-0 top-full z-[45] max-h-[calc(100vh-3.5rem)] max-h-[calc(100dvh-3.5rem)] overflow-y-auto overscroll-contain border-b border-slate-200 bg-white shadow-lg [-webkit-overflow-scrolling:touch] dark:border-border dark:bg-card lg:hidden"
               role="dialog"
               aria-modal="true"
               aria-label="Site navigation"

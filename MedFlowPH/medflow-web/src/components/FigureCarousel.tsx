@@ -33,7 +33,7 @@ export function FigureCarousel({
   const heading = slide?.interpretationHeading ?? interpretationTitle
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-border dark:bg-card md:p-6">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-border dark:bg-card md:p-6">
       <div className="overflow-hidden rounded-xl border border-slate-100 dark:border-border">
         <div
           className="flex transition-transform duration-300 ease-out motion-reduce:transition-none"

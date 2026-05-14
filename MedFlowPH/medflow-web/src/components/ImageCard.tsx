@@ -31,7 +31,7 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
   const interactive = Boolean(onClick || (openImageZoom && !imgError))
 
   return (
-    <figure className="flex flex-col gap-2">
+    <figure className="flex max-w-full min-w-0 flex-col gap-2">
       <button
         type="button"
         onClick={interactive ? activate : undefined}
@@ -48,7 +48,7 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
             <img
               src={src}
               alt={title}
-              className="h-full w-full object-contain"
+              className="h-full w-full max-w-full object-contain"
               loading="lazy"
               onError={() => setImgError(true)}
             />

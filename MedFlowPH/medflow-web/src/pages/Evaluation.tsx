@@ -76,7 +76,7 @@ export function Evaluation() {
   return (
     <PageShell>
       <div className="flex gap-8">
-        <div className="min-w-0 flex-1 space-y-12 pb-16">
+        <div className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <SectionWrapper id="evaluation-kmeans-context" title="K‑Means evaluation context">
           <div className="space-y-4 text-sm leading-relaxed text-mf-muted dark:text-muted-foreground">
             <p>
@@ -97,8 +97,8 @@ export function Evaluation() {
             </div>
           </div>
 
-          <div className="mt-8 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
-            <table className="w-full text-left text-sm">
+          <div className="mt-8 overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
+            <table className="w-full min-w-[36rem] text-left text-sm">
               <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
                 <tr>
                   <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Metric</th>
@@ -261,9 +261,10 @@ export function Evaluation() {
           <p className="mt-2 text-xs text-mf-muted">
             Source: `/data/05B/DBSCAN_Evaluation/dbscan_metrics_grid.csv`.
           </p>
-          <div className="mt-6 h-[420px]">
+          <div className="mt-6 w-full min-w-0 overflow-x-auto">
+            <div className="medflow-recharts-container mx-auto min-w-[17rem]">
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ top: 20, bottom: 20 }}>
+              <ScatterChart margin={{ top: 12, right: 12, left: 4, bottom: 48 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   type="number"
@@ -292,6 +293,7 @@ export function Evaluation() {
                 ))}
               </ScatterChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </section>
         </div>

@@ -1482,7 +1482,7 @@ export function Interpretation() {
       />
 
       <div className="flex gap-8">
-        <div className="min-w-0 flex-1 space-y-14">
+        <div className="min-w-0 flex-1 space-y-14 overflow-x-hidden">
           <SectionWrapper id="interpretation-overview">
             <SectionHeader
               title="Cluster Interpretation"

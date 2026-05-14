@@ -1,6 +1,7 @@
 import { ChevronDown, FlaskConical } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { lockAdjacentPageNavForProgrammaticScroll } from '../utils/scrollNavGuards'
 
 const TOC_PREVIEW_CHARS = 360
 
@@ -237,6 +238,7 @@ export function computeActiveTocSectionId(sectionIdsOrdered: string[], insetPx =
 
 export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [active, setActive] = useState(sections[0]?.id ?? '')
   const [hoverPreview, setHoverPreview] = useState<{ id: string; text: string } | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
@@ -275,9 +277,16 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
   const goToSection = (s: PageTOCSection) => {
     if (s.linkTo) {
       const [pathname, h] = s.linkTo.split('#')
-      navigate({ pathname: pathname || '/', hash: h ? `#${h}` : undefined })
+      const targetPath = pathname || '/'
+      const hash = h ? `#${h}` : undefined
+      if (targetPath === location.pathname && hash) {
+        navigate({ pathname: targetPath, search: location.search, hash }, { replace: true })
+        return
+      }
+      navigate({ pathname: targetPath, hash })
       return
     }
+    lockAdjacentPageNavForProgrammaticScroll()
     document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 

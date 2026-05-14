@@ -5,10 +5,28 @@
 @tailwind utilities;
 
 @layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply m-0 min-h-screen bg-mf-bg font-sans text-mf-ink antialiased;
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
   }
 
   h1,
@@ -21,12 +39,27 @@
     font-weight: 700;
   }
 
-  html {
-    scroll-behavior: smooth;
+  #root {
+    @apply min-h-screen w-full min-w-0;
   }
 
-  #root {
-    @apply min-h-screen;
+  /**
+   * In-page anchors (TOC, hash links): offset for fixed topbar (~3px progress + ~56px bar + optional context row).
+   */
+  .medflow-main [id] {
+    scroll-margin-top: 6.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .medflow-main [id] {
+      scroll-margin-top: 6.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .medflow-main [id] {
+      scroll-margin-top: 7.25rem;
+    }
   }
 }
 
@@ -42,6 +75,22 @@
 @layer components {
   .medflow-scroll-active-indicator {
     box-shadow: inset 3px 0 0 hsl(var(--primary) / 0.75);
+  }
+
+  /**
+   * Recharts: fixed pixel height overflows short viewports; cap with vh and allow horizontal scroll if parent clips.
+   */
+  .medflow-recharts-container {
+    width: 100%;
+    min-width: 0;
+    min-height: 220px;
+    height: min(420px, 72vh);
+  }
+
+  @supports (height: 1dvh) {
+    .medflow-recharts-container {
+      height: min(420px, 72dvh);
+    }
   }
 }
 

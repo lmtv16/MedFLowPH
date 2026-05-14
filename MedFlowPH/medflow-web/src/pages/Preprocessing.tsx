@@ -92,7 +92,7 @@ export function Preprocessing() {
 
   return (
     <PageShell>
-      <div className="space-y-12">
+      <div className="min-w-0 space-y-12 overflow-x-hidden">
         <SectionWrapper id="preprocessing-overview" title="02 - Data Preprocessing">
           <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
             Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding

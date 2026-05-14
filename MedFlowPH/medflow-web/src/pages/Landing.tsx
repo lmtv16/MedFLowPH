@@ -113,10 +113,10 @@ export function Landing() {
   return (
     <PageShell>
       <div className="flex gap-8">
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 overflow-x-hidden">
           <div className="space-y-14">
             <SectionWrapper id="hero">
-              <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-blue-50/70 to-teal-50/60 p-8 shadow-sm dark:border-border dark:from-card dark:via-card dark:to-card lg:p-12">
+              <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-blue-50/70 to-teal-50/60 p-4 shadow-sm dark:border-border dark:from-card dark:via-card dark:to-card sm:p-6 md:p-8 lg:p-12">
                 <div className="flex flex-wrap gap-2">
                   <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-300">
                     Data Science Portfolio
@@ -125,14 +125,14 @@ export function Landing() {
                     Machine Learning
                   </span>
                 </div>
-                <h1 className="font-heading mt-4 text-4xl font-bold text-mf-ink dark:text-foreground md:text-5xl">
+                <h1 className="font-heading mt-4 text-3xl font-bold leading-tight text-mf-ink dark:text-foreground sm:text-4xl md:text-5xl">
                   MedFlow <span className="text-mf-primary dark:text-primary">PH</span>
                 </h1>
-                <p className="mt-4 max-w-3xl text-lg font-medium leading-snug tracking-wide text-mf-ink dark:text-foreground">
+                <p className="mt-4 max-w-3xl text-base font-medium leading-snug tracking-wide text-mf-ink dark:text-foreground sm:text-lg">
                   MEDFLOW PH: AN UNSUPERVISED CLUSTERING ANALYSIS OF
-                  <br />
+                  <br className="hidden sm:block" />
                   MEDICAL - RELATED PROCUREMENT AND DISTRIBUTION DATA IN
-                  <br />
+                  <br className="hidden sm:block" />
                   PHILIPPINE PUBLIC HEALTH FACILITIES
                 </p>
                 <p className="mt-4 max-w-3xl text-base text-mf-muted dark:text-muted-foreground">
