@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ClusterFigureLayout, type FigureCaptions } from '../components/ClusterFigureLayout'
-import { IframePanel } from '../components/IframePanel'
+import { LazyIframePanel } from '../components/LazyIframePanel'
 import { ImageCard } from '../components/ImageCard'
 import { PageShell } from '../components/PageShell'
 import { PageTOC, TOC_PCA } from '../components/PageTOC'
@@ -101,7 +101,7 @@ export function PCAPage() {
             </SectionWrapper>
 
             <SectionWrapper id="pca-interactive" title="Interactive PCA">
-              <IframePanel src={PCA_INTERACTIVE} title="Interactive PCA View" height={600} />
+              <LazyIframePanel src={PCA_INTERACTIVE} title="Interactive PCA View" height={600} />
             </SectionWrapper>
           </motion.div>
         </main>

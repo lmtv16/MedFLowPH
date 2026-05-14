@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AlertTriangle, Clock, DollarSign, Hash, Layers } from 'lucide-react'
-import { FigureCarousel } from '../components/FigureCarousel'
+import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
@@ -103,7 +103,7 @@ export function Preprocessing() {
             summaries. Open the lightbox from any slide; edit copy under{' '}
             <span className="font-mono text-xs">IMAGES.eda.preprocessingCarousel</span>.
           </p>
-          <FigureCarousel
+          <LazyFigureCarousel
             items={preprocessingSlides}
             activeIndex={preprocessingSlideIdx}
             onActiveIndexChange={setPreprocessingSlideIdx}

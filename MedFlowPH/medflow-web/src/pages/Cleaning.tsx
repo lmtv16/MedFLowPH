@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
-import { FigureCarousel } from '../components/FigureCarousel'
+import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
@@ -162,7 +162,7 @@ export function Cleaning() {
             </SectionWrapper>
 
             <SectionWrapper id="cleaning-merged" title="Exploratory Data Analysis (EDA)">
-              <FigureCarousel
+              <LazyFigureCarousel
                 items={merged}
                 activeIndex={mergedSlideIdx}
                 onActiveIndexChange={setMergedSlideIdx}

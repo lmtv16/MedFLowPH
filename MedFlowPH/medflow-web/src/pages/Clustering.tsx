@@ -1,99 +1,17 @@
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
-import { useMemo, useState } from 'react'
-import { ClusterFigureLayout, type FigureCaptions } from '../components/ClusterFigureLayout'
 import { ImageCard } from '../components/ImageCard'
-import type { GalleryImage } from '../components/LightboxGallery'
-import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
 import { PageTOC, TOC_CLUSTERING_NAV } from '../components/PageTOC'
-import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
-import { DATA_PATHS, IMAGES } from '../data/fileManifest'
-import { useJsonData } from '../hooks/useCsvData'
-
-type ClusterCountFile = {
-  cluster_counts: Record<string, number>
-}
-
-type DbscanCountFile = Pick<ClusterCountFile, 'cluster_counts'>
 
 const KMEANS_NUMERIC = '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_numeric.png'
 const DBSCAN_NUMERIC = '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_numeric.png'
 
-const KMEANS_PCA_CAPTIONS: FigureCaptions = [
-  'This plot shows the six K-means clusters in the 3D PCA space. Each point represents a medical procurement record, and each color represents one assigned cluster.',
-  <>
-    The model used{' '}
-    <strong className="font-semibold text-mf-ink dark:text-foreground">K = 6</strong> and assigned all{' '}
-    <strong className="font-semibold text-mf-ink dark:text-foreground">487,605 records</strong> to a cluster. The chart
-    displays a 30,000-point sample only to keep the visualization readable.
-  </>,
-]
-
-const DBSCAN_PCA_CAPTIONS: FigureCaptions = [
-  <>
-    This plot shows the DBSCAN clusters in 3D PCA space. Because DBSCAN produced{' '}
-    <strong className="font-semibold text-mf-ink dark:text-foreground">386 clusters</strong>, only the top five largest
-    clusters are shown separately, while smaller clusters are grouped as "Other DBSCAN clusters."
-  </>,
-  <>
-    The grey points represent noise or outlier-like records. DBSCAN labeled about{' '}
-    <strong className="font-semibold text-mf-ink dark:text-foreground">73.27%</strong> of records as noise, meaning most
-    records were not part of a dense enough group under the selected settings.
-  </>,
-]
-
-const DBSCAN_BARS_CAPTIONS: FigureCaptions = [
-  'Top 60 clusters by size after sorting (noise appears when present in the extract). Hundreds of smaller DBSCAN components exist beyond what the axis can label legibly.',
-  <>
-    Source: <code className="rounded bg-slate-100 px-1 py-0.5 text-mf-caption font-mono text-slate-700 dark:bg-muted dark:text-foreground">/results/04B/Summaries/dbscan_cluster_counts.json</code> — truncated here for presentation only.
-  </>,
-]
-
 export function ClusteringPage() {
-  const { data: dbscan } = useJsonData<DbscanCountFile>(DATA_PATHS.clusterCountsDbscan)
-  const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
-    imgs: [],
-    idx: 0,
-  })
-
-  const dbscanBars = useMemo(() => {
-    if (!dbscan?.cluster_counts) return []
-    return Object.entries(dbscan.cluster_counts)
-      .filter(([label]) => Number(label) >= 0 || label === '-1')
-      .map(([cid, count]) => ({
-        cluster: cid === '-1' ? 'Noise' : `C${cid}`,
-        count,
-      }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 60)
-  }, [dbscan])
-
-  function open(images: GalleryImage[], idx: number) {
-    setGallery({ imgs: images, idx })
-  }
-
   return (
     <PageShell>
-      <LightboxGallery
-        images={gallery.imgs}
-        index={gallery.idx}
-        open={gallery.imgs.length > 0}
-        onClose={() => setGallery({ imgs: [], idx: 0 })}
-      />
-
       <div className="flex gap-8">
         <div className="min-w-0 flex-1 space-y-12 overflow-x-hidden">
-          <SectionWrapper id="du-kmeans" title="04A - K-Means Clustering">
+          <SectionWrapper id="du-kmeans" title="K-means Clustering">
             <div className="mb-4 space-y-3 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
               <p>
                 This plot shows the six K-means clusters in the 3D PCA space. Each point represents a medical procurement
@@ -125,33 +43,7 @@ export function ClusteringPage() {
             </div>
           </SectionWrapper>
 
-          <SectionWrapper id="clustering-kmeans">
-            <SectionHeader title="K-Means Clustering" subtitle="Numeric cluster overlay on PC1–PC3." />
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-14">
-              {IMAGES.clustering.kmeans.map((img, idx) => (
-                <ClusterFigureLayout
-                  key={img.src}
-                  figureNum={1}
-                  title={img.title}
-                  footerParagraphs={KMEANS_PCA_CAPTIONS}
-                >
-                  <ImageCard
-                    src={img.src}
-                    title={img.title}
-                    hideInlineTitle
-                    onClick={() =>
-                      open(
-                        IMAGES.clustering.kmeans.map((item) => ({ src: item.src, title: item.title })),
-                        idx,
-                      )
-                    }
-                  />
-                </ClusterFigureLayout>
-              ))}
-            </div>
-          </SectionWrapper>
-
-          <SectionWrapper id="du-dbscan" title="04B - DBSCAN Clustering">
+          <SectionWrapper id="du-dbscan" title="DBSCAN Clustering">
             <div className="mb-4 space-y-3 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
               <p>
                 This plot shows the DBSCAN clusters in 3D PCA space. Because DBSCAN produced{' '}
@@ -189,59 +81,6 @@ export function ClusteringPage() {
                 separately. Smaller clusters are grouped as &quot;Other DBSCAN clusters,&quot; while noise records are
                 shown separately.
               </p>
-            </div>
-          </SectionWrapper>
-
-          <SectionWrapper id="clustering-dbscan">
-            <SectionHeader
-              title="DBSCAN Clustering"
-              subtitle="Highlighting micro‑segments and noise share (top 60 bars for legibility)."
-            />
-
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-14">
-              {IMAGES.clustering.dbscan.map((img, idx) => (
-                <ClusterFigureLayout
-                  key={img.src}
-                  figureNum={2}
-                  title={img.title}
-                  footerParagraphs={DBSCAN_PCA_CAPTIONS}
-                >
-                  <ImageCard
-                    src={img.src}
-                    title={img.title}
-                    hideInlineTitle
-                    onClick={() =>
-                      open(
-                        IMAGES.clustering.dbscan.map((item) => ({ src: item.src, title: item.title })),
-                        idx,
-                      )
-                    }
-                  />
-                </ClusterFigureLayout>
-              ))}
-
-              <ClusterFigureLayout
-                figureNum={3}
-                title="DBSCAN cluster cardinalities (presentation slice)"
-                footerParagraphs={DBSCAN_BARS_CAPTIONS}
-              >
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="w-full min-w-0 overflow-x-auto">
-                    <div className="medflow-recharts-container mx-auto min-w-[17rem]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={dbscanBars} margin={{ top: 8, right: 8, left: 4, bottom: 8 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="cluster" tick={{ fontSize: 9 }} interval={0} angle={-55} textAnchor="end" height={110} />
-                        <YAxis tick={{ fontSize: 11 }} />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="count" fill="#0F766E" name="Observations" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                    </div>
-                  </div>
-                </div>
-              </ClusterFigureLayout>
             </div>
           </SectionWrapper>
 

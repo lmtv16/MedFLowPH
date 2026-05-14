@@ -10,9 +10,19 @@ type ImageCardProps = {
   figure?: string
   /** When an external heading already shows the title, hide the button footnote caption. */
   hideInlineTitle?: boolean
+  /** Active carousel slides use eager so the visible figure loads promptly; others stay lazy. */
+  imageLoading?: 'lazy' | 'eager'
 }
 
-export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitle }: ImageCardProps) {
+export function ImageCard({
+  src,
+  title,
+  onClick,
+  caption,
+  figure,
+  hideInlineTitle,
+  imageLoading = 'lazy',
+}: ImageCardProps) {
   const [imgError, setImgError] = useState(false)
   const [captionOpen, setCaptionOpen] = useState(false)
   const captionPanelId = useId()
@@ -49,7 +59,8 @@ export function ImageCard({ src, title, onClick, caption, figure, hideInlineTitl
               src={src}
               alt={title}
               className="h-full w-full max-w-full object-contain"
-              loading="lazy"
+              loading={imageLoading}
+              decoding="async"
               onError={() => setImgError(true)}
             />
           ) : null}

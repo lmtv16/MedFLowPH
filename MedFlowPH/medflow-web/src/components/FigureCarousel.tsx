@@ -49,6 +49,7 @@ export function FigureCarousel({
                 title={item.title}
                 onClick={onSlideImageClick ? () => onSlideImageClick(idx) : undefined}
                 figure={getFigureLabel(idx, item)}
+                imageLoading={idx === activeIndex ? 'eager' : 'lazy'}
               />
             </div>
           ))}

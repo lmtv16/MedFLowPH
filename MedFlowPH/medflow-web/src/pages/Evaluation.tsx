@@ -11,7 +11,7 @@ import {
 } from 'recharts'
 import { useMemo, useState } from 'react'
 import { LineChart as LineIcon } from 'lucide-react'
-import { FigureCarousel } from '../components/FigureCarousel'
+import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { PageTOC, TOC_EVALUATION_NAV } from '../components/PageTOC'
 import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
@@ -188,7 +188,7 @@ export function Evaluation() {
             Step through k-selection diagnostics one at a time. Click a figure to open the full gallery; replace
             placeholders in the manifest with your own interpretations.
           </p>
-          <FigureCarousel
+          <LazyFigureCarousel
             items={kmeansEvalSlides}
             activeIndex={kmeansEvalSlideIdx}
             onActiveIndexChange={setKmeansEvalSlideIdx}
@@ -208,7 +208,7 @@ export function Evaluation() {
             Step through DBSCAN evaluation heatmaps one at a time. Click a figure for the gallery view; replace
             placeholders on each entry in <span className="font-mono text-mf-caption">IMAGES.eda.dbscanEvaluationCarousel</span>.
           </p>
-          <FigureCarousel
+          <LazyFigureCarousel
             items={dbscanEvalSlides}
             activeIndex={dbscanEvalSlideIdx}
             onActiveIndexChange={setDbscanEvalSlideIdx}

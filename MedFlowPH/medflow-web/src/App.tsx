@@ -1,30 +1,100 @@
+import { lazy, Suspense, type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
-import { Cleaning } from './pages/Cleaning'
-import { Comparison } from './pages/Comparison'
-import { Landing } from './pages/Landing'
-import { ClusteringPage } from './pages/Clustering'
-import { EDA } from './pages/EDA'
-import { Evaluation } from './pages/Evaluation'
-import { Interpretation } from './pages/Interpretation'
-import { PCAPage } from './pages/PCA'
-import { Preprocessing } from './pages/Preprocessing'
+import { PageRouteFallback } from './components/PageRouteFallback'
+
+const Landing = lazy(() => import('./pages/Landing').then((m) => ({ default: m.Landing })))
+const EDA = lazy(() => import('./pages/EDA').then((m) => ({ default: m.EDA })))
+const Cleaning = lazy(() => import('./pages/Cleaning').then((m) => ({ default: m.Cleaning })))
+const Preprocessing = lazy(() => import('./pages/Preprocessing').then((m) => ({ default: m.Preprocessing })))
+const PCAPage = lazy(() => import('./pages/PCA').then((m) => ({ default: m.PCAPage })))
+const ClusteringPage = lazy(() => import('./pages/Clustering').then((m) => ({ default: m.ClusteringPage })))
+const Evaluation = lazy(() => import('./pages/Evaluation').then((m) => ({ default: m.Evaluation })))
+const Interpretation = lazy(() => import('./pages/Interpretation').then((m) => ({ default: m.Interpretation })))
+const Comparison = lazy(() => import('./pages/Comparison').then((m) => ({ default: m.Comparison })))
+
+function RouteFallbackBoundary({ children }: { children: ReactNode }) {
+  return <Suspense fallback={<PageRouteFallback />}>{children}</Suspense>
+}
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Landing />} />
-          <Route path="/eda" element={<EDA />} />
+          <Route
+            path="/"
+            element={
+              <RouteFallbackBoundary>
+                <Landing />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/eda"
+            element={
+              <RouteFallbackBoundary>
+                <EDA />
+              </RouteFallbackBoundary>
+            }
+          />
           <Route path="/data-understanding" element={<Navigate to="/eda" replace />} />
-          <Route path="/cleaning" element={<Cleaning />} />
-          <Route path="/preprocessing" element={<Preprocessing />} />
-          <Route path="/pca" element={<PCAPage />} />
-          <Route path="/clustering" element={<ClusteringPage />} />
-          <Route path="/evaluation" element={<Evaluation />} />
-          <Route path="/interpretation" element={<Interpretation />} />
-          <Route path="/comparison" element={<Comparison />} />
+          <Route
+            path="/cleaning"
+            element={
+              <RouteFallbackBoundary>
+                <Cleaning />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/preprocessing"
+            element={
+              <RouteFallbackBoundary>
+                <Preprocessing />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/pca"
+            element={
+              <RouteFallbackBoundary>
+                <PCAPage />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/clustering"
+            element={
+              <RouteFallbackBoundary>
+                <ClusteringPage />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/evaluation"
+            element={
+              <RouteFallbackBoundary>
+                <Evaluation />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/interpretation"
+            element={
+              <RouteFallbackBoundary>
+                <Interpretation />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/comparison"
+            element={
+              <RouteFallbackBoundary>
+                <Comparison />
+              </RouteFallbackBoundary>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

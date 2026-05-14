@@ -2,7 +2,7 @@ import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, Flag, LayoutGrid, Map
 import type { PointerEvent, ReactNode } from 'react'
 import { Children, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ImageCard } from '../components/ImageCard'
-import { IframePanel } from '../components/IframePanel'
+import { LazyIframePanel } from '../components/LazyIframePanel'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
@@ -1492,7 +1492,7 @@ export function Interpretation() {
           </SectionWrapper>
 
           <SectionWrapper id="interpretation-section-kmeans">
-            <IframePanel
+            <LazyIframePanel
               id="interpretation-kmeans-3d"
               src={INTERACTIVE.kmeans3d}
               title="Interactive 3D K‑Means PCA space"
@@ -1700,7 +1700,7 @@ export function Interpretation() {
           </SectionWrapper>
 
           <SectionWrapper id="interpretation-section-dbscan">
-            <IframePanel
+            <LazyIframePanel
               id="interpretation-dbscan-3d"
               src={INTERACTIVE.dbscan3d}
               title="Interactive 3D DBSCAN PCA space"

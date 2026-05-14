@@ -241,7 +241,13 @@ export function Landing() {
                 </div>
               </div>
               <figure className="mt-8 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/30">
-                <img src={RAW_VS_CLEANED_FIG.src} alt={RAW_VS_CLEANED_FIG.title} className="h-auto w-full object-contain" />
+                <img
+                  src={RAW_VS_CLEANED_FIG.src}
+                  alt={RAW_VS_CLEANED_FIG.title}
+                  className="h-auto w-full object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <figcaption className="border-t border-slate-100 bg-white px-4 py-3 text-center text-mf-caption leading-relaxed text-mf-muted dark:border-border dark:bg-card dark:text-muted-foreground">
                   Records retained after medical filtering across different years, showing the dramatic reduction from millions of
                   general records to thousands of highly relevant medical procurements.
@@ -302,7 +308,13 @@ export function Landing() {
                     />
                   </div>
                   <figure className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50 dark:border-border dark:bg-muted/30">
-                    <img src={RAW_VS_CLEANED_FIG.src} alt={RAW_VS_CLEANED_FIG.title} className="h-auto w-full object-contain" />
+                    <img
+                      src={RAW_VS_CLEANED_FIG.src}
+                      alt={RAW_VS_CLEANED_FIG.title}
+                      className="h-auto w-full object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <figcaption className="border-t border-slate-100 px-3 py-2 text-center text-mf-caption text-mf-muted dark:border-border dark:text-muted-foreground">
                       {RAW_VS_CLEANED_FIG.title}
                     </figcaption>

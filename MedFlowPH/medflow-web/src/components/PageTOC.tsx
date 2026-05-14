@@ -138,18 +138,10 @@ export const TOC_PCA: PageTOCSection[] = [
   { id: 'pca-interactive', label: 'Interactive PCA' },
 ]
 
-/** Clustering workflow page — scroll anchors for K‑Means, DBSCAN, and approach comparison. */
+/** Clustering workflow page — scroll anchors for K-means, DBSCAN, and approach comparison. */
 export const TOC_CLUSTERING_NAV: PageTOCSection[] = [
-  { id: 'du-kmeans', label: '04A - K-Means' },
-  { id: 'clustering-kmeans', label: 'K‑Means clustering' },
-  { id: 'du-dbscan', label: '04B - DBSCAN' },
-  { id: 'clustering-dbscan', label: 'DBSCAN clustering' },
-  {
-    id: 'interpretation-dbscan-insights',
-    label: 'DBSCAN Cluster Insights',
-    linkTo: '/interpretation#interpretation-dbscan-insights',
-    hint: 'Interpretation › DBSCAN: interactive PCA, cluster interpretation cards, and summary tables.',
-  },
+  { id: 'du-kmeans', label: 'K-means Clustering' },
+  { id: 'du-dbscan', label: 'DBSCAN Clustering' },
   { id: 'clustering-approach-comparison', label: 'Approach comparison' },
 ]
 
@@ -198,7 +190,11 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
     nested: true,
   },
 
-  { id: 'interpretation-policy-dbscan', label: 'DBSCAN evidences' },
+  {
+    id: 'interpretation-policy-dbscan',
+    label: 'DBSCAN evidences',
+    tocParentId: 'interpretation-section-dbscan',
+  },
 ]
 
 export const TOC_COMPARISON: PageTOCSection[] = [

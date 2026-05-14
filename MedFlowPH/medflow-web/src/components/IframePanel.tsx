@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 
-type IframePanelProps = {
+export type IframePanelProps = {
   src: string
   title: string
   height?: number
