@@ -15,6 +15,7 @@ import { filenameToTitle, IMAGES } from '../data/fileManifest'
 
 // Raw Understanding
 const RAW_SCHEMA = '/results/00/Raw Dataset Schema/philgeps_raw_schema_table.png'
+const RAW_SCHEMA_TABLE = '/results/00/Raw Dataset Schema/philgeps_raw_schema_table.txt'
 const RAW_SUMMARY = '/results/00/Summaries/philgeps_understanding_summary.txt'
 
 
@@ -54,6 +55,31 @@ function useFetchedText(url: string) {
   return { text, failed }
 }
 
+function RawSchemaPngFigure({ src, title }: { src: string; title: string }) {
+  const [missing, setMissing] = useState(false)
+
+  if (missing) {
+    return (
+      <p className="mb-4 text-xs text-slate-500 dark:text-muted-foreground">
+        Raw dataset schema image is not available. The monospace export below lists the same columns.
+      </p>
+    )
+  }
+
+  return (
+    <figure className="mb-4 min-w-0">
+      <img
+        src={src}
+        alt={title}
+        loading="lazy"
+        decoding="async"
+        className="max-h-[min(70vh,28rem)] w-full max-w-full rounded-xl border border-slate-200 bg-white object-contain object-left shadow-sm dark:border-border dark:bg-card"
+        onError={() => setMissing(true)}
+      />
+    </figure>
+  )
+}
+
 export function EDA() {
   const [quarterKey, setQuarterKey] = useState<string | null>(null)
   const [mergedSlideIdx, setMergedSlideIdx] = useState(0)
@@ -63,6 +89,7 @@ export function EDA() {
   })
 
   const rawSummary = useFetchedText(RAW_SUMMARY)
+  const rawSchemaTable = useFetchedText(RAW_SCHEMA_TABLE)
 
   const quarterlyImages = useMemo(
     () => (quarterKey ? IMAGES.eda.byQuarter[quarterKey] ?? [] : []),
@@ -131,7 +158,21 @@ export function EDA() {
                 Before modeling, we documented column roles, key identifiers, and obvious quality risks directly from the
                 raw schema summary.
               </p>
-              <ImageCard src={RAW_SCHEMA} title="Raw dataset schema (tabular overview)" />
+              <RawSchemaPngFigure src={RAW_SCHEMA} title="Raw dataset schema (tabular overview)" />
+              <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-border dark:bg-muted/40">
+                <p className="mb-3 text-xs font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
+                  Schema table (text export — <code className="text-[11px]">philgeps_raw_schema_table.txt</code>)
+                </p>
+                {rawSchemaTable.text ? (
+                  <pre className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-slate-200 bg-white p-3 font-mono text-[11px] leading-snug text-slate-800 whitespace-pre dark:border-border dark:bg-card dark:text-foreground">
+                    {rawSchemaTable.text}
+                  </pre>
+                ) : rawSchemaTable.failed ? (
+                  <p className="text-xs text-slate-400">Schema table file could not be loaded.</p>
+                ) : (
+                  <p className="text-xs text-slate-400">Loading schema table…</p>
+                )}
+              </div>
               <p className="mt-4 text-sm leading-relaxed text-slate-500 dark:text-muted-foreground">
                 The schema table anchors terminology for later cleaning rules—especially procurement modes, dates,
                 budgets, and agency identifiers—so every downstream transformation can be traced back to an explicit raw
