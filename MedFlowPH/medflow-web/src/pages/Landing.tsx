@@ -61,18 +61,6 @@ const RAW_VS_CLEANED_FIG = IMAGES.eda.merged.find((i) =>
   i.src.includes('raw_vs_cleaned_rows_by_year_grouped'),
 ) ?? IMAGES.eda.merged[6]
 
-const MEDICAL_KEYWORD_PILLS = [
-  'medical',
-  'health',
-  'hospital',
-  'clinic',
-  'medicine',
-  'pharmaceutical',
-  'surgical',
-  'dental',
-  'laboratory',
-] as const
-
 const DATA_FIELD_CATEGORIES: { label: string; icon: typeof Building2 }[] = [
   { label: 'Procuring Entity', icon: Building2 },
   { label: 'Location', icon: MapPin },
@@ -85,6 +73,69 @@ const DATA_FIELD_CATEGORIES: { label: string; icon: typeof Building2 }[] = [
   { label: 'Award Details', icon: Award },
   { label: 'Supplier', icon: Users },
 ]
+
+type ResearchTeamMember = {
+  name: string
+  role?: string
+}
+
+const RESEARCH_TEAM_RESEARCHERS: readonly ResearchTeamMember[] = [
+  { name: 'Cyrrhus L. Jesalva' },
+  { name: 'Wesly P. Lopera' },
+  { name: 'Louis Mathew T. Vergara' },
+]
+
+const RESEARCH_TEAM_ADVISERS: readonly ResearchTeamMember[] = [
+  { name: 'Davie B. Balmadrid, D.Eng', role: 'Content Adviser' },
+  { name: 'Aris J. Ordonez, DIT', role: 'Programming Adviser' },
+]
+
+function ResearchTeamCard() {
+  return (
+    <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <Users className="h-8 w-8 text-primary" aria-hidden />
+      <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Research Team</h3>
+
+      <div className="mt-3 space-y-4">
+        <section aria-labelledby="research-team-researchers">
+          <p
+            id="research-team-researchers"
+            className="text-mf-caption font-semibold uppercase tracking-wide text-muted-foreground"
+          >
+            Researchers
+          </p>
+          <ul className="mt-3 list-none space-y-2 p-0 text-mf-body leading-relaxed text-muted-foreground">
+            {RESEARCH_TEAM_RESEARCHERS.map((member) => (
+              <li key={member.name}>
+                <span className="text-foreground">{member.name}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="research-team-advisers" className="border-t border-border pt-4">
+          <p
+            id="research-team-advisers"
+            className="text-mf-caption font-semibold uppercase tracking-wide text-muted-foreground"
+          >
+            Advisers
+          </p>
+          <ul className="mt-3 list-none space-y-2.5 p-0 text-mf-body leading-relaxed text-muted-foreground">
+            {RESEARCH_TEAM_ADVISERS.map((member) => (
+              <li
+                key={member.name}
+                className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3"
+              >
+                <span className="text-foreground">{member.name}</span>
+                <span className="shrink-0 text-right">{member.role}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  )
+}
 
 export function Landing() {
   const navigate = useNavigate()
@@ -159,16 +210,14 @@ export function Landing() {
             <SectionWrapper id="background" title="Background">
               <div className="space-y-4 text-mf-body leading-relaxed text-muted-foreground">
                 <p>
-                  MedFlow PH represents a comprehensive attempt to demystify the complex web of public health procurement in the
-                  Philippines. By analyzing data from the Philippine Government Electronic Procurement System (PhilGEPS), this study
-                  aims to identify non-obvious groupings and patterns in how medical supplies and equipment are sourced across
-                  different regions and facility types.
+                  The study uses K-means and DBSCAN clustering to analyze aggregated medical-related procurement and distribution
+                  data, revealing patterns such as understocking, overstocking, high-value concentration, and delayed procurement
+                  across Philippine public health facilities.
                 </p>
                 <p>
-                  The analytical pipeline encompasses a rigorous end-to-end data science methodology: starting with deep data
-                  understanding of fragmented government records, proceeding through extensive cleaning and normalization, applying
-                  robust preprocessing techniques, reducing dimensionality via Principal Component Analysis (PCA), and ultimately
-                  comparing K-Means and DBSCAN clustering models to extract meaningful procurement behaviors.
+                  By converting raw procurement records into interpretable clusters and visual insights, it provides actionable
+                  guidance for policymakers and health administrators to monitor supply risks, improve resource allocation, and
+                  enhance equitable access to essential medical resources.
                 </p>
               </div>
             </SectionWrapper>
@@ -178,11 +227,10 @@ export function Landing() {
                 <div>
                   <h3 className="font-heading text-mf-card-title font-semibold text-foreground">General Objective</h3>
                   <p className="mt-3">
-                    The objective of this study is to analyze aggregated and non-personal medical-related procurement and
-                    distribution data from public health facilities in the Philippines using unsupervised machine learning
-                    techniques, specifically clustering analysis, in order to identify distribution patterns and potential
-                    systemic risks related to medicine availability, such as shortages, uneven distribution, or inefficiencies in
-                    supply allocation.
+                    The objective of this study is to analyze aggregated and non-personal medical-related procurement records from
+                    Philippine public health procurement data using unsupervised clustering techniques in order to identify
+                    procurement behavior patterns and possible systemic procurement risk indicators related to resource allocation,
+                    procurement concentration, delays, and supply-related inefficiencies.
                   </p>
                 </div>
                 <div>
@@ -193,11 +241,11 @@ export function Landing() {
                       facilities to identify overall procurement and distribution patterns.
                     </li>
                     <li>
-                      To apply unsupervised clustering algorithms, specifically K-means and DBSCAN, to group public health
-                      facilities based on similarities and variations in medicine procurement and distribution behavior.
+                      To apply unsupervised clustering algorithms, specifically K-means and DBSCAN, to group medical-related
+                      procurement records based on similarities and variations in procurement behavior.
                     </li>
                     <li>
-                      To develop a web-based analytical platform that presents clustering results through cluster summaries,
+                      To develop a web-based results dashboard that presents clustering results through cluster summaries,
                       visualizations, and comparative profiles.
                     </li>
                     <li>
@@ -213,9 +261,9 @@ export function Landing() {
               <div className="grid gap-8 md:grid-cols-2">
                 <div className="space-y-4">
                   <p className="text-mf-body leading-relaxed text-muted-foreground">
-                    The foundation of MedFlow PH is built on open data from the Philippine Government Electronic Procurement System
-                    (PhilGEPS). We sourced award notices spanning from 2020 to 2025, capturing a critical period that includes
-                    pandemic-era emergency purchases and standard operations.
+                    MedFlow PH is built using publicly available procurement data from the Philippine Government Electronic
+                    Procurement System (PhilGEPS). The study used award notice records from 2020 to 2025, covering both
+                    pandemic-related emergency procurement and regular medical procurement activities during this period.
                   </p>
                   <div className="inline-flex flex-col rounded-xl border border-primary/30 bg-primary/10 px-5 py-4">
                     <p className="text-mf-metric font-bold tabular-nums text-primary">6 Years</p>
@@ -224,20 +272,12 @@ export function Landing() {
                 </div>
                 <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
                   <h3 className="font-heading text-mf-card-title font-semibold text-foreground">Medical Filtering Strategy</h3>
-                  <p className="mt-3 text-mf-body text-muted-foreground">
-                    Since PhilGEPS contains all government procurement, we applied strict regex-based filtering to isolate public
-                    health records using specific domain keywords:
+                  <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
+                    To focus on public health procurement, the PhilGEPS dataset was filtered using a set of domain-specific
+                    keywords, such as &ldquo;medical,&rdquo; &ldquo;hospital,&rdquo; &ldquo;medicine,&rdquo; &ldquo;laboratory,&rdquo;
+                    and &ldquo;vaccine.&rdquo; This ensured that only medical-related procurement records were retained for analysis,
+                    allowing the study to examine healthcare supply patterns and systemic risks effectively.
                   </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {MEDICAL_KEYWORD_PILLS.map((kw) => (
-                      <span
-                        key={kw}
-                        className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-mf-caption font-medium text-foreground"
-                      >
-                        {kw}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
               <figure className="mt-8 overflow-hidden rounded-xl border border-border bg-muted/30">
@@ -249,16 +289,16 @@ export function Landing() {
                   decoding="async"
                 />
                 <figcaption className="border-t border-border bg-card px-4 py-3 text-center text-mf-caption leading-relaxed text-muted-foreground">
-                  Records retained after medical filtering across different years, showing the dramatic reduction from millions of
-                  general records to thousands of highly relevant medical procurements.
+                  Number of records kept after filtering medical-related procurement data from different years, reducing millions of
+                  general procurement records into a smaller set of relevant medical procurement records.
                 </figcaption>
               </figure>
             </SectionWrapper>
 
             <SectionWrapper id="data-description" title="Data Description">
               <p className="text-mf-body leading-relaxed text-muted-foreground">
-                The PhilGEPS dataset presents a high-dimensional view of each transaction. Each row represents a single awarded
-                contract or item, encompassing administrative, financial, and temporal details.
+                The PhilGEPS dataset contains information on government procurement transactions. Each row represents one awarded
+                contract or item and includes details about the buyer, cost, dates, and other relevant transaction information.
               </p>
               <div className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
                 <h3 className="font-heading text-mf-card-title font-semibold text-foreground">Key Field Categories</h3>
@@ -395,7 +435,7 @@ export function Landing() {
                   <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Data Source</h3>
                   <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
                     Philippine Government Electronic Procurement System (PhilGEPS) — public procurement award notices, 2020–2025.
-                    Filtered to medicine-related procurement entries using the MedFlow PH keyword pipeline.
+                    Filtered to medical-related procurement entries using the MedFlow PH keyword pipeline.
                   </p>
                   <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
                     Source code pipeline: Steps 00–07 (Data Understanding, Cleaning, Preprocessing, PCA, K-Means, DBSCAN, Model
@@ -410,18 +450,7 @@ export function Landing() {
                     https://www.philgeps.gov.ph
                   </a>
                 </div>
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                  <Users className="h-8 w-8 text-primary" aria-hidden />
-                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Research Team</h3>
-                  <ul className="mt-4 space-y-2 text-mf-body text-muted-foreground">
-                    <li>Cyrrhus L. Jesalva — Researcher</li>
-                    <li>Wesly P. Lopera — Researcher</li>
-                    <li>Louis Mathew T. Vergara — Researcher</li>
-                  </ul>
-                  <p className="mt-4 text-mf-body text-muted-foreground">
-                    Annotated by: Cedric Conol (Data Analyst)
-                  </p>
-                </div>
+                <ResearchTeamCard />
                 <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                   <MapPin className="h-8 w-8 text-primary" aria-hidden />
                   <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Institution</h3>

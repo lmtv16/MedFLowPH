@@ -98,21 +98,22 @@ export function Cleaning() {
                 Aligning schemas, removing duplicates, and surfacing missingness before feature work.
               </p>
               <p className="max-w-3xl text-mf-body leading-relaxed text-muted-foreground">
-                Cleaning aligned schemas, removed duplicates, standardized medical filtering, and surfaced missingness so
-                analysts could trust row counts before feature work began.
+                This phase cleans and transforms the PhilGEPS medical-related procurement data, filters relevant records, engineers
+                features, scales numeric values, and encodes categorical variables to create a standardized dataset ready for PCA
+                and clustering.
               </p>
             </SectionWrapper>
 
             <SectionWrapper id="cleaning-schema" title="Cleaned Dataset Schema">
               <div className="mb-4 space-y-4 text-mf-body leading-relaxed text-muted-foreground md:text-[1.0625rem] md:leading-relaxed">
                 <p>
-                  After data cleaning, the PhilGEPS medical procurement dataset contained 487,605 records and 61 columns.
-                  All fields had 0 missing values, showing that the dataset was ready for preprocessing.
+                  After data cleaning, the PhilGEPS medical-related procurement dataset consisted of 487,605 records across 61
+                  columns, with no missing values, making it ready for preprocessing.
                 </p>
                 <p>
-                  The cleaned schema retained important procurement, financial, date, location, and supplier fields.
-                  Some text fields still had many unique values, so they were kept mainly for reference and interpretation
-                  rather than direct clustering.
+                  The cleaned schema preserved key procurement, financial, date, location, and supplier fields.
+                  High-cardinality text fields were retained for reference and interpretation but were not directly used for
+                  clustering.
                 </p>
               </div>
               <div className="rounded-xl border border-border bg-muted/40 p-4">
