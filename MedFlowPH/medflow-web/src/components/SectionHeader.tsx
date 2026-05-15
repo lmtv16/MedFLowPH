@@ -8,13 +8,13 @@ type SectionHeaderProps = {
 
 export function SectionHeader({ title, subtitle, icon: Icon }: SectionHeaderProps) {
   return (
-    <header className="mb-6 border-l-4 border-mf-primary pl-4">
+    <header className="mb-6 border-l-4 border-primary pl-4">
       <div className="flex items-center gap-2">
-        {Icon ? <Icon className="h-5 w-5 shrink-0 text-mf-primary" aria-hidden /> : null}
-        <h2 className="font-heading text-mf-section font-semibold text-mf-ink dark:text-foreground">{title}</h2>
+        {Icon ? <Icon className="h-5 w-5 shrink-0 text-primary" aria-hidden /> : null}
+        <h2 className="font-heading text-mf-section font-semibold text-foreground">{title}</h2>
       </div>
       {subtitle ? (
-        <p className="mt-1.5 text-mf-caption text-mf-muted dark:text-muted-foreground">{subtitle}</p>
+        <p className="mt-1.5 text-mf-caption text-muted-foreground">{subtitle}</p>
       ) : null}
     </header>
   )

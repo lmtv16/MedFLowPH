@@ -6,17 +6,21 @@ export default {
   theme: {
     extend: {
       colors: {
+        /**
+         * Semantic + MedFlow legacy palette — values come from `index.css` and follow `html.dark`
+         * (no `prefers-color-scheme`; toggle only via `class="dark"` on `document.documentElement`).
+         */
         mf: {
-          primary: '#1D4ED8',
-          secondary: '#0F766E',
-          bg: '#F8FAFC',
-          card: '#FFFFFF',
-          'sidebar-bg': '#1E293B',
-          'sidebar-text': '#CBD5E1',
-          'sidebar-active': '#38BDF8',
-          ink: '#0F172A',
-          muted: '#64748B',
-          border: '#E2E8F0',
+          primary: 'rgb(var(--mf-primary-rgb) / <alpha-value>)',
+          secondary: 'rgb(var(--mf-secondary-rgb) / <alpha-value>)',
+          bg: 'rgb(var(--mf-bg-rgb) / <alpha-value>)',
+          card: 'rgb(var(--mf-card-rgb) / <alpha-value>)',
+          'sidebar-bg': 'rgb(var(--mf-sidebar-bg-rgb) / <alpha-value>)',
+          'sidebar-text': 'rgb(var(--mf-sidebar-text-rgb) / <alpha-value>)',
+          'sidebar-active': 'rgb(var(--mf-sidebar-active-rgb) / <alpha-value>)',
+          ink: 'rgb(var(--mf-ink-rgb) / <alpha-value>)',
+          muted: 'rgb(var(--mf-muted-rgb) / <alpha-value>)',
+          border: 'rgb(var(--mf-border-rgb) / <alpha-value>)',
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -32,6 +36,10 @@ export default {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
       },
       fontFamily: {

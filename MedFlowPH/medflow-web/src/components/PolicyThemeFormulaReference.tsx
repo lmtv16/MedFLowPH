@@ -105,25 +105,25 @@ export default function PolicyThemeFormulaReference({ defaultOpen = true }: Prop
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="mb-4 flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white p-4 transition-colors duration-150 hover:bg-slate-50 dark:border-border dark:bg-card dark:hover:bg-muted/40"
+        className="mb-4 flex w-full items-center justify-between rounded-xl border border-border bg-card p-4 transition-colors duration-150 hover:bg-muted/50"
       >
-        <span className="font-heading text-lg font-semibold text-slate-800 dark:text-foreground">
+        <span className="font-heading text-lg font-semibold text-foreground">
           View Policy Theme Proxy Formulas
         </span>
         {open ? (
-          <ChevronUp className="h-5 w-5 shrink-0 text-slate-400" aria-hidden />
+          <ChevronUp className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
         ) : (
-          <ChevronDown className="h-5 w-5 shrink-0 text-slate-400" aria-hidden />
+          <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
         )}
       </button>
 
       {open ? (
         <div className="space-y-8">
           <div>
-            <h2 className="mb-2 border-l-4 border-blue-700 pl-3 font-heading text-xl font-semibold text-slate-800 dark:text-foreground">
+            <h2 className="mb-2 border-l-4 border-primary pl-3 font-heading text-xl font-semibold text-foreground">
               Policy Theme Proxy Formula Reference
             </h2>
-            <p className="text-mf-body leading-relaxed text-slate-500 dark:text-muted-foreground">
+            <p className="text-mf-body leading-relaxed text-muted-foreground">
               The policy-theme scores are{' '}
               <span className="rounded bg-amber-50 px-1 font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
                 proxy indicators
@@ -138,40 +138,40 @@ export default function PolicyThemeFormulaReference({ defaultOpen = true }: Prop
           </div>
 
           <div>
-            <h3 className="mb-3 font-heading text-base font-semibold text-slate-700 dark:text-foreground">
+            <h3 className="mb-3 font-heading text-base font-semibold text-foreground">
               Policy Theme Proxy Scores
             </h3>
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-border">
+            <div className="overflow-x-auto rounded-xl border border-border">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/40">
-                    <th className="min-w-[160px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                  <tr className="border-b border-border bg-muted/40">
+                    <th className="min-w-[160px] p-3 text-left font-medium text-muted-foreground">
                       Label Theme
                     </th>
-                    <th className="min-w-[280px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                    <th className="min-w-[280px] p-3 text-left font-medium text-muted-foreground">
                       Formula
                     </th>
-                    <th className="min-w-[180px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                    <th className="min-w-[180px] p-3 text-left font-medium text-muted-foreground">
                       Weights
                     </th>
-                    <th className="min-w-[220px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                    <th className="min-w-[220px] p-3 text-left font-medium text-muted-foreground">
                       Explanation
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {policyThemeRows.map((row, i) => (
-                    <tr key={i} className={i % 2 === 0 ? 'bg-white dark:bg-card' : 'bg-slate-50/50 dark:bg-muted/20'}>
-                      <td className="p-3 align-top font-medium text-blue-700 dark:text-blue-400">{row.theme}</td>
+                    <tr key={i} className={i % 2 === 0 ? 'bg-card' : 'bg-muted/25'}>
+                      <td className="p-3 align-top font-medium text-primary">{row.theme}</td>
                       <td className="p-3 align-top">
-                        <code className="block whitespace-pre-wrap rounded bg-slate-100 px-2 py-1 font-mono text-xs text-slate-700 dark:bg-muted dark:text-foreground">
+                        <code className="block whitespace-pre-wrap rounded bg-muted px-2 py-1 font-mono text-xs text-foreground">
                           {row.formula}
                         </code>
                       </td>
-                      <td className="p-3 align-top whitespace-pre-line text-xs text-slate-600 dark:text-muted-foreground">
+                      <td className="p-3 align-top whitespace-pre-line text-xs text-muted-foreground">
                         {row.weights}
                       </td>
-                      <td className="p-3 align-top leading-relaxed text-slate-600 dark:text-muted-foreground">
+                      <td className="p-3 align-top leading-relaxed text-muted-foreground">
                         {row.explanation.includes('does not prove') ? (
                           <>
                             {row.explanation.split('does not prove')[0]}
@@ -192,40 +192,40 @@ export default function PolicyThemeFormulaReference({ defaultOpen = true }: Prop
           </div>
 
           <div>
-            <h3 className="mb-1 font-heading text-base font-semibold text-slate-700 dark:text-foreground">
+            <h3 className="mb-1 font-heading text-base font-semibold text-foreground">
               Simple Formula Notes
             </h3>
-            <p className="mb-3 text-xs text-slate-500 dark:text-muted-foreground">
+            <p className="mb-3 text-xs text-muted-foreground">
               These components explain how the proxy variables were derived before being used as guide indicators for cluster
               interpretation.
             </p>
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-border">
+            <div className="overflow-x-auto rounded-xl border border-border">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/40">
-                    <th className="min-w-[180px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                  <tr className="border-b border-border bg-muted/40">
+                    <th className="min-w-[180px] p-3 text-left font-medium text-muted-foreground">
                       Component
                     </th>
-                    <th className="min-w-[260px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                    <th className="min-w-[260px] p-3 text-left font-medium text-muted-foreground">
                       How it is computed
                     </th>
-                    <th className="min-w-[200px] p-3 text-left font-medium text-slate-600 dark:text-muted-foreground">
+                    <th className="min-w-[200px] p-3 text-left font-medium text-muted-foreground">
                       Meaning
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {formulaNoteRows.map((row, i) => (
-                    <tr key={i} className={i % 2 === 0 ? 'bg-white dark:bg-card' : 'bg-slate-50/50 dark:bg-muted/20'}>
-                      <td className="bg-blue-50/30 p-3 align-top font-mono text-xs font-medium text-blue-700 dark:bg-blue-950/30 dark:text-blue-400">
+                    <tr key={i} className={i % 2 === 0 ? 'bg-card' : 'bg-muted/25'}>
+                      <td className="bg-primary/10 p-3 align-top font-mono text-xs font-medium text-primary">
                         {row.component}
                       </td>
                       <td className="p-3 align-top">
-                        <code className="block whitespace-pre-wrap rounded bg-slate-100 px-2 py-1 font-mono text-xs text-slate-700 dark:bg-muted dark:text-foreground">
+                        <code className="block whitespace-pre-wrap rounded bg-muted px-2 py-1 font-mono text-xs text-foreground">
                           {row.how}
                         </code>
                       </td>
-                      <td className="p-3 align-top leading-relaxed text-slate-600 dark:text-muted-foreground">
+                      <td className="p-3 align-top leading-relaxed text-muted-foreground">
                         {row.meaning}
                       </td>
                     </tr>

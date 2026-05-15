@@ -2,9 +2,13 @@ import gsap from 'gsap'
 import { useLayoutEffect, useRef } from 'react'
 import { usePrefersReducedMotion } from './usePrefersReducedMotion'
 
+/** Clear GSAP-applied inlines after reveal (opacity/transform only in tweens). */
+const FADE_CLEAR = 'all' as const
+
 /**
  * Fade + slight rise when the element first intersects the viewport; runs once.
- * Uses IntersectionObserver (no ScrollTrigger) and gsap.context for safe cleanup.
+ * Uses IntersectionObserver (no ScrollTrigger). The reveal tween is registered with
+ * gsap.context via ctx.add() so revert/kill cannot strand opacity/transform inlines.
  */
 export function useFadeRiseOnce() {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -16,7 +20,7 @@ export function useFadeRiseOnce() {
     if (!el) return
 
     if (reduced) {
-      gsap.set(el, { clearProps: 'opacity,transform' })
+      gsap.set(el, { clearProps: FADE_CLEAR })
       return
     }
 
@@ -30,12 +34,17 @@ export function useFadeRiseOnce() {
         if (!entries.some((e) => e.isIntersecting)) return
         playedRef.current = true
         obs.disconnect()
-        gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          duration: 0.68,
-          ease: 'power2.out',
-        })
+        ctx.add(() =>
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
+            duration: 0.68,
+            ease: 'power2.out',
+            onComplete: () => {
+              gsap.set(el, { clearProps: FADE_CLEAR })
+            },
+          }),
+        )
       },
       { root: null, rootMargin: '0px 0px -12% 0px', threshold: 0.02 },
     )
@@ -46,6 +55,7 @@ export function useFadeRiseOnce() {
       obs.disconnect()
       ctx.revert()
       gsap.killTweensOf(el)
+      gsap.set(el, { clearProps: FADE_CLEAR })
     }
   }, [reduced])
 

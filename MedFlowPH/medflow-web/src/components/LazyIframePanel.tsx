@@ -5,11 +5,11 @@ const IframePanelInner = lazy(() => import('./IframePanel').then((m) => ({ defau
 
 function IframePanelFallback({ height = 600 }: Pick<IframePanelProps, 'height'>) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card" aria-busy="true">
+    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm" aria-busy="true">
       <span className="sr-only">Loading interactive view</span>
-      <div className="mb-3 h-6 w-2/3 max-w-md rounded-md bg-slate-100 motion-safe:animate-pulse dark:bg-muted/60" />
+      <div className="mb-3 h-6 w-2/3 max-w-md rounded-md bg-muted/60 motion-safe:animate-pulse" />
       <div
-        className="flex w-full items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-mf-caption text-mf-muted motion-safe:animate-pulse dark:border-border dark:bg-muted/30 dark:text-muted-foreground"
+        className="flex w-full items-center justify-center rounded-xl border border-border bg-muted/30 text-mf-caption text-muted-foreground motion-safe:animate-pulse"
         style={{ height, maxHeight: 'min(85vh, 900px)' }}
         aria-hidden
       >

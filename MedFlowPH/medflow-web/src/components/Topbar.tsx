@@ -86,10 +86,10 @@ function topNavPill(active: boolean) {
   return [
     'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-mf-nav',
     'transition-[color,background-color,box-shadow] duration-200 ease-out motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-card',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1 focus-visible:ring-offset-background',
     active
-      ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/15 dark:bg-primary/15 dark:text-primary dark:ring-primary/25'
-      : 'text-mf-muted hover:bg-slate-100/90 hover:text-mf-ink dark:text-muted-foreground dark:hover:bg-white/[0.06] dark:hover:text-foreground',
+      ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/15 dark:bg-primary/20 dark:text-primary dark:ring-primary/30'
+      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
   ].join(' ')
 }
 
@@ -116,8 +116,8 @@ const desktopMenuItemClass = (active: boolean) => {
   const base =
     'flex w-full items-center gap-2 rounded-md border-l-2 px-3 py-2 text-left text-mf-nav transition-[color,background-color,border-color] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none'
   return active
-    ? `${base} border-primary bg-primary/10 font-semibold text-mf-primary dark:bg-primary/12 dark:text-primary`
-    : `${base} border-transparent text-mf-ink hover:border-primary/35 hover:bg-primary/[0.07] hover:text-mf-primary focus-visible:border-primary/35 focus-visible:bg-primary/[0.07] focus-visible:text-mf-primary dark:text-foreground dark:hover:bg-white/[0.05] dark:hover:text-primary dark:focus-visible:bg-white/[0.05] dark:focus-visible:text-primary`
+    ? `${base} border-primary bg-[color:var(--dropdown-item-active-bg)] font-semibold text-primary`
+    : `${base} border-transparent text-[color:var(--dropdown-text)] hover:border-primary/40 hover:bg-[color:var(--dropdown-item-hover)] hover:text-primary focus-visible:border-primary/40 focus-visible:bg-[color:var(--dropdown-item-hover)] focus-visible:text-primary`
 }
 
 /**
@@ -197,7 +197,7 @@ function DesktopGroupDropdown({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
-            className="absolute left-0 top-full z-50 mt-2 max-w-[min(20rem,calc(100vw-1.5rem))] min-w-[13rem] rounded-xl border border-white/25 bg-white/85 py-1.5 shadow-[0_8px_30px_-6px_rgba(15,23,42,0.12)] backdrop-blur-md ring-1 ring-slate-900/[0.04] dark:border-white/10 dark:bg-slate-900/88 dark:shadow-[0_12px_36px_-8px_rgba(0,0,0,0.45)] dark:ring-white/[0.06]"
+            className="absolute left-0 top-full z-50 mt-2 max-w-[min(20rem,calc(100vw-1.5rem))] min-w-[13rem] rounded-xl border border-[color:var(--dropdown-border)] bg-[color:var(--dropdown-bg)] py-1.5 text-[color:var(--dropdown-text)] shadow-[var(--dropdown-shadow)] backdrop-blur-md ring-1 ring-[color:var(--dropdown-ring)]"
           >
             {item.children.map((leaf) => {
               const leafActive = isNavTargetActive(location, leaf.path)
@@ -226,17 +226,17 @@ function BrandLogo() {
     <NavLink
       to="/"
       end
-      className="group inline-flex shrink-0 items-center gap-2 rounded-lg px-1.5 py-1 text-mf-ink transition-colors duration-200 ease-out hover:text-mf-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:transition-none dark:text-foreground dark:hover:text-primary"
+      className="group inline-flex shrink-0 items-center gap-2 rounded-lg px-1.5 py-1 text-foreground transition-colors duration-200 ease-out hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:transition-none"
       aria-label="MedFlow PH — go to home"
     >
-      <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-mf-primary shadow-sm ring-1 ring-primary/10 transition-[box-shadow,background-color] duration-200 ease-out group-hover:bg-primary/[0.14] group-hover:ring-primary/20 dark:bg-primary/15 dark:text-primary dark:ring-primary/20 dark:group-hover:bg-primary/20">
+      <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shadow-sm ring-1 ring-primary/10 transition-[box-shadow,background-color] duration-200 ease-out group-hover:bg-primary/[0.14] group-hover:ring-primary/20">
         <FlaskConical className="h-4 w-4" aria-hidden />
       </span>
       <span
         className="whitespace-nowrap text-mf-card-title font-bold leading-none md:text-[1.125rem]"
         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
       >
-        MedFlow <span className="text-mf-primary dark:text-primary">PH</span>
+        MedFlow <span className="text-primary">PH</span>
       </span>
     </NavLink>
   )
@@ -258,22 +258,22 @@ function PageContextBar({
 }) {
   if (isRoot) return null
   return (
-    <div className="medflow-no-print border-t border-slate-200/50 bg-white/45 px-3 py-1.5 backdrop-blur-sm dark:border-white/[0.08] dark:bg-slate-900/45 md:px-5">
+    <div className="medflow-no-print border-t border-[color:var(--context-bar-border)] bg-[color:var(--context-bar-bg)] px-3 py-1.5 backdrop-blur-sm md:px-5">
       <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
         <nav
-          className="min-w-0 text-mf-caption text-mf-muted dark:text-muted-foreground"
+          className="min-w-0 text-mf-caption text-muted-foreground"
           aria-label="Breadcrumb"
         >
           {breadcrumb.map((crumb, i) => (
             <span key={`${crumb}-${i}`}>
               {i > 0 ? (
-                <span className="mx-1 text-slate-300 dark:text-border">/</span>
+                <span className="mx-1 text-muted-foreground/45">/</span>
               ) : null}
               <span>{crumb}</span>
             </span>
           ))}
         </nav>
-        <h1 className="min-w-0 break-words text-mf-nav font-semibold text-mf-ink dark:text-foreground md:text-mf-card-title">
+        <h1 className="min-w-0 break-words text-mf-nav font-semibold text-foreground md:text-mf-card-title">
           {title}
         </h1>
       </div>
@@ -289,9 +289,15 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
 
-  const [dark, setDark] = useState(() =>
-    typeof window !== 'undefined' ? localStorage.getItem('theme') === 'dark' : false,
-  )
+  const [dark, setDark] = useState(() => {
+    if (typeof window === 'undefined') return false
+    try {
+      if (localStorage.getItem('theme') === 'dark') return true
+    } catch {
+      /* private mode / blocked storage */
+    }
+    return document.documentElement.classList.contains('dark')
+  })
 
   useEffect(() => {
     if (dark) document.documentElement.classList.add('dark')
@@ -348,7 +354,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
   }
 
   return (
-    <header className="medflow-topbar fixed left-0 right-0 top-[3px] z-40 border-b border-white/20 bg-white/75 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.08)] backdrop-blur-md dark:border-white/10 dark:bg-slate-900/65 dark:shadow-[0_4px_28px_-4px_rgba(0,0,0,0.4)]">
+    <header className="medflow-topbar fixed left-0 right-0 top-[3px] z-[1000] isolate border-b border-[color:var(--nav-border)] bg-[color:var(--nav-bg)] shadow-[var(--nav-shadow)] backdrop-blur-md">
       {/* Primary navbar row */}
       <div className="relative flex h-14 min-w-0 items-center gap-2 px-3 md:gap-3 md:px-5">
         <BrandLogo />
@@ -400,7 +406,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
           <button
             type="button"
             onClick={() => setDark((d) => !d)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-mf-muted transition-[color,background-color] duration-200 ease-out hover:bg-slate-100/90 hover:text-mf-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:transition-none dark:text-muted-foreground dark:hover:bg-white/[0.07] dark:hover:text-foreground"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-[color,background-color] duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:transition-none"
             aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -409,7 +415,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
           <button
             type="button"
             onClick={() => setMobileOpen((o) => !o)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-mf-muted transition-[color,background-color] duration-200 ease-out hover:bg-slate-100/90 hover:text-mf-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:transition-none dark:text-muted-foreground dark:hover:bg-white/[0.07] dark:hover:text-foreground lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground transition-[color,background-color] duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 motion-reduce:transition-none lg:hidden"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
             aria-controls="medflow-mobile-menu"
@@ -432,7 +438,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="medflow-no-print absolute inset-x-0 top-full -z-10 min-h-[100vh] min-h-[100dvh] bg-slate-900/35 backdrop-blur-[2px] lg:hidden"
+              className="medflow-no-print absolute inset-x-0 top-full -z-10 min-h-[100vh] min-h-[100dvh] bg-[color:var(--mobile-overlay)] backdrop-blur-[2px] lg:hidden"
               onClick={() => setMobileOpen(false)}
               aria-hidden
             />
@@ -443,7 +449,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
-              className="medflow-no-print pointer-events-auto absolute inset-x-0 top-full z-[45] max-h-[calc(100vh-3.5rem)] max-h-[calc(100dvh-3.5rem)] overflow-y-auto overscroll-contain border-b border-white/20 bg-white/92 shadow-[0_12px_40px_-8px_rgba(15,23,42,0.14)] backdrop-blur-md [-webkit-overflow-scrolling:touch] dark:border-white/10 dark:bg-slate-900/82 dark:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.5)] lg:hidden"
+              className="medflow-no-print pointer-events-auto absolute inset-x-0 top-full z-[45] max-h-[calc(100vh-3.5rem)] max-h-[calc(100dvh-3.5rem)] overflow-y-auto overscroll-contain border-b border-[color:var(--nav-border)] bg-[color:var(--dropdown-bg)] text-[color:var(--dropdown-text)] shadow-[var(--mobile-panel-shadow)] backdrop-blur-md [-webkit-overflow-scrolling:touch] lg:hidden"
               role="dialog"
               aria-modal="true"
               aria-label="Site navigation"
@@ -460,8 +466,8 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                         className={({ isActive }) =>
                           `flex min-h-[44px] items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-base transition-[color,background-color,box-shadow] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                             isActive
-                              ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/12 dark:bg-primary/15 dark:text-primary dark:ring-primary/20'
-                              : 'text-mf-ink hover:bg-slate-100/90 dark:text-foreground dark:hover:bg-white/[0.06]'
+                              ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/12 dark:bg-primary/20 dark:text-primary dark:ring-primary/25'
+                              : 'text-[color:var(--dropdown-text)] hover:bg-[color:var(--dropdown-item-hover)]'
                           } ${item.highlight ? 'ring-1 ring-sky-400/35' : ''}`
                         }
                       >
@@ -485,8 +491,8 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                         }
                         className={`flex min-h-[44px] items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-base transition-[color,background-color,box-shadow] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                           groupActive
-                            ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/12 dark:bg-primary/15 dark:text-primary dark:ring-primary/20'
-                            : 'text-mf-ink hover:bg-slate-100/90 dark:text-foreground dark:hover:bg-white/[0.06]'
+                            ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/12 dark:bg-primary/20 dark:text-primary dark:ring-primary/25'
+                            : 'text-[color:var(--dropdown-text)] hover:bg-[color:var(--dropdown-item-hover)]'
                         }`}
                         aria-expanded={expanded}
                         aria-controls={panelId}
@@ -511,7 +517,7 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                             className="overflow-hidden"
                           >
                             <div
-                              className="my-1 ml-3 flex flex-col gap-0.5 border-l border-slate-200/80 pl-3 dark:border-white/10"
+                              className="my-1 ml-3 flex flex-col gap-0.5 border-l border-[color:var(--dropdown-border)] pl-3"
                               role="group"
                               aria-label={`${item.label} pages`}
                             >
@@ -524,8 +530,8 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                                     onClick={() => handleMobileLeaf(leaf)}
                                     className={`flex min-h-[44px] items-center rounded-lg px-3 py-2 text-left text-mf-nav transition-[color,background-color,box-shadow] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                                       leafActive
-                                        ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/10 dark:bg-primary/15 dark:text-primary dark:ring-primary/18'
-                                        : 'text-mf-ink hover:bg-slate-100/90 dark:text-foreground dark:hover:bg-white/[0.06]'
+                                        ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/10 dark:bg-primary/20 dark:text-primary dark:ring-primary/22'
+                                        : 'text-[color:var(--dropdown-text)] hover:bg-[color:var(--dropdown-item-hover)]'
                                     }`}
                                   >
                                     {leaf.label}

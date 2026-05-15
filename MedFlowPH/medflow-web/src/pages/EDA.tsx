@@ -58,7 +58,7 @@ function RawSchemaPngFigure({ src, title }: { src: string; title: string }) {
 
   if (missing) {
     return (
-      <p className="mb-4 text-mf-caption text-slate-500 dark:text-muted-foreground">
+      <p className="mb-4 text-mf-caption text-muted-foreground">
         Raw dataset schema image is not available. The monospace export below lists the same columns.
       </p>
     )
@@ -71,7 +71,7 @@ function RawSchemaPngFigure({ src, title }: { src: string; title: string }) {
         alt={title}
         loading="lazy"
         decoding="async"
-        className="max-h-[min(70vh,28rem)] w-full max-w-full rounded-xl border border-slate-200 bg-white object-contain object-left shadow-sm dark:border-border dark:bg-card"
+        className="max-h-[min(70vh,28rem)] w-full max-w-full rounded-xl border border-border bg-card object-contain object-left shadow-sm"
         onError={() => setMissing(true)}
       />
     </figure>
@@ -104,13 +104,13 @@ export function EDA() {
         <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <div className="space-y-12">
             <SectionWrapper id="du-hero">
-              <h1 className="mb-2 font-heading text-mf-page-title font-bold text-slate-800 dark:text-foreground">
+              <h1 className="mb-2 font-heading text-mf-page-title font-bold text-foreground">
                 Data Understanding
               </h1>
-              <p className="mb-3 text-mf-page-lead font-medium text-blue-700 dark:text-blue-400">
+              <p className="mb-3 text-mf-page-lead font-medium text-primary">
                 Exploring and preparing PhilGEPS medical procurement data before clustering.
               </p>
-              <p className="mb-6 max-w-3xl text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
+              <p className="mb-6 max-w-3xl text-mf-body leading-relaxed text-muted-foreground">
                 This section explains how the raw PhilGEPS procurement records were examined, cleaned, transformed, and
                 prepared for unsupervised clustering. The process started from millions of raw procurement records,
                 filtered them into medical-related purchases, handled data quality issues, engineered useful features,
@@ -121,74 +121,74 @@ export function EDA() {
                   <MetricCard key={m.label} label={m.label} value={m.value} />
                 ))}
               </div>
-              <p className="text-mf-caption italic text-slate-400 dark:text-muted-foreground">
+              <p className="text-mf-caption italic text-muted-foreground">
                 These numbers describe the dataset preparation stage and are not yet the final clustering result.
               </p>
             </SectionWrapper>
 
             <SectionWrapper id="du-raw" title="00 - Raw Dataset Understanding">
-              <p className="mb-6 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
+              <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
                 The raw PhilGEPS extract spans tens of millions of procurement rows with dozens of administrative fields.
                 Before modeling, we documented column roles, key identifiers, and obvious quality risks directly from the
                 raw schema summary.
               </p>
               <RawSchemaPngFigure src={RAW_SCHEMA} title="Raw dataset schema (tabular overview)" />
-              <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-border dark:bg-muted/40">
-                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
+              <div className="mt-4 rounded-xl border border-border bg-muted/40 p-4">
+                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-muted-foreground">
                   Schema table (text export — <code className="text-mf-caption font-mono">philgeps_raw_schema_table.txt</code>)
                 </p>
                 {rawSchemaTable.text ? (
-                  <pre className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-slate-200 bg-white p-3 font-mono text-mf-caption leading-snug text-slate-800 whitespace-pre dark:border-border dark:bg-card dark:text-foreground">
+                  <pre className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card p-3 font-mono text-mf-caption leading-snug text-foreground whitespace-pre">
                     {rawSchemaTable.text}
                   </pre>
                 ) : rawSchemaTable.failed ? (
-                  <p className="text-mf-caption text-slate-400">Schema table file could not be loaded.</p>
+                  <p className="text-mf-caption text-muted-foreground">Schema table file could not be loaded.</p>
                 ) : (
-                  <p className="text-mf-caption text-slate-400">Loading schema table…</p>
+                  <p className="text-mf-caption text-muted-foreground">Loading schema table…</p>
                 )}
               </div>
-              <p className="mt-4 text-mf-body leading-relaxed text-slate-500 dark:text-muted-foreground">
+              <p className="mt-4 text-mf-body leading-relaxed text-muted-foreground">
                 The schema table anchors terminology for later cleaning rules—especially procurement modes, dates,
                 budgets, and agency identifiers—so every downstream transformation can be traced back to an explicit raw
                 column definition.
               </p>
-              <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-border dark:bg-muted/40">
-                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
+              <div className="mt-6 rounded-xl border border-border bg-muted/40 p-4">
+                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-muted-foreground">
                   Raw summary
                 </p>
                 {rawSummary.text ? (
-                  <div className="max-h-[min(70vh,44rem)] overflow-auto rounded-lg border border-slate-200 bg-white p-3 dark:border-border dark:bg-card">
+                  <div className="max-h-[min(70vh,44rem)] overflow-auto rounded-lg border border-border bg-card p-3">
                     <PhilgepsRawSummaryView text={rawSummary.text} />
                   </div>
                 ) : rawSummary.failed ? (
-                  <p className="text-mf-caption text-slate-400">Summary file could not be loaded.</p>
+                  <p className="text-mf-caption text-muted-foreground">Summary file could not be loaded.</p>
                 ) : (
-                  <p className="text-mf-caption text-slate-400">Loading summary…</p>
+                  <p className="text-mf-caption text-muted-foreground">Loading summary…</p>
                 )}
               </div>
             </SectionWrapper>
 
             <SectionWrapper id="du-conclusion" title="Data Understanding Summary">
-              <div className="rounded-2xl bg-slate-800 p-8 text-mf-body text-white dark:bg-slate-900">
+              <div className="rounded-2xl border border-border bg-muted/70 p-8 text-mf-body text-foreground">
                 <p className="leading-relaxed">
                   This walkthrough traced PhilGEPS medical procurement data from raw chaos—millions of heterogeneous rows
                   and forty-six administrative columns—through disciplined cleaning, exploratory validation, and structured
                   preprocessing that prepares a{' '}
-                  <span className="font-semibold text-blue-300">487,605</span>-row tensor ready for PCA-backed clustering.
+                  <span className="font-semibold text-primary">487,605</span>-row tensor ready for PCA-backed clustering.
                 </p>
                 <p className="mt-4 text-mf-body leading-relaxed">
-                  <span className="font-semibold text-blue-300">K-means</span> delivers a compact six-cluster story that
+                  <span className="font-semibold text-primary">K-means</span> delivers a compact six-cluster story that
                   pairs cleanly with policy-theme overlays, whereas{' '}
-                  <span className="font-semibold text-teal-300">DBSCAN</span> exposes dense procurement islands alongside a
-                  substantial noise reservoir—choose <span className="font-semibold text-blue-300">K-means</span> when
+                  <span className="font-semibold text-mf-secondary">DBSCAN</span> exposes dense procurement islands alongside a
+                  substantial noise reservoir—choose <span className="font-semibold text-primary">K-means</span> when
                   executives need stable cohort labels and leverage{' '}
-                  <span className="font-semibold text-teal-300">DBSCAN</span> when investigators must audit outliers or hunt
+                  <span className="font-semibold text-mf-secondary">DBSCAN</span> when investigators must audit outliers or hunt
                   for micro-patterns before collapsing segments downstream.
                 </p>
               </div>
             </SectionWrapper>
 
-            <div className="border-t border-slate-200 pt-12 dark:border-border" />
+            <div className="border-t border-border pt-12" />
 
             <div className="space-y-10">
               <SectionWrapper id="eda-overview" title="Interactive chart gallery">
@@ -197,7 +197,7 @@ export function EDA() {
                   subtitle="Quarterly explorers highlight slice evolution; merged boards synthesize longitudinal behavior."
                   icon={BarChart3}
                 />
-                <p className="mt-4 text-mf-body text-mf-muted dark:text-muted-foreground">
+                <p className="mt-4 text-mf-body text-muted-foreground">
                   This gallery supports the data cleaning narrative: read consolidated boards for the full study window, then
                   optionally filter to a single quarter to narrate procurement seasonality before moving downstream to
                   preprocessing and modeling.
@@ -205,15 +205,15 @@ export function EDA() {
               </SectionWrapper>
 
               <SectionWrapper id="eda-quarter" title="By quarter">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
-                  <p className="text-sm font-medium text-mf-muted dark:text-muted-foreground">Quarter filter</p>
+                <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                  <p className="text-sm font-medium text-muted-foreground">Quarter filter</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <button
                       type="button"
                       className={`rounded-full px-4 py-1.5 text-xs font-semibold ${
                         quarterKey === null
-                          ? 'bg-mf-primary text-white'
-                          : 'bg-slate-100 text-mf-muted hover:bg-slate-200 dark:bg-muted dark:text-foreground dark:hover:bg-muted/80'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80'
                       }`}
                       onClick={() => setQuarterKey(null)}
                     >
@@ -225,8 +225,8 @@ export function EDA() {
                         type="button"
                         className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
                           quarterKey === qk
-                            ? 'bg-mf-secondary text-white'
-                            : 'bg-slate-100 text-mf-muted hover:bg-slate-200 dark:bg-muted dark:text-foreground dark:hover:bg-muted/80'
+                            ? 'bg-mf-secondary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground hover:bg-muted/80'
                         }`}
                         onClick={() => setQuarterKey(qk)}
                       >
@@ -238,7 +238,7 @@ export function EDA() {
 
                 {quarterKey ? (
                   <section className="mt-10">
-                    <h3 className="text-lg font-semibold text-mf-ink dark:text-foreground">
+                    <h3 className="text-lg font-semibold text-foreground">
                       Quarterly exploratory figures — <span className="text-mf-primary">{quarterKey}</span>
                     </h3>
                     <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">

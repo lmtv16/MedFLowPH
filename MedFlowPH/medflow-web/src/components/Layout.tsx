@@ -91,9 +91,9 @@ export function Layout() {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen w-full min-w-0 bg-mf-bg text-mf-ink dark:bg-background dark:text-foreground">
+    <div className="min-h-screen w-full min-w-0 bg-mf-bg text-mf-ink">
       <div
-        className="medflow-scroll-progress pointer-events-none fixed left-0 top-0 z-50 h-[3px] bg-[#1D4ED8] transition-[width] duration-100 ease-out"
+        className="medflow-scroll-progress pointer-events-none fixed left-0 top-0 z-[1001] h-[3px] bg-primary transition-[width] duration-100 ease-out"
         style={{ width: `${scrollPct}%` }}
         aria-hidden
       />

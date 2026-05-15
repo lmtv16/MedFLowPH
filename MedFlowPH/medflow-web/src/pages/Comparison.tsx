@@ -88,13 +88,13 @@ export function Comparison() {
                     onClick={() => setGallery({ imgs: galleryImages, idx: sideBySideGalleryIdx })}
                   />
                 ) : null}
-                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
+                <div className="overflow-x-auto rounded-xl border border-border bg-card">
                   <table className="w-full min-w-[20rem] text-left text-mf-body">
-                    <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
+                    <thead className="border-b border-border bg-muted/50">
                       <tr>
-                        <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Aspect</th>
-                        <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">K‑Means</th>
-                        <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">DBSCAN</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Aspect</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">K‑Means</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">DBSCAN</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -139,17 +139,17 @@ export function Comparison() {
                     ].map((row, i) => (
                       <tr
                         key={row.key}
-                        className={`border-b border-slate-100 dark:border-border ${
+                        className={`border-b border-border ${
                           row.highlight
-                            ? 'border-l-2 border-l-blue-600 bg-blue-50 dark:bg-blue-950/25'
+                            ? 'border-l-2 border-l-primary bg-primary/10'
                             : i % 2 === 1
-                              ? 'bg-slate-50/50 dark:bg-muted/10'
+                              ? 'bg-muted/15'
                               : ''
                         }`}
                       >
-                        <td className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">{row.a}</td>
-                        <td className="px-4 py-3 text-mf-muted dark:text-muted-foreground">{row.k}</td>
-                        <td className="px-4 py-3 text-mf-muted dark:text-muted-foreground">{row.d}</td>
+                        <td className="px-4 py-3 font-semibold text-foreground">{row.a}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{row.k}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{row.d}</td>
                       </tr>
                     ))}
                     </tbody>
@@ -160,26 +160,26 @@ export function Comparison() {
 
             <SectionWrapper id="comparison-verdict" title="Model roles">
               <div className="grid gap-6 md:grid-cols-2">
-                <div className="relative rounded-xl border-2 border-mf-primary bg-white p-6 dark:border-primary dark:bg-card">
-                  <span className="inline-block rounded-full bg-mf-primary px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-white dark:bg-primary dark:text-primary-foreground">
+                <div className="relative rounded-xl border-2 border-primary bg-card p-6">
+                  <span className="inline-block rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-primary-foreground">
                     Recommended
                   </span>
-                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-mf-ink dark:text-foreground">
+                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">
                     K-Means: Main Model
                   </h3>
-                  <p className="mt-3 text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+                  <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
                     Assigns every procurement record to a cluster, producing a cleaner structure for reporting. Easier to
                     create tables, explain cluster sizes, and discuss procurement patterns.
                   </p>
                 </div>
-                <div className="rounded-xl border border-slate-300 bg-slate-50 p-6 dark:border-border dark:bg-muted/30">
-                  <span className="inline-block rounded-full border border-slate-300 bg-white px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-mf-muted dark:border-border dark:bg-card dark:text-muted-foreground">
+                <div className="rounded-xl border border-border bg-muted/30 p-6">
+                  <span className="inline-block rounded-full border border-border bg-card px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Companion
                   </span>
-                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-mf-ink dark:text-foreground">
+                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">
                     DBSCAN: Companion Model
                   </h3>
-                  <p className="mt-3 text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+                  <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
                     Identifies records that behave like outliers in PCA space. Best used as a secondary analysis when many
                     small clusters appear.
                   </p>
@@ -206,10 +206,10 @@ export function Comparison() {
                     text: 'DBSCAN added value by identifying records that did not belong to dense groups. These outlier records may be useful for procurement review, but DBSCAN should not be the main model if the goal is to present a simple and understandable clustering result.',
                   },
                 ].map(({ icon: Icon, title, text }) => (
-                  <div key={title} className="rounded-xl border border-slate-200 bg-white p-6 dark:border-border dark:bg-card">
-                    <Icon className="h-8 w-8 text-mf-primary dark:text-primary" aria-hidden />
-                    <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-mf-ink dark:text-foreground">{title}</h3>
-                    <p className="mt-3 text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">{text}</p>
+                  <div key={title} className="rounded-xl border border-border bg-card p-6">
+                    <Icon className="h-8 w-8 text-primary" aria-hidden />
+                    <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">{title}</h3>
+                    <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">{text}</p>
                   </div>
                 ))}
               </div>
@@ -223,7 +223,7 @@ export function Comparison() {
 
             <SectionWrapper id="comparison-summary" title="Summary metrics">
               <div className="mx-auto max-w-5xl">
-                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-mf-muted dark:text-muted-foreground">
+                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   Metrics — K‑Means vs DBSCAN (paired columns)
                 </p>
                 <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
@@ -288,16 +288,16 @@ export function Comparison() {
             </SectionWrapper>
 
             <SectionWrapper id="comparison-conclusion" title="Conclusion">
-              <div className="space-y-4 rounded-xl bg-slate-50 p-6 italic dark:bg-muted/30">
-                <p className="text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+              <div className="space-y-4 rounded-xl bg-muted/30 p-6 italic">
+                <p className="text-mf-body leading-relaxed text-muted-foreground">
                   MedFlow PH applies a complete unsupervised learning pipeline to medicine-related procurement data from
                   PhilGEPS. The project begins with raw data understanding, continues through cleaning and preprocessing,
                   reduces the feature space using PCA, applies K-Means and DBSCAN clustering, and compares the models based on
                   both metrics and interpretability.
                 </p>
-                <p className="text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+                <p className="text-mf-body leading-relaxed text-muted-foreground">
                   The final result shows that{' '}
-                  <span className="font-semibold not-italic text-mf-primary dark:text-primary">
+                  <span className="font-semibold not-italic text-primary">
                     K-Means is the stronger model
                   </span>{' '}
                   for the website&apos;s main clustering presentation, while DBSCAN is best used as a companion method for
@@ -308,21 +308,21 @@ export function Comparison() {
             </SectionWrapper>
 
             <SectionWrapper id="comparison-recommendation" title="Recommendation">
-              <div className="rounded-2xl border border-mf-primary bg-gradient-to-r from-blue-50 to-teal-50 p-8 shadow-inner dark:border-primary dark:from-card dark:to-card">
-                <p className="text-mf-caption uppercase tracking-[0.3em] text-mf-muted dark:text-muted-foreground">Recommendation</p>
-                <h3 className="mt-3 text-mf-section font-semibold text-mf-ink dark:text-foreground">
+              <div className="rounded-2xl border border-primary bg-gradient-to-r from-primary/10 via-muted/50 to-mf-secondary/15 p-8 shadow-inner">
+                <p className="text-mf-caption uppercase tracking-[0.3em] text-muted-foreground">Recommendation</p>
+                <h3 className="mt-3 text-mf-section font-semibold text-foreground">
                   Recommended model: K‑Means (K={chosenK})
                 </h3>
-                <p className="mt-4 text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+                <p className="mt-4 text-mf-body leading-relaxed text-muted-foreground">
                   {readmeConclusion ??
                     'K‑Means is more suitable as the final interpretable clustering model. DBSCAN is retained as a supporting comparison for noise and outlier-like procurement records.'}
                 </p>
                 {readme ? (
-                  <details className="mt-4 text-mf-caption text-mf-muted dark:text-muted-foreground">
-                    <summary className="cursor-pointer font-semibold text-mf-ink dark:text-foreground">
+                  <details className="mt-4 text-mf-caption text-muted-foreground">
+                    <summary className="cursor-pointer font-semibold text-foreground">
                       Full methodology excerpt
                     </summary>
-                    <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap rounded-lg bg-white/80 p-3 font-mono text-mf-caption dark:bg-muted">
+                    <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/80 p-3 font-mono text-mf-caption">
                       {readme.trim()}
                     </pre>
                   </details>

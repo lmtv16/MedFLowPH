@@ -94,11 +94,11 @@ export function Preprocessing() {
     <PageShell>
       <div className="min-w-0 space-y-12 overflow-x-hidden">
         <SectionWrapper id="preprocessing-overview" title="02 - Data Preprocessing">
-          <p className="mb-6 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
+          <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
             Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding
             captured categorical structure without collapsing rare procurement modes.
           </p>
-          <p className="mb-4 text-mf-body text-mf-muted dark:text-muted-foreground">
+          <p className="mb-4 text-mf-body text-muted-foreground">
             Slides follow the §02 pipeline: feature selection, then min–max scaling diagnostics, then one-hot encoding
             summaries. Open the lightbox from any slide; edit copy under{' '}
             <span className="font-mono text-xs">IMAGES.eda.preprocessingCarousel</span>.
@@ -153,7 +153,7 @@ export function Preprocessing() {
         </SectionWrapper>
 
         <SectionWrapper id="cleaned-dataset-exploration" title="Cleaned Dataset Exploration">
-          <p className="mb-6 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
+          <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
             Exploratory visuals validate relationships among numeric cadence features, categorical procurement codes,
             volume by year, and the impact of cleaning on longitudinal coverage.
           </p>
@@ -195,7 +195,7 @@ The lower count in 2025 should be interpreted carefully because the available 20
                   The cleaned dataset is smaller because the process filtered out non-medical procurement records.
                   {'\n\n'}
                   After Step 01, the dataset was reduced to{' '}
-                  <strong className="font-bold text-slate-700 dark:text-foreground">
+                  <strong className="font-bold text-foreground">
                     487,605 medical-related records
                   </strong>
                   , making it focused and ready for preprocessing and clustering.
@@ -210,7 +210,7 @@ The lower count in 2025 should be interpreted carefully because the available 20
 The final dataset is smaller, but more focused on medical procurement records needed for clustering.`}
             />
           </div>
-          <p className="mt-6 text-mf-body leading-relaxed text-slate-500 dark:text-muted-foreground">
+          <p className="mt-6 text-mf-body leading-relaxed text-muted-foreground">
             Together these boards demonstrate that medical procurement signals remain structured enough for PCA while
             also exposing heavy-tailed budgets and categorical leakage risks that motivate regularization in later
             steps.
@@ -218,19 +218,19 @@ The final dataset is smaller, but more focused on medical procurement records ne
         </SectionWrapper>
 
         <SectionWrapper id="data-cleaning" title="Data Cleaning">
-          <p className="text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">{DATA_CLEANING_INTRO}</p>
+          <p className="text-mf-body leading-relaxed text-muted-foreground">{DATA_CLEANING_INTRO}</p>
 
-          <div className="relative mt-8 border-l-2 border-slate-200 pl-8 dark:border-border">
+          <div className="relative mt-8 border-l-2 border-border">
             {DATA_CLEANING_STEPS.map((step) => (
               <div
                 key={step.n}
                 className={`relative pb-10 last:pb-0 ${step.muted ? 'opacity-60' : ''}`}
               >
-                <div className="absolute -left-[1.54rem] top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-mf-primary bg-white text-xs font-bold text-mf-primary dark:border-primary dark:bg-card dark:text-primary">
+                <div className="absolute -left-[1.54rem] top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-primary bg-card text-xs font-bold text-primary">
                   {step.n}
                 </div>
-                <h3 className="font-heading text-mf-card-title font-semibold text-mf-ink dark:text-foreground">{step.title}</h3>
-                <p className="mt-2 text-mf-body text-mf-muted dark:text-muted-foreground">{step.body}</p>
+                <h3 className="font-heading text-mf-card-title font-semibold text-foreground">{step.title}</h3>
+                <p className="mt-2 text-mf-body text-muted-foreground">{step.body}</p>
               </div>
             ))}
           </div>
@@ -245,7 +245,7 @@ The final dataset is smaller, but more focused on medical procurement records ne
         </SectionWrapper>
 
         <SectionWrapper id="feature-engineering" title="Feature Engineering">
-          <p className="text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+          <p className="text-mf-body leading-relaxed text-muted-foreground">
             Several procurement fields were transformed into numerical features before clustering. Monetary columns were
             converted to numeric values, clipped at zero, and transformed using log1p. This reduced the effect of
             extremely large procurement values while preserving meaningful differences between small and large purchases.
@@ -268,10 +268,10 @@ The final dataset is smaller, but more focused on medical procurement records ne
                 text: 'Log-transformed approved budget — the planned expenditure ceiling for the procurement.',
               },
             ].map(({ icon: Icon, name, text }) => (
-              <div key={name} className="rounded-xl border border-slate-200 bg-white p-4 dark:border-border dark:bg-card">
-                <Icon className="h-6 w-6 text-mf-primary dark:text-primary" aria-hidden />
-                <p className="mt-3 font-mono text-mf-body font-semibold text-mf-primary dark:text-primary">{name}</p>
-                <p className="mt-2 text-mf-body text-mf-muted dark:text-muted-foreground">{text}</p>
+              <div key={name} className="rounded-xl border border-border bg-card p-4">
+                <Icon className="h-6 w-6 text-primary" aria-hidden />
+                <p className="mt-3 font-mono text-mf-body font-semibold text-primary">{name}</p>
+                <p className="mt-2 text-mf-body text-muted-foreground">{text}</p>
               </div>
             ))}
           </div>
@@ -301,26 +301,26 @@ The final dataset is smaller, but more focused on medical procurement records ne
             />
           ))}
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-mf-ink">Selected feature manifest</h3>
-          <p className="text-xs text-mf-muted mt-2">
+        <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-foreground">Selected feature manifest</h3>
+          <p className="text-xs text-muted-foreground mt-2">
             Source:{' '}
             <code>{DATA_PATHS.featureSelected}</code>
           </p>
-          <div className="mt-4 max-h-[420px] overflow-auto rounded-xl border border-slate-100 text-xs">
-            <table className="min-w-full divide-y divide-slate-100 text-left text-mf-body">
-              <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-mf-muted">
+          <div className="mt-4 max-h-[420px] overflow-auto rounded-xl border border-border text-xs">
+            <table className="min-w-full divide-y divide-border text-left text-mf-body">
+              <thead className="bg-muted/50 text-[11px] uppercase tracking-wide text-muted-foreground">
                 <tr>
                   {featureCols.map((col) => (
-                    <th key={col} className="sticky top-0 z-10 whitespace-nowrap bg-slate-50 px-3 py-2">
+                    <th key={col} className="sticky top-0 z-10 whitespace-nowrap bg-muted/50 px-3 py-2">
                       {col}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-border bg-card">
                 {featureRows.slice(0, 200).map((row, rIdx) => (
-                  <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}>
+                  <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-card' : 'bg-muted/30'}>
                     {featureCols.map((col) => (
                       <td key={col + rIdx} className="px-3 py-2 text-[11px] text-mf-muted whitespace-nowrap">
                         {row[col]}
@@ -351,21 +351,21 @@ The final dataset is smaller, but more focused on medical procurement records ne
           ))}
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-mf-ink">Scaled matrix preview</h3>
-          <p className="mt-2 text-xs text-mf-muted">First ten rows retained for readability.</p>
-          <div className="mt-4 max-h-96 overflow-auto rounded-xl border border-slate-50 text-[11px]">
-            <table className="min-w-full divide-y divide-slate-100 text-left">
-              <thead className="sticky top-0 z-10 bg-slate-50 text-[11px] uppercase tracking-wide text-mf-muted">
+        <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-foreground">Scaled matrix preview</h3>
+          <p className="mt-2 text-xs text-muted-foreground">First ten rows retained for readability.</p>
+          <div className="mt-4 max-h-96 overflow-auto rounded-xl border border-border text-[11px]">
+            <table className="min-w-full divide-y divide-border text-left">
+              <thead className="sticky top-0 z-10 bg-muted/50 text-[11px] uppercase tracking-wide text-muted-foreground">
                 <tr>
                   {scaledPreviewKeys.map((col) => (
-                    <th key={col} className="whitespace-nowrap px-3 py-2 bg-slate-50">
+                    <th key={col} className="whitespace-nowrap px-3 py-2 bg-muted/50">
                       {col}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-border bg-card">
                 {scaledPreview.map((row, rIdx) => (
                   <tr key={rIdx}>
                     {scaledPreviewKeys.map((col) => (

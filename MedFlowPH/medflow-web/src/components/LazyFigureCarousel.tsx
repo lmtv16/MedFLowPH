@@ -8,13 +8,13 @@ const FigureCarouselInner = lazy(() =>
 function FigureCarouselFallback() {
   return (
     <div
-      className="min-h-[min(24rem,70vh)] min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm motion-reduce:animate-none dark:border-border dark:bg-card md:p-6"
+      className="min-h-[min(24rem,70vh)] min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm motion-reduce:animate-none md:p-6"
       aria-hidden
     >
-      <div className="aspect-video w-full rounded-xl border border-slate-100 bg-slate-50/90 motion-safe:animate-pulse dark:border-border dark:bg-muted/30" />
+      <div className="aspect-video w-full rounded-xl border border-border bg-muted/30 motion-safe:animate-pulse" />
       <div className="mt-5 flex justify-center gap-2">
-        <div className="h-10 w-10 rounded-full border border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/40" />
-        <div className="h-10 w-10 rounded-full border border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/40" />
+        <div className="h-10 w-10 rounded-full border border-border bg-muted/40" />
+        <div className="h-10 w-10 rounded-full border border-border bg-muted/40" />
       </div>
     </div>
   )

@@ -91,20 +91,20 @@ export function Cleaning() {
         <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <div className="space-y-12">
             <SectionWrapper id="cleaning-overview">
-              <h1 className="mb-2 font-heading text-mf-page-title font-bold text-slate-800 dark:text-foreground">
+              <h1 className="mb-2 font-heading text-mf-page-title font-bold text-foreground">
                 Data Cleaning
               </h1>
               <p className="mb-3 text-mf-page-lead font-medium text-blue-700 dark:text-blue-400">
                 Aligning schemas, removing duplicates, and surfacing missingness before feature work.
               </p>
-              <p className="max-w-3xl text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground">
+              <p className="max-w-3xl text-mf-body leading-relaxed text-muted-foreground">
                 Cleaning aligned schemas, removed duplicates, standardized medical filtering, and surfaced missingness so
                 analysts could trust row counts before feature work began.
               </p>
             </SectionWrapper>
 
             <SectionWrapper id="cleaning-schema" title="Cleaned Dataset Schema">
-              <div className="mb-4 space-y-4 text-mf-body leading-relaxed text-slate-600 dark:text-muted-foreground md:text-[1.0625rem] md:leading-relaxed">
+              <div className="mb-4 space-y-4 text-mf-body leading-relaxed text-muted-foreground md:text-[1.0625rem] md:leading-relaxed">
                 <p>
                   After data cleaning, the PhilGEPS medical procurement dataset contained 487,605 records and 61 columns.
                   All fields had 0 missing values, showing that the dataset was ready for preprocessing.
@@ -115,19 +115,19 @@ export function Cleaning() {
                   rather than direct clustering.
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-border dark:bg-muted/40">
-                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-slate-600 dark:text-muted-foreground">
+              <div className="rounded-xl border border-border bg-muted/40 p-4">
+                <p className="mb-3 text-mf-caption font-semibold tracking-wide text-muted-foreground">
                   Cleaned schema (CSV)
                 </p>
                 {cleanedSchemaTable ? (
-                  <div className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-slate-200 bg-white dark:border-border dark:bg-card">
-                    <table className="w-max min-w-full border-collapse text-left font-mono text-mf-caption leading-snug text-slate-800 dark:text-foreground">
-                      <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-100 dark:border-border dark:bg-muted">
+                  <div className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
+                    <table className="w-max min-w-full border-collapse text-left font-mono text-mf-caption leading-snug text-foreground">
+                      <thead className="sticky top-0 z-10 border-b border-border bg-muted">
                         <tr>
                           {cleanedSchemaTable.headers.map((h, i) => (
                             <th
                               key={`${h}-${i}`}
-                              className="whitespace-nowrap px-2 py-2 font-semibold text-slate-700 dark:text-foreground"
+                              className="whitespace-nowrap px-2 py-2 font-semibold text-foreground"
                             >
                               {h}
                             </th>
@@ -138,10 +138,10 @@ export function Cleaning() {
                         {cleanedSchemaTable.rows.map((row, ri) => (
                           <tr
                             key={ri}
-                            className={ri % 2 === 1 ? 'bg-slate-50/80 dark:bg-muted/30' : 'bg-white dark:bg-card'}
+                            className={ri % 2 === 1 ? 'bg-muted/30' : 'bg-card'}
                           >
                             {row.map((cell, ci) => (
-                              <td key={ci} className="border-t border-slate-100 px-2 py-1.5 dark:border-border">
+                              <td key={ci} className="border-t border-border px-2 py-1.5">
                                 {cell}
                               </td>
                             ))}
@@ -151,11 +151,11 @@ export function Cleaning() {
                     </table>
                   </div>
                 ) : cleanedSchemaCsv.failed ? (
-                  <p className="text-xs text-slate-400 dark:text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Schema CSV could not be loaded.
                   </p>
                 ) : (
-                  <p className="text-xs text-slate-400 dark:text-muted-foreground">Loading schema table…</p>
+                  <p className="text-xs text-muted-foreground">Loading schema table…</p>
                 )}
               </div>
             </SectionWrapper>
@@ -173,10 +173,10 @@ export function Cleaning() {
             </SectionWrapper>
 
             <SectionWrapper id="cleaning-summary" title="Cleaning Summary">
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card md:p-6">
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
                 <ImageCard src={CLEANING_SUMMARY} title="Cleaning summary table" />
-                <div className="mt-5 border-t border-slate-200 pt-5 dark:border-border">
-                  <div className="space-y-4 text-base leading-relaxed text-slate-600 dark:text-muted-foreground md:text-lg md:leading-relaxed">
+                <div className="mt-5 border-t border-border pt-5">
+                  <div className="space-y-4 text-base leading-relaxed text-muted-foreground md:text-lg md:leading-relaxed">
                     <p>
                       Step 01 started with 8,414,861 raw PhilGEPS records and filtered them into medical-related procurement
                       records. After medical filtering and duplicate removal, the final cleaned dataset contained 487,605

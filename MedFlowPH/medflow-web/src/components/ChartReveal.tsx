@@ -2,6 +2,9 @@ import gsap from 'gsap'
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
+/** Opacity + scale only in tweens; clear inlines after complete. */
+const CHART_CLEAR = 'all' as const
+
 type ChartRevealProps = {
   children: ReactNode
   className?: string
@@ -21,7 +24,7 @@ export function ChartReveal({ children, className = '' }: ChartRevealProps) {
     if (!el) return
 
     if (reduced) {
-      gsap.set(el, { clearProps: 'opacity,transform' })
+      gsap.set(el, { clearProps: CHART_CLEAR })
       return
     }
 
@@ -30,11 +33,8 @@ export function ChartReveal({ children, className = '' }: ChartRevealProps) {
         opacity: 0.9,
         scale: 0.988,
         transformOrigin: '50% 50%',
-        force3D: true,
       })
     }, el)
-
-    let tween: gsap.core.Tween | null = null
 
     const obs = new IntersectionObserver(
       (entries) => {
@@ -42,16 +42,17 @@ export function ChartReveal({ children, className = '' }: ChartRevealProps) {
         if (!entries.some((e) => e.isIntersecting)) return
         playedRef.current = true
         obs.disconnect()
-        tween = gsap.to(el, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.55,
-          ease: 'power2.out',
-          force3D: true,
-          onComplete: () => {
-            gsap.set(el, { clearProps: 'transform' })
-          },
-        })
+        ctx.add(() =>
+          gsap.to(el, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.55,
+            ease: 'power2.out',
+            onComplete: () => {
+              gsap.set(el, { clearProps: CHART_CLEAR })
+            },
+          }),
+        )
       },
       { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.03 },
     )
@@ -60,8 +61,9 @@ export function ChartReveal({ children, className = '' }: ChartRevealProps) {
 
     return () => {
       obs.disconnect()
-      tween?.kill()
       ctx.revert()
+      gsap.killTweensOf(el)
+      gsap.set(el, { clearProps: CHART_CLEAR })
     }
   }, [reduced])
 

@@ -1040,21 +1040,21 @@ function LabelFitEvidenceTable({ lead, leadBoldPhrase, rows }: LabelFitEvidence)
         <p className="font-semibold text-mf-ink">Why This Label Fits</p>
         <p className="mt-1.5 leading-relaxed text-mf-muted">{leadWithOptionalBold(lead, leadBoldPhrase)}</p>
       </div>
-      <div className="overflow-x-auto rounded-lg border border-slate-100 bg-slate-50/90">
+      <div className="overflow-x-auto rounded-lg border border-border bg-muted/25">
         <table className="w-full min-w-[16rem] text-left text-[11px] text-mf-ink">
           <thead>
-            <tr className="border-b border-slate-200">
+            <tr className="border-b border-border">
               <th className="px-2 py-1.5 font-bold text-mf-ink">Evidence Column</th>
               <th className="px-2 py-1.5 font-bold text-mf-ink">Strongest Pattern Seen</th>
               <th className="px-2 py-1.5 font-bold text-mf-ink">Interpretation</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border">
             {rows.map((r) => (
               <tr key={r.evidence}>
                 <td className="px-2 py-1.5 align-top text-mf-muted">{r.evidence}</td>
                 <td className="px-2 py-1.5 align-top text-mf-ink">{r.pattern}</td>
-                <td className="px-2 py-1.5 align-top leading-snug text-mf-muted">{r.interpretation}</td>
+                <td className="px-2 py-1.5 align-top leading-snug text-muted-foreground">{r.interpretation}</td>
               </tr>
             ))}
           </tbody>
@@ -1120,7 +1120,7 @@ function DbscanClusterOtherInsightCard() {
   }, [])
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <article className="rounded-2xl border border-border bg-card p-4 shadow-sm">
       <p className="text-mf-caption font-semibold uppercase tracking-wide text-mf-primary">
         Other clusters (pooled)
       </p>
@@ -1153,17 +1153,17 @@ function DbscanClusterOtherInsightCard() {
         ) : error ? (
           <p className="mt-2 text-xs text-red-600">Could not load summaries ({error}).</p>
         ) : rows && rows.length > 0 ? (
-          <div className="mt-2 overflow-x-auto rounded-lg border border-slate-100 bg-slate-50/90">
+          <div className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted/25">
             <table className="w-full min-w-[16rem] text-left text-[11px] text-mf-ink">
               <thead>
-                <tr className="border-b border-slate-200">
+                <tr className="border-b border-border">
                   <th className="px-2 py-1.5 font-semibold text-mf-ink">Dimension</th>
                   <th className="px-2 py-1.5 font-semibold text-mf-ink">Top value</th>
                   <th className="px-2 py-1.5 font-semibold tabular-nums text-mf-ink">Share</th>
                   <th className="px-2 py-1.5 font-semibold tabular-nums text-mf-ink">Lift</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {rows.map((r, i) => (
                   <tr key={`${r.logical_column ?? r.column_name ?? i}`}>
                     <td className="px-2 py-1 align-top text-mf-muted">
@@ -1325,7 +1325,7 @@ function DbscanInsightsGridPageCarousel({ children }: { children: ReactNode }) {
           aria-label="Previous page of DBSCAN cards"
           onClick={() => goPage(-1)}
           disabled={activePage <= 0 || pageCount <= 1}
-          className="hidden h-auto shrink-0 self-center rounded-full border border-slate-200 bg-white p-2 text-mf-primary shadow-sm transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 sm:inline-flex"
+          className="hidden h-auto shrink-0 self-center rounded-full border border-border bg-card p-2 text-primary shadow-sm transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40 sm:inline-flex"
         >
           <ChevronLeft className="h-5 w-5" aria-hidden />
         </button>
@@ -1355,7 +1355,7 @@ function DbscanInsightsGridPageCarousel({ children }: { children: ReactNode }) {
           aria-label="Next page of DBSCAN cards"
           onClick={() => goPage(1)}
           disabled={activePage >= pageCount - 1 || pageCount <= 1}
-          className="hidden h-auto shrink-0 self-center rounded-full border border-slate-200 bg-white p-2 text-mf-primary shadow-sm transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 sm:inline-flex"
+          className="hidden h-auto shrink-0 self-center rounded-full border border-border bg-card p-2 text-primary shadow-sm transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40 sm:inline-flex"
         >
           <ChevronRight className="h-5 w-5" aria-hidden />
         </button>
@@ -1372,7 +1372,7 @@ function DbscanInsightsGridPageCarousel({ children }: { children: ReactNode }) {
               className={`rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-mf-primary focus-visible:ring-offset-2 ${
                 activePage === i
                   ? 'h-2.5 w-2.5 scale-110 bg-mf-primary'
-                  : 'h-2 w-2 bg-slate-300 hover:bg-slate-400 dark:bg-slate-600 dark:hover:bg-slate-500'
+                  : 'h-2 w-2 bg-muted-foreground/35 hover:bg-muted-foreground/55'
               }}`}
             />
           ))}
@@ -1520,7 +1520,7 @@ export function Interpretation() {
                     return (
                       <article
                         key={id}
-                        className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                        className="rounded-2xl border border-border bg-card p-4 shadow-sm"
                       >
                         <p className="text-mf-caption font-semibold uppercase tracking-wide text-mf-primary">
                           Cluster {id}
@@ -1541,15 +1541,15 @@ export function Interpretation() {
                           </SemanticCollapsible>
                         ) : !themeLoading && tabularRows && tabularRows.length > 0 ? (
                           <SemanticCollapsible title="Tabulated metrics">
-                            <div className="mt-2 overflow-x-auto rounded-lg border border-slate-100 bg-slate-50/90">
+                            <div className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted/25">
                               <table className="w-full min-w-[12rem] text-left text-[11px] text-mf-ink">
                                 <thead>
-                                  <tr className="border-b border-slate-200 text-mf-muted">
+                                  <tr className="border-b border-border text-muted-foreground">
                                     <th className="px-2 py-1.5 font-semibold">Metric</th>
                                     <th className="px-2 py-1.5 font-semibold tabular-nums">Value</th>
                                   </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100">
+                                <tbody className="divide-y divide-border">
                                   {tabularRows.map((r) => (
                                     <tr key={r.label}>
                                       <td className="px-2 py-1 text-mf-muted">{r.label}</td>
@@ -1581,7 +1581,7 @@ export function Interpretation() {
               )}
             </div>
 
-            <div className="mt-14 border-t border-slate-200 pt-14 dark:border-border">
+            <div className="mt-14 border-t border-border pt-14">
               <SectionWrapper id="interpretation-cluster-summary">
                 <SectionHeader
                   title="Overall cluster summary (K‑Means)"
@@ -1596,23 +1596,23 @@ export function Interpretation() {
                     high-volume high-budget procurement, and bulk low-to-medium cost procurement.
                   </p>
 
-                  <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+                  <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
                     <table className="min-w-full text-left text-xs">
-                      <thead className="bg-slate-50 text-mf-muted">
+                      <thead className="bg-muted/50 text-muted-foreground">
                         <tr>
                           <th className="px-3 py-2 font-semibold whitespace-nowrap">Cluster</th>
                           <th className="px-3 py-2 font-semibold">Suggested label</th>
                           <th className="px-3 py-2 font-semibold">Main meaning</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-mf-ink">
+                      <tbody className="divide-y divide-border text-foreground">
                         {OVERALL_CLUSTER_SUMMARY_ROWS.map((r) => (
-                          <tr key={r.cluster} className="odd:bg-white even:bg-slate-50/60">
+                          <tr key={r.cluster} className="odd:bg-card even:bg-muted/30">
                             <td className="px-3 py-2 font-medium whitespace-nowrap tabular-nums">
                               Cluster {r.cluster}
                             </td>
                             <td className="px-3 py-2 font-medium">{r.label}</td>
-                            <td className="px-3 py-2 leading-snug text-mf-muted">{r.meaning}</td>
+                            <td className="px-3 py-2 leading-snug text-muted-foreground">{r.meaning}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1622,7 +1622,7 @@ export function Interpretation() {
               </SectionWrapper>
             </div>
 
-            <div className="mt-14 border-t border-slate-200 pt-14 dark:border-border">
+            <div className="mt-14 border-t border-border pt-14">
               <SectionWrapper id="interpretation-overall-conclusion">
                 <SectionHeader
                   title="Overall conclusion (K‑Means)"
@@ -1667,8 +1667,8 @@ export function Interpretation() {
                   onClick={() => setPolicyCluster(id)}
                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                     policyCluster === id
-                      ? 'border-mf-primary bg-mf-primary text-white'
-                      : 'border-slate-200 bg-white text-mf-muted hover:border-slate-300'
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/40'
                   }`}
                 >
                   Cluster {id}
@@ -1726,7 +1726,7 @@ export function Interpretation() {
                     return (
                       <article
                         key={cardKey}
-                        className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                        className="rounded-2xl border border-border bg-card p-4 shadow-sm"
                       >
                         <p className="text-mf-caption font-semibold uppercase tracking-wide text-mf-primary">
                           {clusterTitle}
@@ -1745,15 +1745,15 @@ export function Interpretation() {
                           </SemanticCollapsible>
                         ) : !dbscanThemeLoading && tabularRows && tabularRows.length > 0 ? (
                           <SemanticCollapsible title="Tabulated metrics">
-                            <div className="mt-2 overflow-x-auto rounded-lg border border-slate-100 bg-slate-50/90">
+                            <div className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted/25">
                               <table className="w-full min-w-[12rem] text-left text-[11px] text-mf-ink">
                                 <thead>
-                                  <tr className="border-b border-slate-200 text-mf-muted">
+                                  <tr className="border-b border-border text-muted-foreground">
                                     <th className="px-2 py-1.5 font-semibold">Metric</th>
                                     <th className="px-2 py-1.5 font-semibold tabular-nums">Value</th>
                                   </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100">
+                                <tbody className="divide-y divide-border">
                                   {tabularRows.map((r) => (
                                     <tr key={r.label}>
                                       <td className="px-2 py-1 text-mf-muted">{r.label}</td>
@@ -1786,7 +1786,7 @@ export function Interpretation() {
               </DbscanInsightsGridPageCarousel>
             </div>
 
-            <div className="mt-14 border-t border-slate-200 pt-14 dark:border-border">
+            <div className="mt-14 border-t border-border pt-14">
               <SectionWrapper id="interpretation-dbscan-cluster-summary">
                 <SectionHeader
                   title="Overall cluster summary (DBSCAN)"
@@ -1800,21 +1800,21 @@ export function Interpretation() {
                     density-based patterns, small specialized clusters, and outlier-like records.
                   </p>
 
-                  <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+                  <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
                     <table className="min-w-full text-left text-xs">
-                      <thead className="bg-slate-50 text-mf-muted">
+                      <thead className="bg-muted/50 text-muted-foreground">
                         <tr>
                           <th className="px-3 py-2 font-semibold whitespace-nowrap">DBSCAN Group</th>
                           <th className="px-3 py-2 font-semibold">Suggested label</th>
                           <th className="px-3 py-2 font-semibold">Main meaning</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-mf-ink">
+                      <tbody className="divide-y divide-border text-foreground">
                         {DBSCAN_OVERALL_SUMMARY_ROWS.map((row) => (
-                          <tr key={row.group} className="odd:bg-white even:bg-slate-50/60">
+                          <tr key={row.group} className="odd:bg-card even:bg-muted/30">
                             <td className="px-3 py-2 font-medium whitespace-nowrap">{row.group}</td>
                             <td className="px-3 py-2 font-medium">{row.label}</td>
-                            <td className="px-3 py-2 leading-snug text-mf-muted">{row.meaning}</td>
+                            <td className="px-3 py-2 leading-snug text-muted-foreground">{row.meaning}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1824,7 +1824,7 @@ export function Interpretation() {
               </SectionWrapper>
             </div>
 
-            <div className="mt-14 border-t border-slate-200 pt-14 dark:border-border">
+            <div className="mt-14 border-t border-border pt-14">
               <SectionWrapper id="interpretation-dbscan-overall-conclusion">
                 <SectionHeader
                   title="Overall conclusion (DBSCAN)"
@@ -1879,8 +1879,8 @@ export function Interpretation() {
                   onClick={() => setDbscanPolicyFolder(folder)}
                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                     dbscanPolicyFolder === folder
-                      ? 'border-mf-primary bg-mf-primary text-white'
-                      : 'border-slate-200 bg-white text-mf-muted hover:border-slate-300'
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/40'
                   }`}
                 >
                   {label}

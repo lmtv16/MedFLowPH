@@ -14,7 +14,7 @@ export function SectionWrapper({ title, id, children }: SectionWrapperProps) {
     <div id={id}>
       <div ref={rootRef}>
         {title ? (
-          <h2 className="mb-4 border-l-4 border-blue-700 pl-3 font-heading text-mf-section font-semibold text-mf-ink dark:border-primary dark:text-foreground">
+          <h2 className="mb-4 border-l-4 border-primary pl-3 font-heading text-mf-section font-semibold text-foreground">
             {title}
           </h2>
         ) : null}

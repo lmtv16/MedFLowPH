@@ -345,7 +345,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
 
   return (
     <nav
-      className="sticky top-24 z-[30] flex w-full max-w-[12rem] flex-col gap-0.5 self-start overflow-visible rounded-xl ring-1 ring-slate-900/[0.04] shadow-sm dark:ring-white/[0.08]"
+      className="sticky top-24 z-[30] flex w-full max-w-[12rem] flex-col gap-0.5 self-start overflow-visible rounded-xl ring-1 ring-border/80 shadow-sm"
       aria-label="Page contents"
     >
       <div className="mb-3 flex items-center gap-1.5 px-3">
@@ -428,7 +428,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
             </button>
             <button
               type="button"
-              className={`shrink-0 border-l border-border/80 px-2 transition-colors duration-[280ms] ease-out hover:bg-muted/70 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:border-border`}
+              className={`shrink-0 border-l border-border/80 px-2 transition-colors duration-[280ms] ease-out hover:bg-muted/70 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40`}
               aria-expanded={open}
               aria-controls={panelId}
               aria-label={`${open ? 'Hide' : 'Show'} ${parent.label} subsections`}
@@ -477,7 +477,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                 id={panelId}
                 role="group"
                 aria-label={`${parent.label} subsections`}
-                className="mx-3 mb-1 ml-5 mt-1 space-y-0.5 border-l border-border py-1 pl-2 dark:border-border"
+                className="mx-3 mb-1 ml-5 mt-1 space-y-0.5 border-l border-border py-1 pl-2"
               >
                 {children.map((c) => {
                   const relaxed = active === c.id

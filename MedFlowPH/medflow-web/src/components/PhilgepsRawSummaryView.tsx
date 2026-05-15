@@ -55,20 +55,20 @@ function PreambleRows({ lines }: { lines: string[] }) {
   }, [lines])
 
   return (
-    <div className="mb-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
-      <table className="mb-0 w-full min-w-[16rem] border-collapse text-left text-mf-caption text-slate-700 dark:text-foreground">
+    <div className="mb-4 overflow-x-auto rounded-lg border border-border">
+      <table className="mb-0 w-full min-w-[16rem] border-collapse text-left text-mf-caption text-foreground">
       <tbody>
         {rows.map((r, idx) => (
-          <tr key={idx} className="border-b border-slate-200 dark:border-border">
+          <tr key={idx} className="border-b border-border">
             {r.key ? (
               <>
-                <th className="whitespace-nowrap px-2 py-2 align-top font-medium text-slate-500 dark:text-muted-foreground">
+                <th className="whitespace-nowrap px-2 py-2 align-top font-medium text-muted-foreground">
                   {r.key}
                 </th>
                 <td className="px-2 py-2">{r.value}</td>
               </>
             ) : (
-              <td className="px-2 py-2 font-medium text-slate-800 dark:text-foreground" colSpan={2}>
+              <td className="px-2 py-2 font-medium text-foreground" colSpan={2}>
                 {r.value}
               </td>
             )}
@@ -88,14 +88,14 @@ function GenericSectionTable({ heading, body }: { heading: string; body: string[
 
   if (isSegmentDetail) {
     return (
-      <details className="group rounded-lg border border-slate-200 bg-white dark:border-border dark:bg-card">
-        <summary className="cursor-pointer list-none px-3 py-2 text-sm font-medium text-slate-700 outline-none marker:content-none dark:text-foreground [&::-webkit-details-marker]:hidden">
-          <span className="underline decoration-slate-300 underline-offset-2 group-open:no-underline">
+      <details className="group rounded-lg border border-border bg-card">
+        <summary className="cursor-pointer list-none px-3 py-2 text-sm font-medium text-foreground outline-none marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="underline decoration-border underline-offset-2 group-open:no-underline">
             Full segment detail (compact){' '}
-            <span className="font-normal text-slate-400 dark:text-muted-foreground">— expand</span>
+            <span className="font-normal text-muted-foreground">— expand</span>
           </span>
         </summary>
-        <pre className="max-h-[28rem] overflow-auto border-t border-slate-100 p-3 font-mono text-[11px] leading-relaxed text-slate-700 dark:border-border dark:text-muted-foreground">
+        <pre className="max-h-[28rem] overflow-auto border-t border-border p-3 font-mono text-[11px] leading-relaxed text-muted-foreground">
           {plainBody}
         </pre>
       </details>
@@ -121,15 +121,15 @@ function GenericSectionTable({ heading, body }: { heading: string; body: string[
         <tbody>
           {rows.map((r, idx) =>
             r.type === 'group' ? (
-              <tr key={idx} className="bg-slate-100 dark:bg-muted/60">
-                <td className="px-2 py-2 font-semibold text-slate-800 dark:text-foreground" colSpan={2}>
+              <tr key={idx} className="bg-muted/60">
+                <td className="px-2 py-2 font-semibold text-foreground" colSpan={2}>
                   {r.text}
                 </td>
               </tr>
             ) : (
-              <tr key={idx} className="border-b border-slate-100 dark:border-border">
-                <td className="w-6 px-2 py-1.5 align-top text-slate-400 dark:text-muted-foreground">•</td>
-                <td className="px-2 py-1.5 text-slate-700 dark:text-foreground">{r.text}</td>
+              <tr key={idx} className="border-b border-border">
+                <td className="w-6 px-2 py-1.5 align-top text-muted-foreground">•</td>
+                <td className="px-2 py-1.5 text-foreground">{r.text}</td>
               </tr>
             ),
           )}
@@ -154,18 +154,18 @@ function GenericSectionTable({ heading, body }: { heading: string; body: string[
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-border">
+    <div className="overflow-x-auto rounded-lg border border-border">
       <table className="min-w-full border-collapse text-xs">
         {headerCells ? (
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/40">
-              <th className="sticky left-0 z-10 whitespace-nowrap border-r border-slate-100 bg-slate-50 px-2 py-2 text-left font-semibold text-slate-600 dark:border-border dark:bg-muted/40 dark:text-foreground">
+            <tr className="border-b border-border bg-muted/40">
+              <th className="sticky left-0 z-10 whitespace-nowrap border-r border-border bg-muted/40 px-2 py-2 text-left font-semibold text-foreground">
                 Field / segment
               </th>
               {headerCells.map((h, j) => (
                 <th
                   key={j}
-                  className="whitespace-nowrap px-2 py-2 text-right font-semibold tabular-nums text-slate-600 dark:text-muted-foreground"
+                  className="whitespace-nowrap px-2 py-2 text-right font-semibold tabular-nums text-muted-foreground"
                 >
                   {h}
                 </th>
@@ -178,8 +178,8 @@ function GenericSectionTable({ heading, body }: { heading: string; body: string[
             const cells = splitCells(line)
             if (cells.length === 1) {
               return (
-                <tr key={i} className="border-b border-slate-100 dark:border-border">
-                  <td className="px-2 py-2 text-slate-600 dark:text-muted-foreground" colSpan={99}>
+                <tr key={i} className="border-b border-border">
+                  <td className="px-2 py-2 text-muted-foreground" colSpan={99}>
                     {cells[0]}
                   </td>
                 </tr>
@@ -189,14 +189,14 @@ function GenericSectionTable({ heading, body }: { heading: string; body: string[
               cells.length >= 2 &&
               cells.slice(1).every((c) => /^[\d,]+$|^\d+\s+file\(s\)$|^drift=\w+$|^cols=\d+$/.test(c))
             return (
-              <tr key={i} className="border-b border-slate-100 dark:border-border">
-                <td className="sticky left-0 z-[1] whitespace-nowrap border-r border-slate-100 bg-slate-50/95 px-2 py-1.5 font-medium text-slate-800 backdrop-blur-sm dark:border-border dark:bg-muted/80 dark:text-foreground">
+              <tr key={i} className="border-b border-border">
+                <td className="sticky left-0 z-[1] whitespace-nowrap border-r border-border bg-muted/80 px-2 py-1.5 font-medium text-foreground backdrop-blur-sm">
                   {cells[0]}
                 </td>
                 {cells.slice(1).map((c, j) => (
                   <td
                     key={j}
-                    className={`whitespace-nowrap px-2 py-1.5 text-slate-700 dark:text-foreground ${
+                    className={`whitespace-nowrap px-2 py-1.5 text-foreground ${
                       isNumericTail ? 'text-right tabular-nums' : 'text-left'
                     }`}
                   >
@@ -224,7 +224,7 @@ export function PhilgepsRawSummaryView({ text }: Props) {
       {preamble.some((l) => l.trim()) ? <PreambleRows lines={preamble} /> : null}
       {sections.map((sec, idx) => (
         <section key={`${sec.heading}-${idx}`}>
-          <h4 className="mb-2 border-l-4 border-blue-600 pl-2 text-sm font-semibold text-slate-800 dark:border-blue-500 dark:text-foreground">
+          <h4 className="mb-2 border-l-4 border-primary pl-2 text-sm font-semibold text-foreground">
             {sec.heading}
           </h4>
           <GenericSectionTable heading={sec.heading} body={sec.body} />

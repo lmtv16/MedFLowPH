@@ -34,8 +34,8 @@ export function FigureCarousel({
   const heading = slide?.interpretationHeading ?? interpretationTitle
 
   return (
-    <ChartReveal className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-border dark:bg-card md:p-6">
-      <div className="overflow-hidden rounded-xl border border-slate-100 dark:border-border">
+    <ChartReveal className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm md:p-6">
+      <div className="overflow-hidden rounded-xl border border-border">
         <div
           className="flex transition-transform duration-300 ease-out motion-reduce:transition-none"
           style={{
@@ -64,11 +64,11 @@ export function FigureCarousel({
             aria-label={ariaPrevLabel}
             disabled={activeIndex <= 0}
             onClick={() => onActiveIndexChange(Math.max(0, activeIndex - 1))}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-40 dark:border-border dark:bg-card dark:text-foreground dark:hover:bg-muted"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
           >
             <ChevronLeft className="h-5 w-5" aria-hidden />
           </button>
-          <span className="min-w-[4.5rem] text-center text-mf-caption font-medium tabular-nums text-mf-muted dark:text-muted-foreground">
+          <span className="min-w-[4.5rem] text-center text-mf-caption font-medium tabular-nums text-muted-foreground">
             {activeIndex + 1} / {n}
           </span>
           <button
@@ -76,7 +76,7 @@ export function FigureCarousel({
             aria-label={ariaNextLabel}
             disabled={activeIndex >= n - 1}
             onClick={() => onActiveIndexChange(Math.min(n - 1, activeIndex + 1))}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-40 dark:border-border dark:bg-card dark:text-foreground dark:hover:bg-muted"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
           >
             <ChevronRight className="h-5 w-5" aria-hidden />
           </button>
@@ -92,7 +92,7 @@ export function FigureCarousel({
               className={
                 i === activeIndex
                   ? 'h-2.5 w-2.5 rounded-full bg-mf-primary ring-2 ring-mf-primary/30 dark:ring-primary/40'
-                  : 'h-2.5 w-2.5 rounded-full bg-slate-300 transition hover:bg-slate-400 dark:bg-muted-foreground/40 dark:hover:bg-muted-foreground/60'
+                  : 'h-2.5 w-2.5 rounded-full bg-muted-foreground/35 transition hover:bg-muted-foreground/55'
               }
             />
           ))}
@@ -100,13 +100,13 @@ export function FigureCarousel({
       </div>
 
       <div
-        className="mt-6 rounded-xl border border-dashed border-slate-300 bg-slate-50/90 p-5 md:p-7 dark:border-slate-600 dark:bg-muted/25"
+        className="mt-6 rounded-xl border border-dashed border-border bg-muted/30 p-5 md:p-7"
         aria-live="polite"
       >
-        <p className="text-mf-card-title font-semibold uppercase tracking-wide text-slate-600 dark:text-muted-foreground">
+        <p className="text-mf-card-title font-semibold uppercase tracking-wide text-muted-foreground">
           {heading}
         </p>
-        <p className="mt-3 text-mf-body leading-relaxed whitespace-pre-line text-slate-700 dark:text-foreground">
+        <p className="mt-3 text-mf-body leading-relaxed whitespace-pre-line text-foreground">
           {slide?.explanation ?? fallbackExplanation}
         </p>
       </div>

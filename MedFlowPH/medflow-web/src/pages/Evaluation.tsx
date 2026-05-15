@@ -79,7 +79,7 @@ export function Evaluation() {
       <div className="flex gap-8">
         <div className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
           <SectionWrapper id="evaluation-kmeans-context" title="K‑Means evaluation context">
-          <div className="space-y-4 text-mf-body leading-relaxed text-mf-muted dark:text-muted-foreground">
+          <div className="space-y-4 text-mf-body leading-relaxed text-muted-foreground">
             <p>
               K-Means was used as the main clustering model because it creates clear and complete group assignments. Every
               procurement record is assigned to one cluster, making the results easier to summarize, count, compare, and
@@ -87,7 +87,7 @@ export function Evaluation() {
               space.
             </p>
             <div>
-              <h3 className="font-heading mb-2 text-mf-card-title font-semibold text-mf-ink dark:text-foreground">
+              <h3 className="font-heading mb-2 text-mf-card-title font-semibold text-foreground">
                 Choosing the Number of Clusters (K)
               </h3>
               <p>
@@ -98,13 +98,13 @@ export function Evaluation() {
             </div>
           </div>
 
-          <div className="mt-8 overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-border dark:bg-card">
+          <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-card">
             <table className="w-full min-w-[36rem] text-left text-mf-body">
-              <thead className="border-b border-slate-200 bg-slate-50 dark:border-border dark:bg-muted/50">
+              <thead className="border-b border-border bg-muted/50">
                 <tr>
-                  <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Metric</th>
-                  <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Range / interpretation</th>
-                  <th className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">Description</th>
+                  <th className="px-4 py-3 font-semibold text-foreground">Metric</th>
+                  <th className="px-4 py-3 font-semibold text-foreground">Range / interpretation</th>
+                  <th className="px-4 py-3 font-semibold text-foreground">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -137,15 +137,15 @@ export function Evaluation() {
                 ].map((row, i) => (
                   <tr
                     key={row.m}
-                    className={`border-b border-slate-100 dark:border-border ${i % 2 === 1 ? 'bg-slate-50/50 dark:bg-muted/20' : ''}`}
+                    className={`border-b border-border ${i % 2 === 1 ? 'bg-muted/25' : ''}`}
                   >
-                    <td className="px-4 py-3 font-semibold text-mf-ink dark:text-foreground">{row.m}</td>
+                    <td className="px-4 py-3 font-semibold text-foreground">{row.m}</td>
                     <td className="px-4 py-3">
                       <span className="inline-block rounded-md bg-blue-50 px-2 py-0.5 text-mf-caption font-medium text-blue-800 dark:bg-blue-950/50 dark:text-blue-200">
                         {row.r}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-mf-muted dark:text-muted-foreground">{row.d}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.d}</td>
                   </tr>
                 ))}
               </tbody>
@@ -154,38 +154,38 @@ export function Evaluation() {
         </SectionWrapper>
 
         <SectionWrapper id="du-eval-kmeans" title="05A - Evaluating K-Means">
-          <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+          <p className="mb-6 leading-relaxed text-muted-foreground">
             Hyperparameter sweeps contrast internal clustering indices to justify the reported k-means configuration.
           </p>
           <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-border dark:bg-card">
-              <p className="font-semibold text-mf-ink dark:text-foreground">Silhouette score</p>
-              <p className="mt-2 text-mf-body text-slate-600 dark:text-muted-foreground">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="font-semibold text-foreground">Silhouette score</p>
+              <p className="mt-2 text-mf-body text-muted-foreground">
                 Higher is better — captures how tightly points match their own cluster versus neighboring clusters.
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-border dark:bg-card">
-              <p className="font-semibold text-mf-ink dark:text-foreground">Davies–Bouldin index</p>
-              <p className="mt-2 text-mf-body text-slate-600 dark:text-muted-foreground">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="font-semibold text-foreground">Davies–Bouldin index</p>
+              <p className="mt-2 text-mf-body text-muted-foreground">
                 Lower is better — summarizes within-cluster scatter relative to between-cluster separation.
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-border dark:bg-card">
-              <p className="font-semibold text-mf-ink dark:text-foreground">Calinski–Harabasz score</p>
-              <p className="mt-2 text-mf-body text-slate-600 dark:text-muted-foreground">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="font-semibold text-foreground">Calinski–Harabasz score</p>
+              <p className="mt-2 text-mf-body text-muted-foreground">
                 Higher is better — rewards dense, well-separated partitions for a chosen k.
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-border dark:bg-card">
-              <p className="font-semibold text-mf-ink dark:text-foreground">Composite score</p>
-              <p className="mt-2 text-mf-body text-slate-600 dark:text-muted-foreground">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="font-semibold text-foreground">Composite score</p>
+              <p className="mt-2 text-mf-body text-muted-foreground">
                 Higher is better — aggregates normalized silhouette, Davies–Bouldin, and Calinski–Harabasz traces into a
                 single ranking-friendly curve.
               </p>
             </div>
           </div>
 
-          <p className="mb-4 text-mf-body text-mf-muted dark:text-muted-foreground">
+          <p className="mb-4 text-mf-body text-muted-foreground">
             Step through k-selection diagnostics one at a time. Click a figure to open the full gallery; replace
             placeholders in the manifest with your own interpretations.
           </p>
@@ -201,11 +201,11 @@ export function Evaluation() {
         </SectionWrapper>
 
         <SectionWrapper id="du-eval-dbscan" title="05B - Evaluating DBSCAN">
-          <p className="mb-6 leading-relaxed text-slate-600 dark:text-muted-foreground">
+          <p className="mb-6 leading-relaxed text-muted-foreground">
             DBSCAN grids explore stability of noise share, silhouette substitutes, and composite rankings across
             epsilon/minPts combinations.
           </p>
-          <p className="mb-4 text-mf-body text-mf-muted dark:text-muted-foreground">
+          <p className="mb-4 text-mf-body text-muted-foreground">
             Step through DBSCAN evaluation heatmaps one at a time. Click a figure for the gallery view; replace
             placeholders on each entry in <span className="font-mono text-mf-caption">IMAGES.eda.dbscanEvaluationCarousel</span>.
           </p>
@@ -255,7 +255,7 @@ export function Evaluation() {
           ))}
         </div>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
           <h3 className="text-mf-card-title font-semibold text-mf-ink">
             Figure DB‑Sweep: silhouette vs epsilon (hue = min_samples)
           </h3>
