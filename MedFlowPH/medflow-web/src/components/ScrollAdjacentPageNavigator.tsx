@@ -19,7 +19,7 @@ type OrderedPath = (typeof PAGE_ORDER)[number]
 
 const PAGE_NAMES: Record<OrderedPath, string> = {
   '/': 'Home',
-  '/data-understanding': 'Data Understanding',
+  '/data-understanding': 'Data Preparation',
   '/cleaning': 'Cleaning',
   '/preprocessing': 'Preprocessing',
   '/pca': 'PCA',

@@ -17,7 +17,7 @@ const ROUTE_META: Record<
   }
 > = {
   '/': { title: 'MedFlow PH', crumbs: ['Home'] },
-  '/eda': { title: 'Data Understanding', crumbs: ['Home', 'Data Understanding'] },
+  '/eda': { title: 'Data Preparation', crumbs: ['Home', 'Data Preparation'] },
   '/cleaning': { title: 'Data Cleaning', crumbs: ['Home', 'Cleaning'] },
   '/preprocessing': {
     title: 'Preprocessing Pipeline',

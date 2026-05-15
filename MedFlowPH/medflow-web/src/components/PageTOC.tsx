@@ -107,9 +107,8 @@ export const TOC_LANDING: PageTOCSection[] = [
 export const TOC_EDA: PageTOCSection[] = [
   { id: 'du-hero', label: 'Overview' },
   { id: 'du-raw', label: 'Raw Dataset' },
-  { id: 'du-conclusion', label: 'Conclusion' },
-  { id: 'eda-overview', label: 'Interactive charts' },
   { id: 'eda-quarter', label: 'By quarter' },
+  { id: 'du-conclusion', label: 'Conclusion' },
 ]
 
 /** Pipeline walkthrough anchors only (through Conclusion; before interactive EDA chart sections). */
@@ -213,10 +212,13 @@ export const TOC_COMPARISON: PageTOCSection[] = [
 ]
 
 const routeLinks = [
-  { path: '/eda', label: 'Data Understanding' },
-  { path: '/clustering', label: 'Cluster Segmentation' },
+  { path: '/eda', label: 'Data Preparation' },
+  { path: '/clustering', label: 'Modeling' },
+  { path: '/interpretation', label: 'Results' },
   { path: '/comparison', label: 'Model Comparison' },
-]
+] as const
+
+const PAGES_NAV_PANEL_ID = 'page-toc-route-links'
 
 /** Matches main content top padding (~pt-24) + sticky toolbar so the spy line aligns with visible content. */
 export const SCROLL_SPY_VIEWPORT_TOP = 118
@@ -241,6 +243,12 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
   const [active, setActive] = useState(sections[0]?.id ?? '')
   const [hoverPreview, setHoverPreview] = useState<{ id: string; text: string } | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
+  const [pagesNavOpen, setPagesNavOpen] = useState(false)
+
+  const pagesGroupActive = useMemo(
+    () => routeLinks.some((r) => location.pathname === r.path),
+    [location.pathname],
+  )
 
   const tocScrollIds = useMemo(
     () => sections.filter(({ linkTo }) => !linkTo).map(({ id }) => id),
@@ -314,6 +322,11 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
     }
     setOpenDropdownId(null)
   }, [active, tocRows])
+
+  /** Keep Pages dropdown open while viewing any linked route. */
+  useEffect(() => {
+    if (pagesGroupActive) setPagesNavOpen(true)
+  }, [pagesGroupActive])
 
   if (sections.length === 0) return null
 
@@ -532,22 +545,51 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
       {showRouteLinks ? (
         <>
           <div className="mx-3 my-3 h-px bg-border" />
-          <p className="mb-1 px-3 text-mf-caption uppercase tracking-widest text-muted-foreground/60">Pages</p>
-          {routeLinks.map((r) => (
-            <NavLink
-              key={r.path}
-              to={r.path}
-              className={({ isActive }) =>
-                `rounded-lg px-3 py-1.5 text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
-                  isActive
-                    ? 'bg-primary/10 font-semibold text-primary'
-                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
-                }`
-              }
+          <div className="mb-1 flex flex-col">
+            <button
+              type="button"
+              className={`flex w-full items-center justify-between gap-1 rounded-lg px-3 py-1.5 text-left text-mf-caption uppercase tracking-widest transition-colors duration-[280ms] ease-out motion-reduce:transition-none hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                pagesGroupActive
+                  ? 'font-semibold text-foreground'
+                  : 'text-muted-foreground/60 hover:text-foreground'
+              }`}
+              aria-expanded={pagesNavOpen}
+              aria-controls={PAGES_NAV_PANEL_ID}
+              onClick={() => setPagesNavOpen((open) => !open)}
             >
-              {r.label}
-            </NavLink>
-          ))}
+              <span>Pages</span>
+              <ChevronDown
+                aria-hidden
+                className={`h-3.5 w-3.5 shrink-0 transition-transform duration-[280ms] ease-out motion-reduce:transition-none ${
+                  pagesNavOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+            {pagesNavOpen ? (
+              <div
+                id={PAGES_NAV_PANEL_ID}
+                role="group"
+                aria-label="Site pages"
+                className="ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-border/80 py-1 pl-2"
+              >
+                {routeLinks.map((r) => (
+                  <NavLink
+                    key={r.path}
+                    to={r.path}
+                    className={({ isActive }) =>
+                      `rounded-lg px-3 py-1.5 text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
+                        isActive
+                          ? 'border-l-2 border-primary bg-primary/10 pl-2.5 font-semibold text-primary'
+                          : 'border-l-2 border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                      }`
+                    }
+                  >
+                    {r.label}
+                  </NavLink>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </>
       ) : null}
     </nav>

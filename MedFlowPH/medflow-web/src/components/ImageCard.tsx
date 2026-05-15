@@ -1,5 +1,6 @@
 import { ChevronDown, ZoomIn } from 'lucide-react'
 import { useId, useState, type ReactNode } from 'react'
+import { HoverDisclosurePanel } from './HoverDisclosurePanel'
 import { useOpenImageZoom } from './ImageZoomLightboxContext'
 
 type ImageCardProps = {
@@ -14,84 +15,6 @@ type ImageCardProps = {
   hideInlineTitle?: boolean
   /** Active carousel slides use eager so the visible figure loads promptly; others stay lazy. */
   imageLoading?: 'lazy' | 'eager'
-}
-
-function HoverDisclosureRibbon({
-  text,
-  expandAria,
-  collapseAria,
-}: {
-  text: string
-  expandAria: string
-  collapseAria: string
-}) {
-  const [pinned, setPinned] = useState(false)
-  /** After collapsing while the pointer is still over the control, ignore hover so the panel actually closes. */
-  const [hoverRevealBlocked, setHoverRevealBlocked] = useState(false)
-
-  const allowHoverReveal = !hoverRevealBlocked
-
-  const triggerBtn =
-    'flex w-full cursor-pointer items-center gap-2 px-2.5 py-2 text-left text-mf-caption font-bold text-muted-foreground transition-colors hover:bg-muted/60'
-
-  const triggerSpan = 'min-w-0 flex-1 truncate text-muted-foreground'
-
-  const panelClass =
-    'border-t border-border px-2.5 pb-2.5 pt-1.5 text-left text-mf-caption font-bold leading-relaxed text-muted-foreground'
-
-  return (
-    <div
-      className="group rounded-lg border border-border bg-card/90 shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-primary/40 hover:shadow-md"
-      onMouseLeave={() => setHoverRevealBlocked(false)}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
-          setHoverRevealBlocked(false)
-        }
-      }}
-    >
-      <button
-        type="button"
-        className={triggerBtn}
-        aria-expanded={pinned}
-        onClick={() => {
-          setPinned((wasPinned) => {
-            if (wasPinned) {
-              setHoverRevealBlocked(true)
-              return false
-            }
-            setHoverRevealBlocked(false)
-            return true
-          })
-        }}
-        aria-label={pinned ? collapseAria : expandAria}
-      >
-        <span className={triggerSpan}>{text}</span>
-        <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out ${
-            pinned
-              ? 'rotate-180'
-              : hoverRevealBlocked
-                ? ''
-                : 'group-hover:rotate-180 group-focus-within:rotate-180'
-          }`}
-          aria-hidden
-        />
-      </button>
-      <div
-        className={`grid min-h-0 transition-[grid-template-rows] duration-200 ease-out ${
-          pinned
-            ? 'grid-rows-[1fr]'
-            : allowHoverReveal
-              ? 'grid-rows-[0fr] group-hover:grid-rows-[1fr] group-focus-within:grid-rows-[1fr]'
-              : 'grid-rows-[0fr]'
-        }`}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <p className={panelClass}>{text}</p>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 export function ImageCard({
@@ -168,11 +91,13 @@ export function ImageCard({
         ) : null}
       </button>
       {titleDisclosure ? (
-        <HoverDisclosureRibbon
-          text={title}
+        <HoverDisclosurePanel
+          label={title}
           expandAria={`Expand image title: ${title}`}
           collapseAria={`Collapse image title: ${title}`}
-        />
+        >
+          <p className="text-left text-mf-caption font-bold leading-relaxed text-muted-foreground">{title}</p>
+        </HoverDisclosurePanel>
       ) : null}
       {figure ? (
         <p className="text-mf-caption text-muted-foreground">{figure}</p>

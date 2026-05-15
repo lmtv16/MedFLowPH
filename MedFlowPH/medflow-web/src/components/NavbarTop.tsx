@@ -8,7 +8,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 
 const routes = [
   { path: '/', label: 'Home' },
-  { path: '/eda', label: 'Data Understanding' },
+  { path: '/eda', label: 'Data Preparation' },
   { path: '/clustering', label: 'Clustering' },
   { path: '/comparison', label: 'Comparison' },
 ]
