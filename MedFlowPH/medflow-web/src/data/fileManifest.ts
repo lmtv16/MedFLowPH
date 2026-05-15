@@ -34,6 +34,24 @@ const mergedKeptVsRemovedExplanation = `This chart shows how the raw PhilGEPS re
 
 The final dataset is smaller, but more focused on medical procurement records needed for clustering.`
 
+const kMeansMetricRankHeatmapExplanation = `This heatmap compares K values from 2 to 7 across clustering metrics. A rank of 1 means that K performed best for that metric.
+
+K = 6 ranked best in silhouette, Davies-Bouldin, and composite score, making it the strongest overall choice. Although K = 7 ranked best in inertia, inertia was used only as an elbow diagnostic because it usually improves as K increases.
+
+Based on this evaluation, K = 6 was selected for the final K-means clustering model.`
+
+const kMeansMetricCurvesExplanation = `These charts compare K values from 2 to 7 using common clustering metrics. Silhouette, Calinski-Harabasz, and composite scores are better when higher, while Davies-Bouldin is better when lower.
+
+The results show that K = 6 gives the strongest overall performance. It has the best silhouette score, the lowest Davies-Bouldin score, and the highest composite score.
+
+Because of this, K = 6 was selected for the final K-means model.`
+
+const kMeansCombinedMetricsExplanation = `This chart compares the main K-means evaluation metrics on one normalized scale from 0 to 1. A higher score means better performance in the graph.
+
+Silhouette, Calinski-Harabasz, and composite scores are normalized directly because higher values are better. Davies-Bouldin is inverted because lower values are better.
+
+The yellow star marks the selected value: K = 6. This K performed best for silhouette, best for Davies-Bouldin after inversion, and strongest overall in the composite score.`
+
 const kMeansEvaluationFigurePlaceholder =
   'Placeholder — Add a short interpretation: how this diagnostic supports choosing k and validating the K-means configuration on the PhilGEPS medical slice.'
 
@@ -171,32 +189,38 @@ export const IMAGES = {
       {
         src: '/results/05/EDA/metric_rank_heatmap.png',
         title: 'Metric rank heatmap (k-means search)',
-        explanation: kMeansEvaluationFigurePlaceholder,
+        interpretationHeading: 'K-means Metric Ranking',
+        explanation: kMeansMetricRankHeatmapExplanation,
       },
       {
         src: '/results/05/KSelection/silhouette_vs_k.png',
         title: 'Silhouette vs k',
-        explanation: kMeansEvaluationFigurePlaceholder,
+        interpretationHeading: 'K-means Metric Curves',
+        explanation: kMeansMetricCurvesExplanation,
       },
       {
         src: '/results/05/KSelection/davies_bouldin_vs_k.png',
         title: 'Davies–Bouldin vs k',
-        explanation: kMeansEvaluationFigurePlaceholder,
+        interpretationHeading: 'K-means Metric Curves',
+        explanation: kMeansMetricCurvesExplanation,
       },
       {
         src: '/results/05/KSelection/calinski_harabasz_vs_k.png',
         title: 'Calinski–Harabasz vs k',
-        explanation: kMeansEvaluationFigurePlaceholder,
+        interpretationHeading: 'K-means Metric Curves',
+        explanation: kMeansMetricCurvesExplanation,
       },
       {
         src: '/results/05/KSelection/composite_vs_k.png',
         title: 'Composite score vs k',
-        explanation: kMeansEvaluationFigurePlaceholder,
+        interpretationHeading: 'K-means Metric Curves',
+        explanation: kMeansMetricCurvesExplanation,
       },
       {
         src: '/results/05/KSelection/combined_silhouette_db_ch_composite_vs_k.png',
         title: 'Combined silhouette, DB, CH, and composite vs k',
-        explanation: kMeansEvaluationFigurePlaceholder,
+        interpretationHeading: 'Combined K-selection Metrics',
+        explanation: kMeansCombinedMetricsExplanation,
       },
     ],
     /** Ordered slides for the Data Understanding DBSCAN evaluation carousel (distinct from `evaluation.dbscan` gallery order). */

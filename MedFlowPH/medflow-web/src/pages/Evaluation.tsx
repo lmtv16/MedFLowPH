@@ -38,8 +38,12 @@ const dbscanGallery: GalleryImage[] = IMAGES.evaluation.dbscan.map((item) => ({
   title: item.title,
 }))
 
+const DBSCAN_SWEEP_CHART_MARGIN = { top: 36, right: 24, left: 8, bottom: 40 }
+
 export function Evaluation() {
-  const { data: dbRows } = useCsvData(DATA_PATHS.dbscanMetricsGrid)
+  const { data: dbRows, loading: dbscanGridLoading, error: dbscanGridError } = useCsvData(
+    DATA_PATHS.dbscanMetricsGrid,
+  )
   const [kmeansEvalSlideIdx, setKmeansEvalSlideIdx] = useState(0)
   const [dbscanEvalSlideIdx, setDbscanEvalSlideIdx] = useState(0)
   const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
@@ -153,7 +157,7 @@ export function Evaluation() {
           </div>
         </SectionWrapper>
 
-        <SectionWrapper id="du-eval-kmeans" title="05A - Evaluating K-Means">
+        <SectionWrapper id="du-eval-kmeans" title="Evaluating K-Means">
           <p className="mb-6 leading-relaxed text-muted-foreground">
             Hyperparameter sweeps contrast internal clustering indices to justify the reported k-means configuration.
           </p>
@@ -193,27 +197,21 @@ export function Evaluation() {
             items={kmeansEvalSlides}
             activeIndex={kmeansEvalSlideIdx}
             onActiveIndexChange={setKmeansEvalSlideIdx}
-            getFigureLabel={(idx, item) => `Figure KM-DU${idx + 1}: ${item.title}`}
             onSlideImageClick={openKmeansEvalCarousel}
             ariaPrevLabel="Previous K-means evaluation figure"
             ariaNextLabel="Next K-means evaluation figure"
           />
         </SectionWrapper>
 
-        <SectionWrapper id="du-eval-dbscan" title="05B - Evaluating DBSCAN">
+        <SectionWrapper id="du-eval-dbscan" title="Evaluating DBSCAN">
           <p className="mb-6 leading-relaxed text-muted-foreground">
             DBSCAN grids explore stability of noise share, silhouette substitutes, and composite rankings across
             epsilon/minPts combinations.
-          </p>
-          <p className="mb-4 text-mf-body text-muted-foreground">
-            Step through DBSCAN evaluation heatmaps one at a time. Click a figure for the gallery view; replace
-            placeholders on each entry in <span className="font-mono text-mf-caption">IMAGES.eda.dbscanEvaluationCarousel</span>.
           </p>
           <LazyFigureCarousel
             items={dbscanEvalSlides}
             activeIndex={dbscanEvalSlideIdx}
             onActiveIndexChange={setDbscanEvalSlideIdx}
-            getFigureLabel={(idx, item) => `Figure DB-DU${idx + 1}: ${item.title}`}
             onSlideImageClick={openDbscanEvalCarousel}
             ariaPrevLabel="Previous DBSCAN evaluation figure"
             ariaNextLabel="Next DBSCAN evaluation figure"
@@ -262,39 +260,83 @@ export function Evaluation() {
           <p className="mt-2 text-mf-caption text-mf-muted">
             Source: `/data/05B/DBSCAN_Evaluation/dbscan_metrics_grid.csv`.
           </p>
-          <div className="mt-6 w-full min-w-0 overflow-x-auto">
-            <ChartReveal className="medflow-recharts-container mx-auto min-w-[17rem]">
-            <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ top: 12, right: 12, left: 4, bottom: 48 }}>
+          <div className="mt-6 w-full min-w-0">
+            {dbscanGridLoading ? (
+              <div
+                className="medflow-recharts-container flex items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 text-mf-caption text-muted-foreground"
+                aria-busy="true"
+              >
+                Loading DBSCAN sweep data…
+              </div>
+            ) : dbscanGridError ? (
+              <div
+                className="medflow-recharts-container flex items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 px-4 text-center text-mf-caption text-muted-foreground"
+                role="alert"
+              >
+                Could not load DBSCAN metrics grid ({dbscanGridError.message}).
+              </div>
+            ) : dbscanScatter.dots.length === 0 ? (
+              <div className="medflow-recharts-container flex items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 text-mf-caption text-muted-foreground">
+                No valid points in the metrics grid CSV.
+              </div>
+            ) : (
+              <ChartReveal className="medflow-recharts-container mx-auto min-w-[17rem]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ScatterChart margin={DBSCAN_SWEEP_CHART_MARGIN}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   type="number"
                   dataKey="x"
                   name="epsilon"
                   tick={{ fontSize: 11 }}
-                  label={{ value: 'ε (epsilon)', position: 'bottom', dy: 10 }}
+                  tickFormatter={(v: number) => v.toFixed(2)}
+                  domain={['auto', 'auto']}
+                  label={{ value: 'ε (epsilon)', position: 'insideBottom', offset: -4 }}
                 />
                 <YAxis
                   type="number"
                   dataKey="y"
                   name="silhouette"
+                  width={48}
                   tick={{ fontSize: 11 }}
-                  label={{ angle: -90, value: 'Silhouette score', position: 'insideLeft' }}
+                  tickFormatter={(v: number) => v.toFixed(2)}
+                  domain={['auto', 'auto']}
+                  label={{
+                    value: 'Silhouette score',
+                    angle: -90,
+                    position: 'insideLeft',
+                    style: { textAnchor: 'middle' },
+                  }}
                 />
-                <ZAxis range={[48, 48]} />
-                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                <Legend />
+                <ZAxis range={[64, 64]} />
+                <Tooltip
+                  cursor={{ strokeDasharray: '3 3' }}
+                  formatter={(value: number, name: string) => [
+                    typeof value === 'number' ? value.toFixed(3) : value,
+                    name === 'silhouette' ? 'Silhouette' : name,
+                  ]}
+                  labelFormatter={(label) => `ε = ${Number(label).toFixed(2)}`}
+                />
+                <Legend
+                  verticalAlign="top"
+                  align="right"
+                  wrapperStyle={{ paddingBottom: 8 }}
+                  iconSize={10}
+                />
                 {dbscanScatter.uniqueSamples.map((ms, idx) => (
                   <Scatter
                     key={ms}
-                    name={`min_samples ${ms}`}
+                    name={`min_samples = ${ms}`}
                     data={dbscanScatter.dots.filter((d) => d.min_samples === ms)}
                     fill={SCATTER_PALETTE[idx % SCATTER_PALETTE.length]}
+                    line={{ strokeWidth: 1.5 }}
+                    lineType="joint"
                   />
                 ))}
-              </ScatterChart>
-            </ResponsiveContainer>
-            </ChartReveal>
+                  </ScatterChart>
+                </ResponsiveContainer>
+              </ChartReveal>
+            )}
           </div>
         </section>
         </div>

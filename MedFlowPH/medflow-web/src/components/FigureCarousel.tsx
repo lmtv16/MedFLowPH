@@ -3,11 +3,19 @@ import { ChartReveal } from './ChartReveal'
 import { ImageCard } from './ImageCard'
 import type { ImageManifestItem } from '../data/fileManifest'
 
+function explanationParagraphs(text: string): string[] {
+  const parts = text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+  return parts.length > 0 ? parts : [text.trim()]
+}
+
 export type FigureCarouselProps = {
   items: readonly ImageManifestItem[]
   activeIndex: number
   onActiveIndexChange: (index: number) => void
-  getFigureLabel: (index: number, item: ImageManifestItem) => string | undefined
+  getFigureLabel?: (index: number, item: ImageManifestItem) => string | undefined
   onSlideImageClick?: (index: number) => void
   interpretationTitle?: string
   fallbackExplanation?: string
@@ -32,6 +40,8 @@ export function FigureCarousel({
   const slide = items[Math.min(activeIndex, n - 1)]
 
   const heading = slide?.interpretationHeading ?? interpretationTitle
+  const explanation = slide?.explanation ?? fallbackExplanation
+  const paragraphs = explanationParagraphs(explanation)
 
   return (
     <ChartReveal className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm md:p-6">
@@ -49,7 +59,7 @@ export function FigureCarousel({
                 src={item.src}
                 title={item.title}
                 onClick={onSlideImageClick ? () => onSlideImageClick(idx) : undefined}
-                figure={getFigureLabel(idx, item)}
+                figure={getFigureLabel?.(idx, item)}
                 imageLoading={idx === activeIndex ? 'eager' : 'lazy'}
               />
             </div>
@@ -106,9 +116,13 @@ export function FigureCarousel({
         <p className="text-mf-card-title font-semibold uppercase tracking-wide text-muted-foreground">
           {heading}
         </p>
-        <p className="mt-3 text-mf-body leading-relaxed whitespace-pre-line text-foreground">
-          {slide?.explanation ?? fallbackExplanation}
-        </p>
+        <div className="mt-3 space-y-4">
+          {paragraphs.map((paragraph, i) => (
+            <p key={i} className="text-mf-body leading-relaxed text-foreground">
+              {paragraph}
+            </p>
+          ))}
+        </div>
       </div>
     </ChartReveal>
   )
