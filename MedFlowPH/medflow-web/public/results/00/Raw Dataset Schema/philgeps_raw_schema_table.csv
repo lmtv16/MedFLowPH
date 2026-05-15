@@ -1,4 +1,4 @@
-canonical_position,column_name,in_canonical_46,pandas_dtype,row_count,null_count,null_pct,non_null_count,nunique_non_null,nunique_how,kmeans_feature_role
+canonical_position,column_name,in_canonical_46,pandas_dtype,row_count,null_count,null_pct,non_null_count,nunique_non_null,nunique_how,concept
 1,Procuring Entity (PE),True,float64,8414861,865782,10.2887,7549079,,N/A (no full merge; see per-quarter EDA),high_cardinality_text
 2,Region,True,float64,8414861,865782,10.2887,7549079,,N/A (no full merge; see per-quarter EDA),low_cardinality_encodable
 3,Province,True,float64,8414861,865782,10.2887,7549079,,N/A (no full merge; see per-quarter EDA),high_cardinality_text

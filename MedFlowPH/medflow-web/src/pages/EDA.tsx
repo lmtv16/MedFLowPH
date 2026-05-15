@@ -6,7 +6,9 @@ import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
 import { MetricCard } from '../components/MetricCard'
 import { HoverDisclosurePanel } from '../components/HoverDisclosurePanel'
+import { KMeansFeatureRoleLegend } from '../components/KMeansFeatureRoleLegend'
 import { PhilgepsRawSummaryView } from '../components/PhilgepsRawSummaryView'
+import { KMEANS_FEATURE_ROLE_SET } from '../data/kmeansFeatureRoles'
 import { PageShell } from '../components/PageShell'
 import { SectionWrapper } from '../components/SectionWrapper'
 import { IMAGES } from '../data/fileManifest'
@@ -148,6 +150,7 @@ function RawSchemaPngFigure({ src, title }: { src: string; title: string }) {
 
 export function EDA() {
   const [quarterKey, setQuarterKey] = useState<string | null>(null)
+  const [highlightedFeatureRole, setHighlightedFeatureRole] = useState<string | null>(null)
   const [gallery, setGallery] = useState<{ images: GalleryImage[]; idx: number }>({
     images: [],
     idx: 0,
@@ -174,6 +177,7 @@ export function EDA() {
     }
     if (rawSchemaCsvTable) {
       const colNameIdx = rawSchemaCsvTable.headers.indexOf('column_name')
+      const conceptIdx = rawSchemaCsvTable.headers.indexOf('concept')
       return (
         <>
           {rawSchemaPreamble.length > 0 && (
@@ -197,27 +201,47 @@ export function EDA() {
               <tbody>
                 {rawSchemaCsvTable.rows.map((row, ri) => (
                   <tr key={ri} className={ri % 2 === 1 ? 'bg-muted/30' : 'bg-card'}>
-                    {row.map((cell, ci) => (
-                      <td
-                        key={ci}
-                        className={`border-t border-border px-2 py-1.5 ${ci === colNameIdx && colNameIdx >= 0 ? 'max-w-[min(28rem,55vw)] whitespace-normal break-words' : 'whitespace-nowrap'}`}
-                      >
-                        {cell}
-                      </td>
-                    ))}
+                    {row.map((cell, ci) => {
+                      const isConceptRole =
+                        ci === conceptIdx && conceptIdx >= 0 && KMEANS_FEATURE_ROLE_SET.has(cell)
+                      return (
+                        <td
+                          key={ci}
+                          className={[
+                            'border-t border-border px-2 py-1.5',
+                            ci === colNameIdx && colNameIdx >= 0
+                              ? 'max-w-[min(28rem,55vw)] whitespace-normal break-words'
+                              : 'whitespace-nowrap',
+                            isConceptRole ? 'cursor-help transition-colors hover:bg-muted/50' : '',
+                          ].join(' ')}
+                          onMouseEnter={
+                            isConceptRole ? () => setHighlightedFeatureRole(cell) : undefined
+                          }
+                          onMouseLeave={
+                            isConceptRole ? () => setHighlightedFeatureRole(null) : undefined
+                          }
+                        >
+                          {cell}
+                        </td>
+                      )
+                    })}
                   </tr>
                 ))}
               </tbody>
             </table>
+            <KMeansFeatureRoleLegend highlightedRole={highlightedFeatureRole} />
           </div>
         </>
       )
     }
     if (rawSchemaTable.text) {
       return (
-        <pre className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card p-3 font-mono text-mf-caption leading-snug text-foreground whitespace-pre">
-          {rawSchemaTable.text}
-        </pre>
+        <div className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
+          <pre className="p-3 font-mono text-mf-caption leading-snug text-foreground whitespace-pre">
+            {rawSchemaTable.text}
+          </pre>
+          <KMeansFeatureRoleLegend />
+        </div>
       )
     }
     const txtPending = !rawSchemaTable.text && !rawSchemaTable.failed
@@ -231,6 +255,7 @@ export function EDA() {
     }
     return <p className="text-mf-caption text-muted-foreground">Schema table files could not be loaded.</p>
   }, [
+    highlightedFeatureRole,
     rawSchemaCsvTable,
     rawSchemaPreamble,
     rawSchemaTable.failed,

@@ -100,7 +100,7 @@ export function PCAPage() {
             </SectionWrapper>
 
             <SectionWrapper id="pca-interactive" title="Interactive PCA">
-              <LazyIframePanel src={PCA_INTERACTIVE} title="Interactive PCA View" height={600} />
+              <LazyIframePanel src={PCA_INTERACTIVE} title="Interactive PCA" height={600} />
             </SectionWrapper>
           </div>
         </main>

@@ -1494,7 +1494,7 @@ export function Interpretation() {
             <LazyIframePanel
               id="interpretation-kmeans-3d"
               src={INTERACTIVE.kmeans3d}
-              title="Interactive 3D K‑Means PCA space"
+              title="K‑Means PCA"
               height={600}
             />
 
@@ -1699,7 +1699,7 @@ export function Interpretation() {
             <LazyIframePanel
               id="interpretation-dbscan-3d"
               src={INTERACTIVE.dbscan3d}
-              title="Interactive 3D DBSCAN PCA space"
+              title="DBSCAN PCA"
               height={600}
             />
 

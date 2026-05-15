@@ -703,7 +703,7 @@ def write_raw_schema_table(
                 "non_null_count": max(0, total_row_count - null_ct),
                 "nunique_non_null": "",
                 "nunique_how": "N/A (see EDA charts in this quarter folder)",
-                "kmeans_feature_role": kmeans_report.get(col, ""),
+                "concept": kmeans_report.get(col, ""),
             },
         )
 

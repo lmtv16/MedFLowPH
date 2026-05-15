@@ -1,4 +1,4 @@
-canonical_position,column_name,pandas_dtype,row_count,null_count,null_pct,non_null_count,kmeans_feature_role
+canonical_position,column_name,pandas_dtype,row_count,null_count,null_pct,non_null_count,concept
 1,Procuring Entity (PE),float64,8414861,865782,10.2887,7549079,high_cardinality_text
 2,Region,float64,8414861,865782,10.2887,7549079,low_cardinality_encodable
 3,Province,float64,8414861,865782,10.2887,7549079,high_cardinality_text

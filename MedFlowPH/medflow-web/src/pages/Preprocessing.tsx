@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, Clock, DollarSign, Hash, Layers } from 'lucide-react'
+import { Clock, DollarSign, FileCheck, Hash, Layers, Package } from 'lucide-react'
 import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
@@ -19,7 +19,7 @@ const RAW_VS_CLEANED = '/results/01/Exploratory Data Analysis/merged/07_raw_vs_c
 const STACKED = '/results/01/Exploratory Data Analysis/merged/08_raw_vs_cleaned_stacked_by_year.png'
 
 const DATA_CLEANING_INTRO =
-  'The analytical pipeline encompasses a rigorous end-to-end data science methodology: starting with deep data understanding of fragmented government records, proceeding through extensive cleaning and normalization, applying robust preprocessing techniques, reducing dimensionality via Principal Component Analysis (PCA), and ultimately comparing K-Means and DBSCAN clustering models to extract meaningful procurement behaviors.'
+  'Cleaning aligned schemas, removed duplicates, standardized medical filtering, and surfaced missingness so analysts could trust row counts before feature work began.'
 
 const DATA_CLEANING_STEPS: {
   n: string
@@ -67,7 +67,6 @@ const DATA_CLEANING_STEPS: {
 ]
 
 export function Preprocessing() {
-  const { data: featureRows } = useCsvData(DATA_PATHS.featureSelected)
   const { data: scaledRows } = useCsvData(DATA_PATHS.minMaxScaled)
   const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
     imgs: [],
@@ -87,21 +86,15 @@ export function Preprocessing() {
   }
 
   const scaledPreviewKeys = scaledRows.length ? Object.keys(scaledRows[0] ?? {}) : []
-  const featureCols = featureRows.length ? Object.keys(featureRows[0] ?? {}) : []
   const scaledPreview = scaledRows.slice(0, 10)
 
   return (
     <PageShell>
       <div className="min-w-0 space-y-12 overflow-x-hidden">
-        <SectionWrapper id="preprocessing-overview" title="02 - Data Preprocessing">
+        <SectionWrapper id="preprocessing-overview" title="Data Preprocessing">
           <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
             Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding
             captured categorical structure without collapsing rare procurement modes.
-          </p>
-          <p className="mb-4 text-mf-body text-muted-foreground">
-            Slides follow the §02 pipeline: feature selection, then min–max scaling diagnostics, then one-hot encoding
-            summaries. Open the lightbox from any slide; edit copy under{' '}
-            <span className="font-mono text-xs">IMAGES.eda.preprocessingCarousel</span>.
           </p>
           <LazyFigureCarousel
             items={preprocessingSlides}
@@ -112,44 +105,6 @@ export function Preprocessing() {
             ariaPrevLabel="Previous preprocessing figure"
             ariaNextLabel="Next preprocessing figure"
           />
-
-          <div className="mt-10 rounded-r-xl border-l-4 border-amber-400 bg-amber-50 p-5 dark:border-amber-500 dark:bg-amber-950/40">
-            <div className="flex gap-3">
-              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
-              <div>
-                <p className="font-semibold text-amber-900 dark:text-amber-100">
-                  Important Note About Policy Theme Scores
-                </p>
-                <p className="mt-2 text-mf-body leading-relaxed text-amber-950/90 dark:text-amber-50/90">
-                  Cluster IDs from later k-means runs are{' '}
-                  <strong className="font-semibold">not</strong> substitutes for these engineered themes: k-means
-                  partitions PCA space, while the theme scores are standalone proxies attached before scaling.
-                  Columns include{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
-                    high_risk_shortage
-                  </code>
-                  ,{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
-                    low_risk_shortage
-                  </code>
-                  ,{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">overstocking</code>,{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">understocking</code>,{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">normal_inventory</code>
-                  ,{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
-                    unequal_supply_regions
-                  </code>
-                  , and{' '}
-                  <code className="rounded bg-amber-100/80 px-1 text-xs dark:bg-amber-900/60">
-                    equal_supply_regions
-                  </code>{' '}
-                  — each constrained to [0, 1] and interpreted as procurement-process proxies rather than confirmed
-                  inventory ground truth.
-                </p>
-              </div>
-            </div>
-          </div>
         </SectionWrapper>
 
         <SectionWrapper id="cleaned-dataset-exploration" title="Cleaned Dataset Exploration">
@@ -218,24 +173,39 @@ The final dataset is smaller, but more focused on medical procurement records ne
         </SectionWrapper>
 
         <SectionWrapper id="data-cleaning" title="Data Cleaning">
-          <p className="text-mf-body leading-relaxed text-muted-foreground">{DATA_CLEANING_INTRO}</p>
+          <p className="mb-8 max-w-3xl text-mf-body leading-relaxed text-muted-foreground">
+            {DATA_CLEANING_INTRO}
+          </p>
 
-          <div className="relative mt-8 border-l-2 border-border">
-            {DATA_CLEANING_STEPS.map((step) => (
-              <div
-                key={step.n}
-                className={`relative pb-10 last:pb-0 ${step.muted ? 'opacity-60' : ''}`}
-              >
-                <div className="absolute -left-[1.54rem] top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-primary bg-card text-xs font-bold text-primary">
-                  {step.n}
-                </div>
-                <h3 className="font-heading text-mf-card-title font-semibold text-foreground">{step.title}</h3>
-                <p className="mt-2 text-mf-body text-muted-foreground">{step.body}</p>
-              </div>
-            ))}
-          </div>
+          <ol className="mx-auto max-w-3xl list-none space-y-0 p-0">
+            {DATA_CLEANING_STEPS.map((step, index) => {
+              const isLast = index === DATA_CLEANING_STEPS.length - 1
+              return (
+                <li
+                  key={step.n}
+                  className={`grid grid-cols-[2.25rem_1fr] gap-x-5 ${step.muted ? 'opacity-70' : ''}`}
+                >
+                  <div className="relative flex justify-center">
+                    <span className="relative z-10 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-background text-xs font-bold text-primary">
+                      {step.n}
+                    </span>
+                    {!isLast && (
+                      <span
+                        aria-hidden
+                        className="absolute left-1/2 top-9 bottom-0 w-px -translate-x-1/2 bg-border"
+                      />
+                    )}
+                  </div>
+                  <div className={`min-w-0 rounded-xl border border-border bg-card p-5 shadow-sm ${isLast ? '' : 'mb-8'}`}>
+                    <h3 className="font-heading text-mf-card-title font-semibold text-foreground">{step.title}</h3>
+                    <p className="mt-2 text-mf-body leading-relaxed text-muted-foreground">{step.body}</p>
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
 
-          <div className="mt-8 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 p-4 dark:bg-amber-950/30">
+          <div className="mt-8 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 p-4 dark:border-amber-500 dark:bg-amber-950/40">
             <p className="text-mf-card-title font-semibold text-amber-900 dark:text-amber-200">Note on 2022 data</p>
             <p className="mt-2 text-mf-body leading-relaxed text-amber-900/90 dark:text-amber-100/90">
               The 2022 raw exports were treated as headerless files and read using a fixed 46-column PhilGEPS schema so
@@ -266,6 +236,16 @@ The final dataset is smaller, but more focused on medical procurement records ne
                 icon: DollarSign,
                 name: 'log1p_Approved_Budget_of_the_Contract',
                 text: 'Log-transformed approved budget — the planned expenditure ceiling for the procurement.',
+              },
+              {
+                icon: Package,
+                name: 'log1p_Item_Budget',
+                text: 'Log-transformed line-item budget — planned spend for the specific procured item, clipped at zero before log1p.',
+              },
+              {
+                icon: FileCheck,
+                name: 'log1p_Contract_Amount',
+                text: 'Log-transformed contract amount — the awarded contract value used in PCA and clustering alongside other monetary features.',
               },
             ].map(({ icon: Icon, name, text }) => (
               <div key={name} className="rounded-xl border border-border bg-card p-4">
@@ -301,38 +281,6 @@ The final dataset is smaller, but more focused on medical procurement records ne
             />
           ))}
         </div>
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-foreground">Selected feature manifest</h3>
-          <p className="text-xs text-muted-foreground mt-2">
-            Source:{' '}
-            <code>{DATA_PATHS.featureSelected}</code>
-          </p>
-          <div className="mt-4 max-h-[420px] overflow-auto rounded-xl border border-border text-xs">
-            <table className="min-w-full divide-y divide-border text-left text-mf-body">
-              <thead className="bg-muted/50 text-[11px] uppercase tracking-wide text-muted-foreground">
-                <tr>
-                  {featureCols.map((col) => (
-                    <th key={col} className="sticky top-0 z-10 whitespace-nowrap bg-muted/50 px-3 py-2">
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border bg-card">
-                {featureRows.slice(0, 200).map((row, rIdx) => (
-                  <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-card' : 'bg-muted/30'}>
-                    {featureCols.map((col) => (
-                      <td key={col + rIdx} className="px-3 py-2 text-[11px] text-mf-muted whitespace-nowrap">
-                        {row[col]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
         <SectionHeader title="Min–Max scaling diagnostics" subtitle="Post‑scaling marginals and correlations." />
         <div className="grid gap-6 md:grid-cols-2">
           {IMAGES.preprocessing.scaling.map((img, idx) => (
