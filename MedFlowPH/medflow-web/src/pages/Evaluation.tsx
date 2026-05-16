@@ -22,6 +22,7 @@ import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
 import { useCsvData } from '../hooks/useCsvData'
+import { tooltipFormatter } from '../utils/chartFormatters'
 
 const kmeansEvalSlides = IMAGES.eda.kmeansEvaluationCarousel
 const dbscanEvalSlides = IMAGES.eda.dbscanEvaluationCarousel
@@ -311,11 +312,10 @@ export function Evaluation() {
                 <ZAxis range={[64, 64]} />
                 <Tooltip
                   cursor={{ strokeDasharray: '3 3' }}
-                  formatter={(value: number, name: string) => [
-                    typeof value === 'number' ? value.toFixed(3) : value,
-                    name === 'silhouette' ? 'Silhouette' : name,
-                  ]}
-                  labelFormatter={(label) => `ε = ${Number(label).toFixed(2)}`}
+                  formatter={tooltipFormatter}
+                  labelFormatter={(label) =>
+                    `ε = ${Number(label ?? 0).toFixed(2)}`
+                  }
                 />
                 <Legend
                   verticalAlign="top"

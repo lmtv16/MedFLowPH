@@ -52,9 +52,6 @@ Silhouette, Calinski-Harabasz, and composite scores are normalized directly beca
 
 The yellow star marks the selected value: K = 6. This K performed best for silhouette, best for Davies-Bouldin after inversion, and strongest overall in the composite score.`
 
-const kMeansEvaluationFigurePlaceholder =
-  'Placeholder — Add a short interpretation: how this diagnostic supports choosing k and validating the K-means configuration on the PhilGEPS medical slice.'
-
 const dbscanEvaluationFigurePlaceholder =
   'Placeholder — Add a short interpretation: how this DBSCAN grid diagnostic informs epsilon / minPts choices and parameter stability on the PhilGEPS medical slice.'
 
