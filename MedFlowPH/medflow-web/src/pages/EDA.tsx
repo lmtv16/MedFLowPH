@@ -287,10 +287,11 @@ export function EDA() {
                 Exploring and preparing PhilGEPS medical procurement data before clustering.
               </p>
               <p className="mb-6 max-w-3xl text-mf-body leading-relaxed text-muted-foreground">
-                This section explains how the raw PhilGEPS procurement records were examined, cleaned, transformed, and
-                prepared for unsupervised clustering. The process started from millions of raw procurement records,
-                filtered them into medical-related purchases, handled data quality issues, engineered useful features,
-                and prepared the dataset for PCA, K-means, and DBSCAN analysis.
+              This phase reviews raw PhilGEPS medical-related procurement data to check for missing
+              values, duplicates, and inconsistent formats. Key features examined include Contract Amount, 
+              Item Budget, Approved Budget of the Contract, and Quantity. Patterns in these features, along 
+              with regions and agencies, are explored to select relevant variables. The output guides data 
+              cleaning and preparation for PCA, K-means, and DBSCAN clustering. 
               </p>
               <div className="mb-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
                 {heroMetrics.map((m) => (
@@ -460,19 +461,11 @@ export function EDA() {
             <SectionWrapper id="du-conclusion" title="Data Understanding Summary">
               <div className="rounded-2xl border border-border bg-muted/70 p-8 text-mf-body text-foreground">
                 <p className="leading-relaxed">
-                  This walkthrough traced PhilGEPS medical procurement data from raw chaos—millions of heterogeneous rows
-                  and forty-six administrative columns—through disciplined cleaning, exploratory validation, and structured
-                  preprocessing that prepares a{' '}
-                  <span className="font-semibold text-primary">487,605</span>-row tensor ready for PCA-backed clustering.
-                </p>
-                <p className="mt-4 text-mf-body leading-relaxed">
-                  <span className="font-semibold text-primary">K-means</span> delivers a compact six-cluster story that
-                  pairs cleanly with policy-theme overlays, whereas{' '}
-                  <span className="font-semibold text-mf-secondary">DBSCAN</span> exposes dense procurement islands alongside a
-                  substantial noise reservoir—choose <span className="font-semibold text-primary">K-means</span> when
-                  executives need stable cohort labels and leverage{' '}
-                  <span className="font-semibold text-mf-secondary">DBSCAN</span> when investigators must audit outliers or hunt
-                  for micro-patterns before collapsing segments downstream.
+                This phase reviews the raw PhilGEPS medical procurement data to identify issues like missing 
+                values, duplicates, and inconsistent formats. Key features such as quantities, budgets, contract 
+                amounts, dates, and regions are analyzed to guide variable selection. This provides a clear 
+                dataset overview to prepare for cleaning, PCA, and clustering with K-means and DBSCAN. 
+            
                 </p>
               </div>
             </SectionWrapper>

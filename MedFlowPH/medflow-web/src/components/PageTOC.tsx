@@ -101,6 +101,7 @@ export const TOC_LANDING: PageTOCSection[] = [
   { id: 'data-description', label: 'Schema' },
   { id: 'dataset-snapshot', label: 'Snapshot' },
   { id: 'recommendations', label: 'Recommendations' },
+  { id: 'conclusion', label: 'Conclusion' },
   { id: 'references', label: 'References' },
 ]
 

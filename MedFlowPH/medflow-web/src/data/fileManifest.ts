@@ -8,7 +8,7 @@ export type ImageManifestItem = {
 }
 
 const mergedMissingnessExplanation =
-  'This chart shows that all columns in the cleaned PhilGEPS medical procurement dataset have 0 percent missing values. The cleaning process produced a complete dataset with 487,605 records, making it ready for preprocessing, feature engineering, and clustering.'
+  'This chart shows that all columns in the cleaned PhilGEPS medical-related procurement dataset have 0 percent missing values. The cleaning process produced a complete dataset with 487,605 records, making it ready for preprocessing, feature engineering, and clustering.'
 
 const mergedDtypeOverviewExplanation = `Most columns in the cleaned PhilGEPS dataset are text or categorical fields. This is expected because procurement records include descriptions, locations, agencies, statuses, and supplier details.
 

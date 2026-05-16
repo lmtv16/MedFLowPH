@@ -7,7 +7,9 @@ import {
   ExternalLink,
   FileText,
   Filter,
+  GitCompare,
   Hash,
+  Layers,
   LayoutDashboard,
   MapPin,
   Package,
@@ -62,15 +64,10 @@ const RAW_VS_CLEANED_FIG = IMAGES.eda.merged.find((i) =>
 ) ?? IMAGES.eda.merged[6]
 
 const MEDICAL_KEYWORD_PILLS = [
-  'medical',
-  'health',
-  'hospital',
-  'clinic',
-  'medicine',
-  'pharmaceutical',
-  'surgical',
-  'dental',
-  'laboratory',
+  "medical", "medicine", "pharmaceutical", "drug", "vaccine",
+    "hospital", "laboratory", "diagnostic", "surgical",
+    "clinic", "health", "therapeutic", "antibiotic",
+    "syringe", "test kit", "reagent", "biomedical",
 ] as const
 
 const DATA_FIELD_CATEGORIES: { label: string; icon: typeof Building2 }[] = [
@@ -159,16 +156,16 @@ export function Landing() {
             <SectionWrapper id="background" title="Background">
               <div className="space-y-4 text-mf-body leading-relaxed text-muted-foreground">
                 <p>
-                  MedFlow PH represents a comprehensive attempt to demystify the complex web of public health procurement in the
-                  Philippines. By analyzing data from the Philippine Government Electronic Procurement System (PhilGEPS), this study
-                  aims to identify non-obvious groupings and patterns in how medical supplies and equipment are sourced across
-                  different regions and facility types.
+                The study uses K-means and DBSCAN clustering to analyze aggregated medical-related 
+                procurement and distribution data, revealing patterns such as understocking, overstocking, 
+                high-value concentration, and delayed procurement across Philippine public health facilities.
+
                 </p>
                 <p>
-                  The analytical pipeline encompasses a rigorous end-to-end data science methodology: starting with deep data
-                  understanding of fragmented government records, proceeding through extensive cleaning and normalization, applying
-                  robust preprocessing techniques, reducing dimensionality via Principal Component Analysis (PCA), and ultimately
-                  comparing K-Means and DBSCAN clustering models to extract meaningful procurement behaviors.
+                By converting raw procurement records into interpretable clusters and visual insights, it provides
+                actionable guidance for policymakers and health administrators to monitor supply risks, improve 
+                resource allocation, and enhance equitable access to essential medical resources.
+
                 </p>
               </div>
             </SectionWrapper>
@@ -178,11 +175,12 @@ export function Landing() {
                 <div>
                   <h3 className="font-heading text-mf-card-title font-semibold text-foreground">General Objective</h3>
                   <p className="mt-3">
-                    The objective of this study is to analyze aggregated and non-personal medical-related procurement and
-                    distribution data from public health facilities in the Philippines using unsupervised machine learning
-                    techniques, specifically clustering analysis, in order to identify distribution patterns and potential
-                    systemic risks related to medicine availability, such as shortages, uneven distribution, or inefficiencies in
-                    supply allocation.
+                  The objective of this study is to analyze aggregated and non-personal medical-related 
+                  procurement records from Philippine Government Electronic Procurement System (PhilGEPS)
+                  data using unsupervised clustering techniques in order to identify procurement behavior 
+                  patterns and possible systemic procurement risk indicators related to resource allocation, 
+                  procurement concentration, delays, and supply-related inefficiencies. 
+
                   </p>
                 </div>
                 <div>
@@ -193,12 +191,12 @@ export function Landing() {
                       facilities to identify overall procurement and distribution patterns.
                     </li>
                     <li>
-                      To apply unsupervised clustering algorithms, specifically K-means and DBSCAN, to group public health
-                      facilities based on similarities and variations in medicine procurement and distribution behavior.
+                    To apply unsupervised clustering algorithms, specifically K-means and DBSCAN, to group medical-related 
+                    procurement records based on similarities and variations in procurement behavior.
                     </li>
                     <li>
-                      To develop a web-based analytical platform that presents clustering results through cluster summaries,
-                      visualizations, and comparative profiles.
+                    To develop a web-based results dashboard that presents clustering results through cluster summaries, 
+                    visualizations, and comparative profiles.
                     </li>
                     <li>
                       To evaluate and compare the clustering results of K-means and DBSCAN using appropriate validation metrics,
@@ -213,9 +211,10 @@ export function Landing() {
               <div className="grid gap-8 md:grid-cols-2">
                 <div className="space-y-4">
                   <p className="text-mf-body leading-relaxed text-muted-foreground">
-                    The foundation of MedFlow PH is built on open data from the Philippine Government Electronic Procurement System
-                    (PhilGEPS). We sourced award notices spanning from 2020 to 2025, capturing a critical period that includes
-                    pandemic-era emergency purchases and standard operations.
+                  MedFlow PH is built using publicly available procurement data from the Philippine Government Electronic Procurement System (PhilGEPS).
+                  The study used award notice records from 2020 to 2025, covering both pandemic-related emergency procurement and regular medical procurement 
+                  activities during this period.
+
                   </p>
                   <div className="inline-flex flex-col rounded-xl border border-primary/30 bg-primary/10 px-5 py-4">
                     <p className="text-mf-metric font-bold tabular-nums text-primary">6 Years</p>
@@ -249,16 +248,17 @@ export function Landing() {
                   decoding="async"
                 />
                 <figcaption className="border-t border-border bg-card px-4 py-3 text-center text-mf-caption leading-relaxed text-muted-foreground">
-                  Records retained after medical filtering across different years, showing the dramatic reduction from millions of
-                  general records to thousands of highly relevant medical procurements.
+                Number of records kept after filtering medical-related procurement data from different years, reducing millions of general
+                procurement records into a smaller set of relevant medical procurement records. 
                 </figcaption>
               </figure>
             </SectionWrapper>
 
             <SectionWrapper id="data-description" title="Data Description">
               <p className="text-mf-body leading-relaxed text-muted-foreground">
-                The PhilGEPS dataset presents a high-dimensional view of each transaction. Each row represents a single awarded
-                contract or item, encompassing administrative, financial, and temporal details.
+              The PhilGEPS dataset contains information on government procurement transactions. Each row represents 
+              one awarded contract or item and includes details about the buyer, cost, dates, and other relevant transaction information. 
+
               </p>
               <div className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
                 <h3 className="font-heading text-mf-card-title font-semibold text-foreground">Key Field Categories</h3>
@@ -356,27 +356,70 @@ export function Landing() {
               </div>
             </SectionWrapper>
 
-            <SectionWrapper id="recommendations" title="Recommendations">
+            <SectionWrapper id="conclusion" title="Conclusion">
               <p className="text-mf-body text-muted-foreground">
-                Future work on MedFlow PH may extend the analysis in three key directions — richer data, better interactivity,
-                and expert-validated cluster interpretation.
+              The study showed that cleaned PhilGEPS medical procurement data reveal meaningful procurement
+              patterns. K-means produced six clear clusters, while DBSCAN highlighted density and outliers. The MedFlow
+              PH dashboard effectively presents these results, confirming K-means as the primary, interpretable model.
               </p>
-              <div className="mt-6 grid gap-6 md:grid-cols-3">
+              <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
                 {[
                   {
                     icon: Filter,
-                    title: 'Enrich With External Health Facility Data',
-                    text: 'Future improvements may include adding facility type, service capacity, population served, or regional health demand indicators. These additional variables could make the clusters more meaningful for health planning and policy discussion.',
+                    title: 'Objective 1: Analysis of Aggregated Medical-Related Procurement Records from PhilGEPS ',
+                    text: 'The study found that cleaned PhilGEPS medical procurement records (487,605) show sufficient variation in quantities, budgets, contracts, timing, regions, and agencies to reveal meaningful procurement behavior patterns through clustering.',
                   },
                   {
                     icon: LayoutDashboard,
-                    title: 'Build Interactive Dashboard Features',
-                    text: 'Users may benefit from filters by year, region, procurement mode, agency, or cluster. Interactive dashboards can help users explore how procurement behavior changes across time and location.',
+                    title: 'Objective 2: Application of K-means and DBSCAN Clustering Algorithms',
+                    text: 'The study showed that K-means effectively grouped medical procurement records into six meaningful clusters, while DBSCAN offered supplementary insights on density and outliers, serving as a supporting model. ',
                   },
                   {
                     icon: UserCheck,
-                    title: 'Validate Clusters With Domain Experts',
-                    text: 'Since clustering is unsupervised, expert review is important to confirm whether the discovered procurement groups are meaningful in real-world public health practice.',
+                    title: 'Objective 3: Development of the MedFlow PH Web-Based Results Dashboard',
+                    text: 'The study concluded that the MedFlow PH dashboard clearly and effectively presented clustering results and analytics, making complex procurement patterns understandable for stakeholders.',
+                  },
+                  {
+                    icon: Calendar,
+                    title: 'Objective 4: Evaluation and Comparison of K-means and DBSCAN Results',
+                    text: 'The study concluded that K-means was the most suitable primary clustering model for MedFlow PH, producing stable and interpretable clusters with K = 6 and a silhouette score of 0.386. DBSCAN was useful for identifying noise and density patterns but less effective for clear segment summaries, serving only as a supporting comparison.',
+                  },
+                ].map(({ icon: Icon, title, text }) => (
+                  <div key={title} className="rounded-xl border border-border bg-card p-6">
+                    <Icon className="h-8 w-8 text-primary" aria-hidden />
+                    <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">{title}</h3>
+                    <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="recommendation" title="Recommendation">
+              <p className="text-mf-body text-muted-foreground">
+              Future studies should improve PhilGEPS data quality, include additional sources, explore more clustering methods, enhance the MedFlow PH dashboard with interactive features, 
+              and evaluate clusters using metrics, interpretability, and stakeholder validation.
+              </p>
+              <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                {[
+                  {
+                    icon: Database,
+                    title: 'Objective 1: PhilGEPS Data Collection, Cleaning, and Procurement Dataset Improvement',
+                    text: 'Future studies should improve PhilGEPS data quality, include additional sources like inventory and delivery records, and use privacy-safe contextual variables to enhance cluster interpretation and analysis.',
+                  },
+                  {
+                    icon: Layers,
+                    title: 'Objective 2: Improvement of Clustering Models and Analytical Methods',
+                    text: 'Future studies should test more clustering methods, adjust parameters, and interpret clusters as analytical insights, not definitive evidence.',
+                  },
+                  {
+                    icon: GitCompare,
+                    title: 'Objective 3: Enhancement of the MedFlow PH Web-Based Dashboard',
+                    text: 'Future dashboard updates should enhance interactivity, filtering, explanatory notes, downloads, and modular design for easier updates and stakeholder access.',
+                  },
+                  {
+                    icon: LayoutDashboard,
+                    title: 'Objective 4: Continuous Model Evaluation and Validation',
+                    text: 'Future studies should assess clustering using both metrics and interpretability, validate clusters with real procurement indicators, and involve stakeholder review, while also considering stability, outliers, and sensitivity analyses.',
                   },
                 ].map(({ icon: Icon, title, text }) => (
                   <div key={title} className="rounded-xl border border-border bg-card p-6">
@@ -394,12 +437,11 @@ export function Landing() {
                   <Database className="h-8 w-8 text-primary" aria-hidden />
                   <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Data Source</h3>
                   <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
-                    Philippine Government Electronic Procurement System (PhilGEPS) — public procurement award notices, 2020–2025.
-                    Filtered to medicine-related procurement entries using the MedFlow PH keyword pipeline.
+                    Philippine Government Electronic Procurement System (PhilGEPS),  public procurement award notices, 
+                    2020–2025. Filtered to medical-related procurement entries using the MedFlow PH keyword pipeline.
                   </p>
                   <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
-                    Source code pipeline: Steps 00–07 (Data Understanding, Cleaning, Preprocessing, PCA, K-Means, DBSCAN, Model
-                    Comparison)
+                    
                   </p>
                   <a
                     href="https://www.philgeps.gov.ph"
@@ -419,7 +461,10 @@ export function Landing() {
                     <li>Louis Mathew T. Vergara — Researcher</li>
                   </ul>
                   <p className="mt-4 text-mf-body text-muted-foreground">
-                    Annotated by: Cedric Conol (Data Analyst)
+                    Content Adviser: Davie B. Balmadrid, Deng
+                  </p>
+                  <p className="mt-4 text-mf-body text-muted-foreground">
+                    Programming Adviser: Aris J. Ordonez, DIT
                   </p>
                 </div>
                 <div className="rounded-xl border border-border bg-card p-6 shadow-sm">

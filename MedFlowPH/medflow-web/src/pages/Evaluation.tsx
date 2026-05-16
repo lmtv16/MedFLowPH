@@ -258,7 +258,7 @@ export function Evaluation() {
             Figure DB‑Sweep: silhouette vs epsilon (hue = min_samples)
           </h3>
           <p className="mt-2 text-mf-caption text-mf-muted">
-            Source: `/data/05B/DBSCAN_Evaluation/dbscan_metrics_grid.csv`.
+            
           </p>
           <div className="mt-6 w-full min-w-0">
             {dbscanGridLoading ? (

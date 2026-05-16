@@ -7,8 +7,7 @@ import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
 import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
-import { DATA_PATHS, IMAGES } from '../data/fileManifest'
-import { useCsvData } from '../hooks/useCsvData'
+import { IMAGES } from '../data/fileManifest'
 
 // Cleaned Dataset Exploration (merged EDA)
 const NUMERIC_CORR = '/results/01/Exploratory Data Analysis/merged/04_correlation_numeric.png'
@@ -19,7 +18,7 @@ const RAW_VS_CLEANED = '/results/01/Exploratory Data Analysis/merged/07_raw_vs_c
 const STACKED = '/results/01/Exploratory Data Analysis/merged/08_raw_vs_cleaned_stacked_by_year.png'
 
 const DATA_CLEANING_INTRO =
-  'Cleaning aligned schemas, removed duplicates, standardized medical filtering, and surfaced missingness so analysts could trust row counts before feature work began.'
+  'The dataset was cleaned by aligning schemas, removing duplicate records, applying consistent medical-related filters, and addressing missing values. This ensured the data was complete, accurate, and reliable before any further analysis or processing. '
 
 const DATA_CLEANING_STEPS: {
   n: string
@@ -67,7 +66,6 @@ const DATA_CLEANING_STEPS: {
 ]
 
 export function Preprocessing() {
-  const { data: scaledRows } = useCsvData(DATA_PATHS.minMaxScaled)
   const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
     imgs: [],
     idx: 0,
@@ -85,16 +83,14 @@ export function Preprocessing() {
     setGallery({ imgs: images, idx: i })
   }
 
-  const scaledPreviewKeys = scaledRows.length ? Object.keys(scaledRows[0] ?? {}) : []
-  const scaledPreview = scaledRows.slice(0, 10)
-
   return (
     <PageShell>
       <div className="min-w-0 space-y-12 overflow-x-hidden">
         <SectionWrapper id="preprocessing-overview" title="Data Preprocessing">
           <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
-            Feature selection reduced collinearity, min-max scaling harmonized magnitudes, and one-hot encoding
-            captured categorical structure without collapsing rare procurement modes.
+          During data preprocessing, important features were selected to avoid redundancy, 
+          numerical values were scaled to a common range, and categorical information was converted 
+          into a format that the analysis could use while keeping rare procurement types separate.
           </p>
           <LazyFigureCarousel
             items={preprocessingSlides}
@@ -216,9 +212,9 @@ The final dataset is smaller, but more focused on medical procurement records ne
 
         <SectionWrapper id="feature-engineering" title="Feature Engineering">
           <p className="text-mf-body leading-relaxed text-muted-foreground">
-            Several procurement fields were transformed into numerical features before clustering. Monetary columns were
-            converted to numeric values, clipped at zero, and transformed using log1p. This reduced the effect of
-            extremely large procurement values while preserving meaningful differences between small and large purchases.
+          Procurement data was converted into numerical features for clustering. 
+          Monetary values were standardized and transformed to reduce the impact of 
+          extremely large amounts while keeping meaningful differences between smaller and larger transactions. 
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {[
@@ -297,35 +293,6 @@ The final dataset is smaller, but more focused on medical procurement records ne
               }
             />
           ))}
-        </div>
-
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-foreground">Scaled matrix preview</h3>
-          <p className="mt-2 text-xs text-muted-foreground">First ten rows retained for readability.</p>
-          <div className="mt-4 max-h-96 overflow-auto rounded-xl border border-border text-[11px]">
-            <table className="min-w-full divide-y divide-border text-left">
-              <thead className="sticky top-0 z-10 bg-muted/50 text-[11px] uppercase tracking-wide text-muted-foreground">
-                <tr>
-                  {scaledPreviewKeys.map((col) => (
-                    <th key={col} className="whitespace-nowrap px-3 py-2 bg-muted/50">
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border bg-card">
-                {scaledPreview.map((row, rIdx) => (
-                  <tr key={rIdx}>
-                    {scaledPreviewKeys.map((col) => (
-                      <td key={col + rIdx} className="px-3 py-2 text-[11px] text-mf-muted whitespace-nowrap">
-                        {row[col]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         </div>
 
         <SectionHeader title="One‑Hot encoding footprints" subtitle="Dummy proliferation by source cohort." />
