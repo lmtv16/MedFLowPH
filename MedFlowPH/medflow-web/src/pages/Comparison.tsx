@@ -69,7 +69,9 @@ export function Comparison() {
     ?.trim()
 
   const galleryImages = IMAGES.comparison.map((item) => ({ src: item.src, title: item.title }))
-  const sideBySideGalleryIdx = IMAGES.comparison.findIndex((img) => img.src.includes('side_by_side'))
+  const sideBySideGalleryIdx = IMAGES.comparison.findIndex((img) =>
+    img.src.includes('kmeans_vs_DBSCAN'),
+  )
   const sideBySideAsset =
     sideBySideGalleryIdx >= 0 ? IMAGES.comparison[sideBySideGalleryIdx] : undefined
 

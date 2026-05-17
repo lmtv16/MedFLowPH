@@ -2,6 +2,7 @@ import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, Flag, LayoutGrid, Map
 import type { PointerEvent, ReactNode } from 'react'
 import { Children, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ImageCard } from '../components/ImageCard'
+import { DbscanSemanticLegend } from '../components/DbscanSemanticLegend'
 import { LazyIframePanel } from '../components/LazyIframePanel'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
@@ -1696,12 +1697,15 @@ export function Interpretation() {
           </SectionWrapper>
 
           <SectionWrapper id="interpretation-section-dbscan">
-            <LazyIframePanel
-              id="interpretation-dbscan-3d"
-              src={INTERACTIVE.dbscan3d}
-              title="DBSCAN PCA"
-              height={600}
-            />
+            <div className="space-y-3">
+              <LazyIframePanel
+                id="interpretation-dbscan-3d"
+                src={INTERACTIVE.dbscan3d}
+                title="DBSCAN(PCA)"
+                height={600}
+              />
+              <DbscanSemanticLegend />
+            </div>
 
             <SectionWrapper id="interpretation-dbscan-insights">
             <SectionHeader
@@ -1862,17 +1866,21 @@ export function Interpretation() {
             </div>
           </SectionWrapper>
 
-          </SectionWrapper>
+            <p className="mb-8 text-mf-body leading-relaxed text-muted-foreground">
+              Legend matches the featured DBSCAN groups below: clusters 0, 119, 25, 26, and 27, plus noise and pooled
+              minor clusters. Click points for row details. Use the policy evidence charts for per-dimension procurement
+              distributions.
+            </p>
 
-          <SectionWrapper id="interpretation-policy-dbscan">
-            <SectionHeader
-              title="Evidences (DBSCAN)"
-              subtitle="Policy Evidence: procurement dimension bar charts for DBSCAN clusters 0, 119, 25–27, noise, and pooled cluster_other."
-              icon={Scale}
-            />
+            <SectionWrapper id="interpretation-policy-dbscan">
+              <SectionHeader
+                title="Evidences (DBSCAN)"
+                subtitle="Policy Evidence: procurement dimension bar charts for DBSCAN clusters 0, 119, 25–27, noise, and pooled cluster_other."
+                icon={Scale}
+              />
 
-            <div className="mb-4 flex flex-wrap gap-2">
-              {DBSCAN_POLICY_EVIDENCE_TABS.map(({ folder, label }) => (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {DBSCAN_POLICY_EVIDENCE_TABS.map(({ folder, label }) => (
                 <button
                   key={folder}
                   type="button"
@@ -1904,6 +1912,7 @@ export function Interpretation() {
                 />
               ))}
             </div>
+            </SectionWrapper>
           </SectionWrapper>
         </div>
 

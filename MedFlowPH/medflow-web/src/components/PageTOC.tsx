@@ -185,6 +185,11 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
   },
   { id: 'interpretation-dbscan-insights', label: 'Cluster Insights & Interpretation (DBSCAN)', nested: true },
   {
+    id: 'interpretation-policy-dbscan',
+    label: 'DBSCAN policy evidence',
+    nested: true,
+  },
+  {
     id: 'interpretation-dbscan-cluster-summary',
     label: 'Overall cluster summary (DBSCAN)',
     nested: true,
@@ -195,11 +200,6 @@ export const TOC_INTERPRETATION: PageTOCSection[] = [
     nested: true,
   },
 
-  {
-    id: 'interpretation-policy-dbscan',
-    label: 'DBSCAN evidences',
-    tocParentId: 'interpretation-section-dbscan',
-  },
 ]
 
 export const TOC_COMPARISON: PageTOCSection[] = [

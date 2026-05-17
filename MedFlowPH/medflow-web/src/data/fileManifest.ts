@@ -449,7 +449,7 @@ export const IMAGES = {
       title: 'Metric comparison — K‑Means vs. DBSCAN',
     },
     {
-      src: '/results/07/Model_Comparison/kmeans_vs_dbscan_side_by_side.png',
+      src: '/results/07/Model_Comparison/kmeans_vs_DBSCAN.jpg',
       title: 'Side‑by‑side overview',
     },
     {
@@ -474,7 +474,7 @@ export const IMAGES = {
 export const INTERACTIVE = {
   pca3d: '/results/03/Clustering/pca_space_pc123_3d_interactive.html',
   kmeans3d: '/results/04/PCA_Cluster/pca_space_pc123_3d_kmeans_interactive.html',
-  dbscan3d: '/results/04B/PCA_Cluster/pca_space_pc123_3d_dbscan_interactive.html',
+  dbscan3d: '/results/04Bdev/PCA_Cluster/pca_space_pc123_3d_dbscan_interactive.html',
 } as const
 
 export const DATA_PATHS = {
@@ -489,5 +489,6 @@ export const DATA_PATHS = {
   clusterSemanticMap: '/results/06/Interpretation/cluster_semantic_map.csv',
   dbscanThemeProfiles: '/results/06B/Interpretation/dbscan_cluster_theme_profiles.csv',
   dbscanSemanticMap: '/results/06B/Interpretation/dbscan_cluster_semantic_map.csv',
+  dbscanSemanticLegendTable: '/results/04Bdev/PCA_Cluster/dbscan_semantic_legend_table.txt',
   modelComparisonSummary: '/data/07/Model_Comparison/kmeans_vs_dbscan_summary.csv',
 } as const

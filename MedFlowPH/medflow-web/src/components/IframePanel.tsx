@@ -7,9 +7,10 @@ export type IframePanelProps = {
   height?: number
   /** Optional anchor id for in-page TOC / deep links */
   id?: string
+  onIframeLoad?: (e: React.SyntheticEvent<HTMLIFrameElement>) => void
 }
 
-export function IframePanel({ src, title, height = 600, id }: IframePanelProps) {
+export function IframePanel({ src, title, height = 600, id, onIframeLoad }: IframePanelProps) {
   const [loaded, setLoaded] = useState(false)
 
   return (
@@ -31,7 +32,10 @@ export function IframePanel({ src, title, height = 600, id }: IframePanelProps) 
           style={{ height, maxHeight: 'min(85vh, 900px)' }}
           loading="lazy"
           sandbox="allow-scripts allow-same-origin"
-          onLoad={() => setLoaded(true)}
+          onLoad={(e) => {
+            setLoaded(true)
+            onIframeLoad?.(e)
+          }}
         />
       </div>
     </section>
