@@ -1,5 +1,4 @@
-﻿import Papa from 'papaparse'
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import { PageTOC, TOC_EDA } from '../components/PageTOC'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
@@ -15,31 +14,38 @@ import { IMAGES } from '../data/fileManifest'
 
 // Raw Understanding
 const RAW_SCHEMA = '/results/00/Raw Dataset Schema/philgeps_raw_schema_table.png'
-const RAW_SCHEMA_TABLE = '/results/00/Raw Dataset Schema/philgeps_raw_schema_table.txt'
-const RAW_SCHEMA_TABLE_CSV = '/results/00/Raw Dataset Schema/philgeps_raw_schema_table.csv'
+const RAW_SCHEMA_TXT = '/results/00/Raw Dataset Schema/philgeps_raw_schema.txt'
 const RAW_SUMMARY = '/results/00/Summaries/philgeps_understanding_summary.txt'
 
-const RAW_SCHEMA_TABLE_CSV_COLUMNS: readonly string[] = [
+const RAW_SCHEMA_HEADERS: readonly string[] = [
   'canonical_position',
   'column_name',
+  'in_canonical_46',
   'pandas_dtype',
   'row_count',
   'null_count',
   'null_pct',
   'non_null_count',
+  'nunique_non_null',
+  'nunique_how',
   'kmeans_feature_role',
 ]
 
-const RAW_SCHEMA_CSV_HEADER_LABELS: Record<string, string> = {
+const RAW_SCHEMA_HEADER_LABELS: Record<string, string> = {
   canonical_position: '#',
   column_name: 'Column',
+  in_canonical_46: 'In canonical 46',
   pandas_dtype: 'dtype',
   row_count: 'Rows',
   null_count: 'Nulls',
   null_pct: 'Null %',
   non_null_count: 'Non-null',
-  kmeans_feature_role: 'K-means role',
+  nunique_non_null: 'nunique (non-null)',
+  nunique_how: 'nunique how',
+  kmeans_feature_role: 'Concepts',
 }
+
+const KMEANS_ROLE_PATTERN = [...KMEANS_FEATURE_ROLE_SET].join('|')
 
 
 const heroMetrics = [
@@ -66,36 +72,58 @@ function sortedQuarterYears(keys: readonly string[]): number[] {
 
 const QUARTER_YEARS = sortedQuarterYears(quarterPresets)
 
-/** Preamble lines from the .txt export — everything before the fixed-width table. */
-function rawSchemaTxtPreambleLines(text: string): string[] {
+/** Preamble + full schema table from philgeps_raw_schema.txt (whitespace export). */
+function parsePhilgepsRawSchemaTxt(text: string): {
+  preamble: string[]
+  headers: string[]
+  rows: string[][]
+} | null {
   const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n')
-  const out: string[] = []
-  for (const line of lines) {
-    if (/^\s*canonical_position\s+/.test(line)) break
-    if (line.trim()) out.push(line.trimEnd())
+  let headerIdx = -1
+  for (let i = 0; i < lines.length; i++) {
+    if (/^\s*canonical_position\b/.test(lines[i])) {
+      headerIdx = i
+      break
+    }
   }
-  return out
-}
+  if (headerIdx < 0) return null
 
-function parseRawSchemaTableCsv(raw: string): { headers: string[]; rows: string[][] } | null {
-  const parsed = Papa.parse<Record<string, string>>(raw, {
-    header: true,
-    skipEmptyLines: 'greedy',
-    transformHeader: (h) => h.trim(),
-  })
-  if (parsed.errors.length && !parsed.data.length) return null
-  const fields = parsed.meta.fields?.filter(Boolean) ?? []
-  if (!fields.length || !parsed.data.length) return null
+  const preamble = lines
+    .slice(0, headerIdx)
+    .map((l) => l.trimEnd())
+    .filter((l) => l.trim())
+  const rowRe = new RegExp(
+    `^\\s*(\\d+)\\s+(.+?)\\s+(True|False)\\s+(float64|object)\\s+(\\d+)\\s+(\\d+)\\s+([\\d.]+)\\s+(\\d+)\\s+(.+?)\\s+(${KMEANS_ROLE_PATTERN})\\s*$`,
+  )
+  const rows: string[][] = []
 
-  const headers = RAW_SCHEMA_TABLE_CSV_COLUMNS.filter((k) => fields.includes(k))
-  if (!headers.length) return null
+  for (let i = headerIdx + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line.trim()) continue
+    const m = line.match(rowRe)
+    if (!m) continue
+    const [, pos, colName, inCanon, dtype, rowCount, nullCount, nullPct, nonNull, nuniqueRest, role] =
+      m
+    const nuniqueParts = nuniqueRest.trim().split(/\s{2,}/).filter(Boolean)
+    const nuniqueNonNull = nuniqueParts[0] ?? ''
+    const nuniqueHow = nuniqueParts[1] ?? nuniqueNonNull
+    rows.push([
+      pos,
+      colName.trim(),
+      inCanon,
+      dtype,
+      rowCount,
+      nullCount,
+      nullPct,
+      nonNull,
+      nuniqueNonNull,
+      nuniqueHow,
+      role,
+    ])
+  }
 
-  const rows = parsed.data
-    .map((rec) => headers.map((h) => (rec[h] ?? '').trim()))
-    .filter((row) => row.some((c) => c.length > 0))
   if (!rows.length) return null
-
-  return { headers, rows }
+  return { preamble, headers: [...RAW_SCHEMA_HEADERS], rows }
 }
 
 function useFetchedText(url: string) {
@@ -157,69 +185,63 @@ export function EDA() {
   })
 
   const rawSummary = useFetchedText(RAW_SUMMARY)
-  const rawSchemaTable = useFetchedText(RAW_SCHEMA_TABLE)
-  const rawSchemaTableCsv = useFetchedText(RAW_SCHEMA_TABLE_CSV)
+  const rawSchemaTxt = useFetchedText(RAW_SCHEMA_TXT)
 
-  const rawSchemaPreamble = useMemo(
-    () => (rawSchemaTable.text ? rawSchemaTxtPreambleLines(rawSchemaTable.text) : []),
-    [rawSchemaTable.text],
-  )
-
-  const rawSchemaCsvTable = useMemo(
-    () => (rawSchemaTableCsv.text ? parseRawSchemaTableCsv(rawSchemaTableCsv.text) : null),
-    [rawSchemaTableCsv.text],
+  const rawSchemaTable = useMemo(
+    () => (rawSchemaTxt.text ? parsePhilgepsRawSchemaTxt(rawSchemaTxt.text) : null),
+    [rawSchemaTxt.text],
   )
 
   const rawSchemaBlock = useMemo(() => {
-    const csvPending = !rawSchemaTableCsv.text && !rawSchemaTableCsv.failed
-    if (csvPending) {
+    const pending = !rawSchemaTxt.text && !rawSchemaTxt.failed
+    if (pending) {
       return <p className="text-mf-caption text-muted-foreground">Loading schema table…</p>
     }
-    if (rawSchemaCsvTable) {
-      const colNameIdx = rawSchemaCsvTable.headers.indexOf('column_name')
-      const conceptIdx = rawSchemaCsvTable.headers.indexOf('concept')
+    if (rawSchemaTable) {
+      const colNameIdx = rawSchemaTable.headers.indexOf('column_name')
+      const roleIdx = rawSchemaTable.headers.indexOf('kmeans_feature_role')
+      const nuniqueIdx = rawSchemaTable.headers.indexOf('nunique_non_null')
+      const nuniqueHowIdx = rawSchemaTable.headers.indexOf('nunique_how')
       return (
         <>
-          {rawSchemaPreamble.length > 0 && (
+          {rawSchemaTable.preamble.length > 0 && (
             <div className="mb-3 space-y-1 text-mf-caption leading-snug text-muted-foreground">
-              {rawSchemaPreamble.map((line, i) => (
+              {rawSchemaTable.preamble.map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </div>
           )}
-          <div className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
+          <div className="mf-table-scroll max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
             <table className="w-max min-w-full border-collapse text-left font-mono text-mf-caption leading-snug text-foreground">
               <thead className="sticky top-0 z-10 border-b border-border bg-muted">
                 <tr>
-                  {rawSchemaCsvTable.headers.map((h) => (
+                  {rawSchemaTable.headers.map((h) => (
                     <th key={h} className="whitespace-nowrap px-2 py-2 font-semibold text-foreground">
-                      {RAW_SCHEMA_CSV_HEADER_LABELS[h] ?? h}
+                      {RAW_SCHEMA_HEADER_LABELS[h] ?? h}
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {rawSchemaCsvTable.rows.map((row, ri) => (
+                {rawSchemaTable.rows.map((row, ri) => (
                   <tr key={ri} className={ri % 2 === 1 ? 'bg-muted/30' : 'bg-card'}>
                     {row.map((cell, ci) => {
-                      const isConceptRole =
-                        ci === conceptIdx && conceptIdx >= 0 && KMEANS_FEATURE_ROLE_SET.has(cell)
+                      const isRole =
+                        ci === roleIdx && roleIdx >= 0 && KMEANS_FEATURE_ROLE_SET.has(cell)
+                      const isWideText =
+                        ci === colNameIdx || ci === nuniqueIdx || ci === nuniqueHowIdx
                       return (
                         <td
                           key={ci}
                           className={[
                             'border-t border-border px-2 py-1.5',
-                            ci === colNameIdx && colNameIdx >= 0
+                            isWideText
                               ? 'max-w-[min(28rem,55vw)] whitespace-normal break-words'
                               : 'whitespace-nowrap',
-                            isConceptRole ? 'cursor-help transition-colors hover:bg-muted/50' : '',
+                            isRole ? 'cursor-help transition-colors hover:bg-muted/50' : '',
                           ].join(' ')}
-                          onMouseEnter={
-                            isConceptRole ? () => setHighlightedFeatureRole(cell) : undefined
-                          }
-                          onMouseLeave={
-                            isConceptRole ? () => setHighlightedFeatureRole(null) : undefined
-                          }
+                          onMouseEnter={isRole ? () => setHighlightedFeatureRole(cell) : undefined}
+                          onMouseLeave={isRole ? () => setHighlightedFeatureRole(null) : undefined}
                         >
                           {cell}
                         </td>
@@ -229,40 +251,20 @@ export function EDA() {
                 ))}
               </tbody>
             </table>
-            <KMeansFeatureRoleLegend highlightedRole={highlightedFeatureRole} />
           </div>
+          <KMeansFeatureRoleLegend highlightedRole={highlightedFeatureRole} />
         </>
       )
     }
-    if (rawSchemaTable.text) {
+    if (rawSchemaTxt.text && !rawSchemaTable) {
       return (
-        <div className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
-          <pre className="p-3 font-mono text-mf-caption leading-snug text-foreground whitespace-pre">
-            {rawSchemaTable.text}
-          </pre>
-          <KMeansFeatureRoleLegend />
-        </div>
+        <p className="text-mf-caption text-muted-foreground">
+          Schema file could not be parsed; try refreshing the page.
+        </p>
       )
     }
-    const txtPending = !rawSchemaTable.text && !rawSchemaTable.failed
-    if (txtPending) {
-      return <p className="text-mf-caption text-muted-foreground">Loading schema table…</p>
-    }
-    if (rawSchemaTableCsv.text && !rawSchemaCsvTable) {
-      return (
-        <p className="text-mf-caption text-muted-foreground">Schema CSV could not be parsed; try refreshing the page.</p>
-      )
-    }
-    return <p className="text-mf-caption text-muted-foreground">Schema table files could not be loaded.</p>
-  }, [
-    highlightedFeatureRole,
-    rawSchemaCsvTable,
-    rawSchemaPreamble,
-    rawSchemaTable.failed,
-    rawSchemaTable.text,
-    rawSchemaTableCsv.failed,
-    rawSchemaTableCsv.text,
-  ])
+    return <p className="text-mf-caption text-muted-foreground">Schema table file could not be loaded.</p>
+  }, [highlightedFeatureRole, rawSchemaTable, rawSchemaTxt.failed, rawSchemaTxt.text])
 
   const quarterlyImages = useMemo(
     () => (quarterKey ? IMAGES.eda.byQuarter[quarterKey] ?? [] : []),
@@ -333,31 +335,33 @@ export function EDA() {
                 <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                     <p className="text-sm font-medium text-muted-foreground">Quarter filter</p>
-                    <div className="flex shrink-0 items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1 shadow-sm dark:border-primary/35 dark:bg-primary/10">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={quarterKey !== null}
+                      aria-label={
+                        quarterKey !== null
+                          ? 'Quarterly view on; click to turn off'
+                          : 'Quarterly view off; click to turn on'
+                      }
+                      className="flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background dark:border-primary/35 dark:bg-primary/10 dark:hover:bg-primary/15"
+                      onClick={() =>
+                        setQuarterKey(quarterKey !== null ? null : (quarterPresets[0] ?? null))
+                      }
+                    >
                       <span className="text-[11px] font-medium text-foreground">Quarterly view</span>
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={quarterKey !== null}
-                        aria-label={
-                          quarterKey !== null
-                            ? 'Quarterly view on; click to turn off'
-                            : 'Quarterly view off; click to turn on'
-                        }
-                        className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background ${
+                      <span
+                        className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border border-transparent transition-colors ${
                           quarterKey !== null ? 'bg-primary' : 'bg-muted-foreground/35'
                         }`}
-                        onClick={() =>
-                          setQuarterKey(quarterKey !== null ? null : (quarterPresets[0] ?? null))
-                        }
+                        aria-hidden
                       >
                         <span
-                          className={`pointer-events-none absolute top-0.5 h-3.5 w-3.5 rounded-full bg-card shadow-sm transition-[left] duration-200 ease-out ${
+                          className={`absolute top-0.5 h-3.5 w-3.5 rounded-full bg-card shadow-sm transition-[left] duration-200 ease-out ${
                             quarterKey !== null ? 'left-[calc(100%-1.125rem)]' : 'left-0.5'
                           }`}
-                          aria-hidden
                         />
-                      </button>
+                      </span>
                       <span
                         className={`min-w-[1.25rem] text-[10px] font-semibold tabular-nums ${
                           quarterKey !== null ? 'text-primary' : 'text-muted-foreground'
@@ -365,7 +369,7 @@ export function EDA() {
                       >
                         {quarterKey !== null ? 'On' : 'Off'}
                       </span>
-                    </div>
+                    </button>
                   </div>
 
                   <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">

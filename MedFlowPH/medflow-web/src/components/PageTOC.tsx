@@ -1,5 +1,5 @@
 import { ChevronDown, FlaskConical } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState, type ReactNode } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { lockAdjacentPageNavForProgrammaticScroll } from '../utils/scrollNavGuards'
 
@@ -100,8 +100,8 @@ export const TOC_LANDING: PageTOCSection[] = [
   { id: 'data-collection', label: 'Data' },
   { id: 'data-description', label: 'Schema' },
   { id: 'dataset-snapshot', label: 'Snapshot' },
-  { id: 'recommendations', label: 'Recommendations' },
   { id: 'conclusion', label: 'Conclusion' },
+  { id: 'recommendations', label: 'Recommendations' },
   { id: 'references', label: 'References' },
 ]
 
@@ -109,7 +109,7 @@ export const TOC_EDA: PageTOCSection[] = [
   { id: 'du-hero', label: 'Overview' },
   { id: 'du-raw', label: 'Raw Dataset' },
   { id: 'eda-quarter', label: 'By quarter' },
-  { id: 'du-conclusion', label: 'Conclusion' },
+  { id: 'du-conclusion', label: 'Summary' },
 ]
 
 /** Pipeline walkthrough anchors only (through Conclusion; before interactive EDA chart sections). */
@@ -128,6 +128,9 @@ export const TOC_PREPROCESSING: PageTOCSection[] = [
   { id: 'cleaned-dataset-exploration', label: 'Cleaned Dataset Exploration' },
   { id: 'data-cleaning', label: 'Data Cleaning' },
   { id: 'feature-engineering', label: 'Feature Engineering' },
+  { id: 'feature-selection', label: 'Feature Selection' },
+  { id: 'min-max-scaling', label: 'Min–Max Scaling' },
+  { id: 'one-hot-encoding', label: 'One‑Hot Encoding' },
 ]
 
 /** Principal Component Analysis page — loadings, 3D projections, and interactive view. */
@@ -219,8 +222,6 @@ const routeLinks = [
   { path: '/comparison', label: 'Model Comparison' },
 ] as const
 
-const PAGES_NAV_PANEL_ID = 'page-toc-route-links'
-
 /** Matches main content top padding (~pt-24) + sticky toolbar so the spy line aligns with visible content. */
 export const SCROLL_SPY_VIEWPORT_TOP = 118
 
@@ -238,9 +239,57 @@ export function computeActiveTocSectionId(sectionIdsOrdered: string[], insetPx =
   return candidate || sectionIdsOrdered[0] || ''
 }
 
+const TOC_SUBMENU_PANEL_CLASS =
+  'ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-border/80 py-1 pl-2'
+
+function tocCollapsibleTriggerClass(active: boolean) {
+  return `flex w-full items-center justify-between gap-1 rounded-lg px-3 py-1.5 text-left text-mf-caption uppercase tracking-widest transition-colors duration-[280ms] ease-out motion-reduce:transition-none hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+    active
+      ? 'font-semibold text-foreground'
+      : 'text-muted-foreground/60 hover:text-foreground'
+  }`
+}
+
+function TocAnimatedPanel({
+  open,
+  id,
+  className,
+  children,
+  role,
+  'aria-label': ariaLabel,
+}: {
+  open: boolean
+  id?: string
+  className?: string
+  children: ReactNode
+  role?: string
+  'aria-label'?: string
+}) {
+  return (
+    <div
+      className={`grid min-h-0 transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${
+        open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+      }`}
+    >
+      <div className="min-h-0 overflow-hidden">
+        <div
+          id={id}
+          role={role}
+          aria-label={ariaLabel}
+          aria-hidden={!open}
+          className={className}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
   const navigate = useNavigate()
   const location = useLocation()
+  const pagesPanelId = useId()
   const [active, setActive] = useState(sections[0]?.id ?? '')
   const [hoverPreview, setHoverPreview] = useState<{ id: string; text: string } | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
@@ -308,26 +357,6 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
   }
 
   const tocRows = useMemo(() => buildInterpretationDropdownRows(sections), [sections])
-
-  /** Keep methodology dropdown open whenever scroll-spy picks that block or any child anchor. */
-  useEffect(() => {
-    for (const row of tocRows) {
-      if (row.kind !== 'dropdown') continue
-      if (
-        active === row.parent.id ||
-        row.children.some((c) => c.id === active)
-      ) {
-        setOpenDropdownId(row.parent.id)
-        return
-      }
-    }
-    setOpenDropdownId(null)
-  }, [active, tocRows])
-
-  /** Keep Pages dropdown open while viewing any linked route. */
-  useEffect(() => {
-    if (pagesGroupActive) setPagesNavOpen(true)
-  }, [pagesGroupActive])
 
   if (sections.length === 0) return null
 
@@ -417,52 +446,14 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
         const open = openDropdownId === parent.id
         const groupActive =
           active === parent.id || children.some((c) => c.id === active)
-        const barClass =
-          `flex overflow-hidden rounded-lg border text-mf-toc font-semibold tracking-wide transition-all duration-[280ms] ease-out motion-reduce:transition-none hover:brightness-[1.02] dark:hover:brightness-[1.05] ` +
-          (groupActive
-            ? 'border-primary bg-primary/15 text-primary'
-            : 'border-border bg-muted/50 text-foreground hover:border-primary/40 hover:bg-muted')
-
         const parentTipId = `${parent.id}-toc-hover-preview`
         const parentPreview =
           hoverPreview?.id === parent.id ? hoverPreview.text : ''
 
-        const barNode = (
-          <div className={barClass}>
-            <button
-              type="button"
-              data-toc-anchor={parent.id}
-              aria-current={active === parent.id ? 'location' : undefined}
-              className={`min-w-0 flex-1 truncate py-2.5 pl-3 pr-1 text-left transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
-                groupActive ? 'text-primary' : 'text-foreground'
-              }`}
-              onClick={() => goToSection(parent)}
-            >
-              {parent.label}
-            </button>
-            <button
-              type="button"
-              className={`shrink-0 border-l border-border/80 px-2 transition-colors duration-[280ms] ease-out hover:bg-muted/70 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40`}
-              aria-expanded={open}
-              aria-controls={panelId}
-              aria-label={`${open ? 'Hide' : 'Show'} ${parent.label} subsections`}
-              onClick={(e) => {
-                e.stopPropagation()
-                setOpenDropdownId((prev) => (prev === parent.id ? null : parent.id))
-              }}
-            >
-              <ChevronDown
-                aria-hidden
-                className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
-              />
-            </button>
-          </div>
-        )
-
         return (
           <div key={parent.id} className="mb-1 flex flex-col">
             <div
-              className="relative mx-2 mb-0 mt-3"
+              className="relative"
               onPointerEnter={() =>
                 setHoverPreview({
                   id: parent.id,
@@ -475,7 +466,33 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                 )
               }
             >
-              {barNode}
+              <button
+                type="button"
+                data-toc-anchor={parent.id}
+                aria-expanded={open}
+                aria-controls={panelId}
+                aria-current={active === parent.id ? 'location' : undefined}
+                className={tocCollapsibleTriggerClass(groupActive)}
+                onClick={() =>
+                  setOpenDropdownId((prev) => (prev === parent.id ? null : parent.id))
+                }
+              >
+                <span
+                  className="min-w-0 flex-1 truncate"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    goToSection(parent)
+                  }}
+                >
+                  {parent.label}
+                </span>
+                <ChevronDown
+                  aria-hidden
+                  className={`h-3.5 w-3.5 shrink-0 transition-transform duration-[280ms] ease-out motion-reduce:transition-none ${
+                    open ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
               {parentPreview ? (
                 <div
                   role="tooltip"
@@ -486,14 +503,14 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                 </div>
               ) : null}
             </div>
-            {open ? (
-              <div
-                id={panelId}
-                role="group"
-                aria-label={`${parent.label} subsections`}
-                className="mx-3 mb-1 ml-5 mt-1 space-y-0.5 border-l border-border py-1 pl-2"
-              >
-                {children.map((c) => {
+            <TocAnimatedPanel
+              open={open}
+              id={panelId}
+              role="group"
+              aria-label={`${parent.label} subsections`}
+              className={TOC_SUBMENU_PANEL_CLASS}
+            >
+              {children.map((c) => {
                   const relaxed = active === c.id
                   const subClass = `w-full rounded-md px-2 py-1.5 text-left text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
                     relaxed
@@ -537,8 +554,7 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                     </div>
                   )
                 })}
-              </div>
-            ) : null}
+            </TocAnimatedPanel>
           </div>
         )
       })}
@@ -549,13 +565,9 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
           <div className="mb-1 flex flex-col">
             <button
               type="button"
-              className={`flex w-full items-center justify-between gap-1 rounded-lg px-3 py-1.5 text-left text-mf-caption uppercase tracking-widest transition-colors duration-[280ms] ease-out motion-reduce:transition-none hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-                pagesGroupActive
-                  ? 'font-semibold text-foreground'
-                  : 'text-muted-foreground/60 hover:text-foreground'
-              }`}
+              className={tocCollapsibleTriggerClass(pagesGroupActive)}
               aria-expanded={pagesNavOpen}
-              aria-controls={PAGES_NAV_PANEL_ID}
+              aria-controls={pagesPanelId}
               onClick={() => setPagesNavOpen((open) => !open)}
             >
               <span>Pages</span>
@@ -566,30 +578,29 @@ export function PageTOC({ sections, showRouteLinks = true }: PageTOCProps) {
                 }`}
               />
             </button>
-            {pagesNavOpen ? (
-              <div
-                id={PAGES_NAV_PANEL_ID}
-                role="group"
-                aria-label="Site pages"
-                className="ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-border/80 py-1 pl-2"
-              >
-                {routeLinks.map((r) => (
-                  <NavLink
-                    key={r.path}
-                    to={r.path}
-                    className={({ isActive }) =>
-                      `rounded-lg px-3 py-1.5 text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
-                        isActive
-                          ? 'border-l-2 border-primary bg-primary/10 pl-2.5 font-semibold text-primary'
-                          : 'border-l-2 border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
-                      }`
-                    }
-                  >
-                    {r.label}
-                  </NavLink>
-                ))}
-              </div>
-            ) : null}
+            <TocAnimatedPanel
+              open={pagesNavOpen}
+              id={pagesPanelId}
+              role="group"
+              aria-label="Site pages"
+              className={TOC_SUBMENU_PANEL_CLASS}
+            >
+              {routeLinks.map((r) => (
+                <NavLink
+                  key={r.path}
+                  to={r.path}
+                  className={({ isActive }) =>
+                    `rounded-lg px-3 py-1.5 text-mf-toc transition-colors duration-[280ms] ease-out motion-reduce:transition-none ${
+                      isActive
+                        ? 'border-l-2 border-primary bg-primary/10 pl-2.5 font-semibold text-primary'
+                        : 'border-l-2 border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                    }`
+                  }
+                >
+                  {r.label}
+                </NavLink>
+              ))}
+            </TocAnimatedPanel>
           </div>
         </>
       ) : null}

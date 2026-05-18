@@ -13,7 +13,9 @@ import {
   LayoutDashboard,
   MapPin,
   Package,
+  Shield,
   Tag,
+  TrendingUp,
   UserCheck,
   Users,
 } from 'lucide-react'
@@ -394,32 +396,31 @@ export function Landing() {
               </div>
             </SectionWrapper>
 
-            <SectionWrapper id="recommendation" title="Recommendation">
-              <p className="text-mf-body text-muted-foreground">
-              Future studies should improve PhilGEPS data quality, include additional sources, explore more clustering methods, enhance the MedFlow PH dashboard with interactive features, 
-              and evaluate clusters using metrics, interpretability, and stakeholder validation.
+            <SectionWrapper id="recommendations" title="Recommendations">
+              <p className="text-mf-body leading-relaxed text-muted-foreground">
+                Based on the conclusions drawn from the study, the following recommendations are proposed.
               </p>
               <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
                 {[
                   {
                     icon: Database,
-                    title: 'Objective 1: PhilGEPS Data Collection, Cleaning, and Procurement Dataset Improvement',
-                    text: 'Future studies should improve PhilGEPS data quality, include additional sources like inventory and delivery records, and use privacy-safe contextual variables to enhance cluster interpretation and analysis.',
+                    title: 'Recommendation for Objective 1: Analysis of Aggregated Medical-Related Procurement Records from PhilGEPS',
+                    text: 'Future studies should improve the quality and completeness of PhilGEPS medical procurement data, addressing missing values, duplicates, inconsistent formats, and schema differences through systematic cleaning and validation. Incorporating additional data sources—such as inventory, delivery, consumption, and demand records—would strengthen cluster interpretation and reduce reliance on procurement data alone. Using more detailed but privacy-safe datasets with contextual variables like facility type, regional demand, lead times, supplier performance, and delivery status could further enhance analysis.',
                   },
                   {
                     icon: Layers,
-                    title: 'Objective 2: Improvement of Clustering Models and Analytical Methods',
-                    text: 'Future studies should test more clustering methods, adjust parameters, and interpret clusters as analytical insights, not definitive evidence.',
+                    title: 'Recommendation for Objective 2: Application of K-means and DBSCAN Clustering Algorithms',
+                    text: 'Future studies should explore additional clustering algorithms and feature sets, test wider K ranges for K-means, refine DBSCAN parameters or use HDBSCAN, and interpret clusters cautiously as analytical indicators rather than direct proof of procurement issues.',
                   },
                   {
                     icon: GitCompare,
-                    title: 'Objective 3: Enhancement of the MedFlow PH Web-Based Dashboard',
-                    text: 'Future dashboard updates should enhance interactivity, filtering, explanatory notes, downloads, and modular design for easier updates and stakeholder access.',
+                    title: 'Recommendation for Objective 3: Development of the MedFlow PH Web-Based Results Dashboard',
+                    text: 'Future development of the MedFlow PH dashboard should focus on interactivity and user-friendliness, including dynamic filtering by year, region, agency, procurement category, cluster label, or amount. Enhancing explanatory notes, adding downloadable reports, interactive tables, and export options will improve usability for stakeholders. Maintaining a modular design will simplify updates and enable convenient online access to new results and visualizations.',
                   },
                   {
                     icon: LayoutDashboard,
-                    title: 'Objective 4: Continuous Model Evaluation and Validation',
-                    text: 'Future studies should assess clustering using both metrics and interpretability, validate clusters with real procurement indicators, and involve stakeholder review, while also considering stability, outliers, and sensitivity analyses.',
+                    title: 'Recommendation for Objective 4: Evaluation and Comparison of K-means and DBSCAN Results',
+                    text: 'Future studies should evaluate clustering models using both numerical metrics (Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Index) and interpretability to ensure practical usefulness. Cluster labels should be validated against external indicators like stockouts, delivery delays, emergency procurement, supplier performance, and facility demand. Stakeholder review by public health administrators, procurement officers, and supply chain managers is recommended, along with additional model comparisons such as cluster stability, outlier detection, runtime, and sensitivity analysis.',
                   },
                 ].map(({ icon: Icon, title, text }) => (
                   <div key={title} className="rounded-xl border border-border bg-card p-6">
@@ -429,6 +430,42 @@ export function Landing() {
                   </div>
                 ))}
               </div>
+
+              <h3 className="font-heading mt-10 text-mf-section font-semibold text-foreground">
+                Additional Recommendations
+              </h3>
+              <div className="mt-6 grid gap-6 md:grid-cols-3">
+                {[
+                  {
+                    icon: FileText,
+                    title: 'Data Governance and Documentation',
+                    text: 'Establish clear documentation of data sources, cleaning rules, transformations, and model parameters to ensure transparency, reproducibility, and easier future improvements.',
+                  },
+                  {
+                    icon: Shield,
+                    title: 'Ethical and Privacy Considerations',
+                    text: 'Maintain strict data privacy practices, including anonymization and access control, especially if more detailed datasets are introduced in future studies.',
+                  },
+                  {
+                    icon: TrendingUp,
+                    title: 'Future Research Expansion',
+                    text: 'Expand analysis across regions, facilities, time periods, procurement types, and suppliers, and include time-series analysis to track changes over time.',
+                  },
+                ].map(({ icon: Icon, title, text }) => (
+                  <div key={title} className="rounded-xl border border-border bg-card p-6">
+                    <Icon className="h-8 w-8 text-primary" aria-hidden />
+                    <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">{title}</h3>
+                    <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">{text}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-8 text-mf-body leading-relaxed text-muted-foreground">
+                The study demonstrates that unsupervised learning can identify procurement patterns in PhilGEPS
+                data, providing useful decision-support insights for public health procurement. While it does not
+                confirm actual shortages or inefficiencies, the results can guide further investigation, monitoring,
+                and resource planning, and serve as a foundation for more advanced procurement analytics.
+              </p>
             </SectionWrapper>
 
             <SectionWrapper id="references" title="References & Team">

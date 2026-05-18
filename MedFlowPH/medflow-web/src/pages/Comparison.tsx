@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { BarChart2, Search, Sparkles, Target } from 'lucide-react'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
@@ -26,18 +26,10 @@ type ParsedRow = {
 export function Comparison() {
   const { data } = useCsvData(DATA_PATHS.modelComparisonSummary)
   const { data: clusterMeta } = useJsonData<ClusterMeta>(DATA_PATHS.clusterCountsKmeans)
-  const [readme, setReadme] = useState<string>('')
   const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
     imgs: [],
     idx: 0,
   })
-
-  useEffect(() => {
-    fetch('/results/07/Model_Comparison/kmeans_vs_dbscan_comparison_readme.txt')
-      .then((r) => r.text())
-      .then(setReadme)
-      .catch(() => setReadme(''))
-  }, [])
 
   const parsed = useMemo(() => {
     const rows = data.map<ParsedRow | null>((row) => {
@@ -60,13 +52,6 @@ export function Comparison() {
   }, [data])
 
   const chosenK = clusterMeta?.k ?? 6
-  const readmeConclusion = readme
-    .split(/Final conclusion:/i)
-    .slice(1)
-    .join('')
-    .split(/\r?\n/)
-    .find((line) => line.trim().length > 0)
-    ?.trim()
 
   const galleryImages = IMAGES.comparison.map((item) => ({ src: item.src, title: item.title }))
   const sideBySideGalleryIdx = IMAGES.comparison.findIndex((img) =>
@@ -316,19 +301,14 @@ export function Comparison() {
                   Recommended model: K‑Means (K={chosenK})
                 </h3>
                 <p className="mt-4 text-mf-body leading-relaxed text-muted-foreground">
-                  {readmeConclusion ??
-                    'K‑Means is more suitable as the final interpretable clustering model. DBSCAN is retained as a supporting comparison for noise and outlier-like procurement records.'}
+                  K‑means is recommended as the primary model for MedFlow PH: it produces stable, interpretable
+                  procurement segments (K&nbsp;=&nbsp;{chosenK}; best silhouette 0.386). DBSCAN should remain a
+                  supporting method for density patterns and outlier detection, not the main presentation layer.
+                  Future work should explore additional algorithms and wider K ranges, refine DBSCAN parameters or
+                  consider HDBSCAN, and evaluate models using Silhouette, Davies‑Bouldin, and Calinski‑Harabasz
+                  scores together with interpretability—validating cluster labels against procurement indicators
+                  and stakeholder review.
                 </p>
-                {readme ? (
-                  <details className="mt-4 text-mf-caption text-muted-foreground">
-                    <summary className="cursor-pointer font-semibold text-foreground">
-                      Full methodology excerpt
-                    </summary>
-                    <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/80 p-3 font-mono text-mf-caption">
-                      {readme.trim()}
-                    </pre>
-                  </details>
-                ) : null}
               </div>
             </SectionWrapper>
 

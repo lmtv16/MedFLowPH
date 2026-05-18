@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Clock, DollarSign, FileCheck, Hash, Layers, Package } from 'lucide-react'
+import { Clock, DollarSign, FileCheck, Hash, Package } from 'lucide-react'
 import { LazyFigureCarousel } from '../components/LazyFigureCarousel'
 import { ImageCard } from '../components/ImageCard'
 import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
-import { SectionHeader } from '../components/SectionHeader'
+import { PageTOC, TOC_PREPROCESSING } from '../components/PageTOC'
 import { SectionWrapper } from '../components/SectionWrapper'
 import { IMAGES } from '../data/fileManifest'
 
@@ -85,8 +85,10 @@ export function Preprocessing() {
 
   return (
     <PageShell>
-      <div className="min-w-0 space-y-12 overflow-x-hidden">
-        <SectionWrapper id="preprocessing-overview" title="Data Preprocessing">
+      <div className="flex gap-8">
+        <main className="min-w-0 flex-1 space-y-12 overflow-x-hidden pb-16">
+          <div className="space-y-12">
+            <SectionWrapper id="preprocessing-overview" title="Data Preprocessing">
           <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
           During data preprocessing, important features were selected to avoid redundancy, 
           numerical values were scaled to a common range, and categorical information was converted 
@@ -253,13 +255,12 @@ The final dataset is smaller, but more focused on medical procurement records ne
           </div>
         </SectionWrapper>
 
-        <SectionHeader
-          title="Feature Selection"
-          subtitle="Correlation diagnostics feeding rank‑truncated subsets before scaling and encoding."
-          icon={Layers}
-        />
-        <div className="grid gap-6 md:grid-cols-2">
-          {IMAGES.preprocessing.featureSelection.map((img, idx) => (
+            <SectionWrapper id="feature-selection" title="Feature Selection">
+              <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
+                Correlation diagnostics feeding rank‑truncated subsets before scaling and encoding.
+              </p>
+              <div className="grid gap-6 md:grid-cols-2">
+                {IMAGES.preprocessing.featureSelection.map((img, idx) => (
             <ImageCard
               key={img.src}
               src={img.src}
@@ -275,10 +276,15 @@ The final dataset is smaller, but more focused on medical procurement records ne
                 )
               }
             />
-          ))}
-        </div>
-        <SectionHeader title="Min–Max scaling diagnostics" subtitle="Post‑scaling marginals and correlations." />
-        <div className="grid gap-6 md:grid-cols-2">
+                ))}
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="min-max-scaling" title="Min–Max Scaling">
+              <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
+                Post‑scaling marginals and correlations.
+              </p>
+              <div className="grid gap-6 md:grid-cols-2">
           {IMAGES.preprocessing.scaling.map((img, idx) => (
             <ImageCard
               key={img.src}
@@ -292,10 +298,14 @@ The final dataset is smaller, but more focused on medical procurement records ne
                 )
               }
             />
-          ))}
-        </div>
+                ))}
+              </div>
+            </SectionWrapper>
 
-        <SectionHeader title="One‑Hot encoding footprints" subtitle="Dummy proliferation by source cohort." />
+            <SectionWrapper id="one-hot-encoding" title="One‑Hot Encoding">
+              <p className="mb-6 text-mf-body leading-relaxed text-muted-foreground">
+                Dummy proliferation by source cohort.
+              </p>
         <div className="grid gap-6 md:grid-cols-2">
           {IMAGES.preprocessing.oneHot.map((img, idx) => (
             <ImageCard
@@ -310,11 +320,23 @@ The final dataset is smaller, but more focused on medical procurement records ne
                 )
               }
             />
-          ))}
-        </div>
-      </div>
+                ))}
+              </div>
+            </SectionWrapper>
 
-      <LightboxGallery images={gallery.imgs} index={gallery.idx} open={gallery.imgs.length > 0} onClose={() => setGallery({ imgs: [], idx: 0 })} />
+            <LightboxGallery
+              images={gallery.imgs}
+              index={gallery.idx}
+              open={gallery.imgs.length > 0}
+              onClose={() => setGallery({ imgs: [], idx: 0 })}
+            />
+          </div>
+        </main>
+
+        <aside className="medflow-no-print hidden w-48 shrink-0 xl:block">
+          <PageTOC sections={TOC_PREPROCESSING} />
+        </aside>
+      </div>
     </PageShell>
   )
 }

@@ -121,7 +121,7 @@ export function Cleaning() {
                   Cleaned schema (CSV)
                 </p>
                 {cleanedSchemaTable ? (
-                  <div className="max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
+                  <div className="mf-table-scroll max-h-[min(55vh,36rem)] overflow-auto rounded-lg border border-border bg-card">
                     <table className="w-max min-w-full border-collapse text-left font-mono text-mf-caption leading-snug text-foreground">
                       <thead className="sticky top-0 z-10 border-b border-border bg-muted">
                         <tr>

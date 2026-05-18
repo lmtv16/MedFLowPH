@@ -64,29 +64,31 @@ export function QuarterFilterDropdown({
             Grouped by year — open the menu to pick a quarter, or turn quarterly view off.
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1 shadow-sm transition-colors duration-200 hover:border-primary/40 hover:bg-primary/10 dark:border-primary/35 dark:bg-primary/10">
+        <button
+          type="button"
+          role="switch"
+          aria-checked={quarterlyViewOn}
+          aria-label={
+            quarterlyViewOn ? 'Quarterly view on; click to turn off' : 'Quarterly view off; click to turn on'
+          }
+          className="flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background dark:border-primary/35 dark:bg-primary/10 dark:hover:bg-primary/15"
+          onClick={() =>
+            onQuarterKeyChange(quarterlyViewOn ? null : (quarterPresets[0] ?? null))
+          }
+        >
           <span className="text-[11px] font-medium text-foreground">Quarterly view</span>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={quarterlyViewOn}
-            aria-label={
-              quarterlyViewOn ? 'Quarterly view on; click to turn off' : 'Quarterly view off; click to turn on'
-            }
-            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background ${
+          <span
+            className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border border-transparent transition-colors ${
               quarterlyViewOn ? 'bg-primary' : 'bg-muted-foreground/35'
             }`}
-            onClick={() =>
-              onQuarterKeyChange(quarterlyViewOn ? null : (quarterPresets[0] ?? null))
-            }
+            aria-hidden
           >
             <span
-              className={`pointer-events-none absolute top-0.5 h-3.5 w-3.5 rounded-full bg-card shadow-sm transition-[left] duration-200 ease-out ${
+              className={`absolute top-0.5 h-3.5 w-3.5 rounded-full bg-card shadow-sm transition-[left] duration-200 ease-out ${
                 quarterlyViewOn ? 'left-[calc(100%-1.125rem)]' : 'left-0.5'
               }`}
-              aria-hidden
             />
-          </button>
+          </span>
           <span
             className={`min-w-[1.25rem] text-[10px] font-semibold tabular-nums ${
               quarterlyViewOn ? 'text-primary' : 'text-muted-foreground'
@@ -94,7 +96,7 @@ export function QuarterFilterDropdown({
           >
             {quarterlyViewOn ? 'On' : 'Off'}
           </span>
-        </div>
+        </button>
       </div>
 
       <div ref={rootRef} className="relative mt-3">

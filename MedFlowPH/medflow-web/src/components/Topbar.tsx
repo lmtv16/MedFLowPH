@@ -166,6 +166,21 @@ function DesktopGroupDropdown({
     navigate({ pathname, hash })
   }
 
+  /** Double-click the group pill → first page in the group (e.g. Data Preparation → /eda). */
+  function goToGroupDefault() {
+    const first = item.children[0]
+    if (!first) return
+    onOpenChange(false)
+    const { pathname, hash } = splitPathHash(first.path)
+    const hashNorm = hash ?? ''
+    const locHash = location.hash || ''
+    if (location.pathname === pathname && locHash === hashNorm) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    navigate({ pathname, hash })
+  }
+
   const menuId = `topnav-${item.key}-menu`
 
   return (
@@ -173,7 +188,14 @@ function DesktopGroupDropdown({
       <button
         ref={buttonRef}
         type="button"
-        onClick={() => onOpenChange(!isOpen)}
+        onClick={(e) => {
+          if (e.detail >= 2) return
+          onOpenChange(!isOpen)
+        }}
+        onDoubleClick={(e) => {
+          e.preventDefault()
+          goToGroupDefault()
+        }}
         className={topNavPill(active)}
         aria-haspopup="menu"
         aria-expanded={isOpen}
@@ -486,9 +508,15 @@ export function Topbar({ title, breadcrumb }: TopbarProps) {
                     <div key={`m-${item.key}`} className="flex flex-col">
                       <button
                         type="button"
-                        onClick={() =>
+                        onClick={(e) => {
+                          if (e.detail >= 2) return
                           setMobileExpanded((curr) => (curr === item.key ? null : item.key))
-                        }
+                        }}
+                        onDoubleClick={(e) => {
+                          e.preventDefault()
+                          const first = item.children[0]
+                          if (first) handleMobileLeaf(first)
+                        }}
                         className={`flex min-h-[44px] items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-base transition-[color,background-color,box-shadow] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                           groupActive
                             ? 'bg-primary/10 font-semibold text-mf-primary shadow-sm ring-1 ring-primary/12 dark:bg-primary/20 dark:text-primary dark:ring-primary/25'
