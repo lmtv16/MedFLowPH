@@ -1,0 +1,15 @@
+{
+  "cluster_id": 67,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Province",
+  "column_name": "Province",
+  "resolved_column": "Province",
+  "numeric": false,
+  "top_value": "Cotabato",
+  "top_count": 713,
+  "cluster_rows": 2125,
+  "top_share_within_cluster": 0.3355294117647059,
+  "global_count_of_top_value": 2206,
+  "global_share_of_top_value": 0.00452415377200808,
+  "lift_vs_global": 74.16401578582476
+}

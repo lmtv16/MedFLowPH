@@ -1,0 +1,17 @@
+[2026-05-20T09:34:08] Step 03 — PCA: matrix=base, max_pc=9, rows=None, pc3d_max_points=30000, pc3d_plot_jitter_frac=0.025, pc3d_color=density, interactive_html=True, standardize=True, scaled_include_policy_themes=False
+[2026-05-20T09:34:08] Reading scaled numerics: D:\medflowv6\MedFlow\MedFlowPH\output_source\02\Min-Max Scaling\philgeps_min_max_scaled.csv
+[2026-05-20T09:34:10] Loaded full scaled table shape=(487605, 31)
+[2026-05-20T09:34:10] PCA column selection (base): subset of D:\medflowv6\MedFlow\MedFlowPH\output_source\02\Min-Max Scaling\philgeps_min_max_scaled.csv (award_decision_lag_days, log1p_Quantity, log1p_Approved_Budget_of_the_Contract, log1p_Item_Budget, log1p_Contract_Amount)
+[2026-05-20T09:34:10] PCA input: n_samples=487,605, n_features=5, n_comp=5 (capped)
+[2026-05-20T09:34:13] Wrote PCA input features -> D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_features.csv (shape=(487605, 5))
+[2026-05-20T09:34:16] Wrote PC scores -> D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_pc_scores.csv
+[2026-05-20T09:34:16] Wrote D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_theme_clustering.json (cumulative PC1–PC3 variance=0.800455; explained_ratio_PC123=[0.337566, 0.263058, 0.19983])
+[2026-05-20T09:34:17] Wrote dominance audit -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_pc123_dominance_audit.json
+[2026-05-20T09:34:17] Printed PC loadings (PC1–PC3) to terminal
+[2026-05-20T09:34:17] Saved loadings table + heatmap -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_loadings_pc123.csv, D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_loadings_pc123.png
+[2026-05-20T09:34:17] Saved cumulative variance plot -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\cumulative_variance_pca.png
+[2026-05-20T09:34:21] Saved 3D PCA scatter -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d.png
+[2026-05-20T09:34:22] Saved 3D PCA scatter (solid) -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d_solid.png
+[2026-05-20T09:35:06] Wrote interactive 3D HTML + row JSON -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d_interactive.html, D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d_interactive_rows.json
+[2026-05-20T09:35:06] Wrote readme -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\clustering_features_readme.txt
+[2026-05-20T09:35:06] Step 03 complete. outputs: D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_features.csv, D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_pc_scores.csv, results_dir=D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering

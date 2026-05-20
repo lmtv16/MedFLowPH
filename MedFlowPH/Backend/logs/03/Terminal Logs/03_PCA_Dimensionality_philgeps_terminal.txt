@@ -1,0 +1,20 @@
+Wrote PCA input features -> D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_features.csv (shape=(487605, 5))
+Wrote PC scores -> D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_pc_scores.csv
+Wrote D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_theme_clustering.json (cumulative PC1–PC3 variance=0.800455)
+Wrote D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_pc123_dominance_audit.json
+
+PC loadings (components_):
+      award_decision_lag_days  log1p_Quantity  log1p_Approved_Budget_of_the_Contract  log1p_Item_Budget  log1p_Contract_Amount
+PC-1                -0.165299       -0.043012                               0.363627           0.670205               0.624040
+PC-2                -0.095175        0.750502                               0.602374          -0.075793              -0.243083
+PC-3                 0.963248        0.092393                               0.122119          -0.026726               0.219064
+Saved loadings -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_loadings_pc123.csv, D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_loadings_pc123.png
+Saved plot -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\cumulative_variance_pca.png
+3D PNG: plot-only jitter Gaussian, scale s = 0.025 * max(ptp, std) per PC on subsample (not applied to D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_pc_scores.csv); s (PC1-PC3) ~ [0.202, 0.171, 0.177].
+3D PNG: color = KNN local density (k=24, viridis; PNG only).
+Saved 3D PCA scatter -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d.png
+Saved 3D PCA scatter (solid) -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d_solid.png
+Wrote interactive row lookup JSON -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d_interactive_rows.json (30,000 rows, 75.05 MB)
+Saved interactive 3D PCA -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\pca_space_pc123_3d_interactive.html
+Wrote readme -> D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering\clustering_features_readme.txt
+PhilGEPS step 03 done. PCA input: D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_features.csv; PC scores: D:\medflowv6\MedFlow\MedFlowPH\output_source\03\Clustering\philgeps_clustering_pc_scores.csv; results: D:\medflowv6\MedFlow\MedFlowPH\results\03\Clustering; logs: D:\medflowv6\MedFlow\MedFlowPH\logs\03. Run k-means step 04 on PC scores when ready.

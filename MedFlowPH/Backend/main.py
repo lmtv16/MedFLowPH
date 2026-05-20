@@ -160,7 +160,7 @@ def api_run_status(run_id: str) -> dict[str, Any]:
     if not row:
         raise HTTPException(404, "Run not found")
     log_tail = ""
-    log_dir = Path(__file__).resolve().parent.parent / "runs" / run_id / "logs" / "pipeline"
+    log_dir = Path(__file__).resolve().parent / "runs" / run_id / "logs" / "pipeline"
     if log_dir.is_dir():
         logs = sorted(log_dir.glob("*.log"), key=lambda p: p.stat().st_mtime, reverse=True)
         if logs:

@@ -2,14 +2,42 @@
 
 React + TypeScript + Vite SPA: thesis pages and `/workbench`.
 
-## Contents (this folder only)
+## Layout
 
-| Item | Purpose |
-|------|---------|
-| `src/` | React components, pages, API client |
-| `public/` | Static thesis assets (`data/`, `results/`, `output_source/`) |
-| `index.html`, `vite.config.ts` | Vite app shell and dev proxy to `:8000` |
-| `package.json` | Node dependencies |
+```
+Frontend/
+├── package.json
+├── package-lock.json
+├── index.html
+├── vite.config.ts
+├── vercel.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── eslint.config.js
+├── postcss.config.js
+├── tailwind.config.ts
+├── .env.example
+├── .gitignore
+├── README.md
+├── src/
+│   ├── main.tsx, App.tsx, index.css, App.css, vite-env.d.ts
+│   ├── api/              # HTTP client to Backend
+│   ├── assets/
+│   ├── components/
+│   ├── context/
+│   ├── data/
+│   ├── hooks/
+│   ├── pages/            # thesis routes
+│   │   └── workbench/
+│   └── utils/
+└── public/
+    ├── data/
+    ├── results/
+    └── output_source/
+```
+
+Build artifacts (not committed): `node_modules/`, `dist/`.
 
 ## Run locally
 

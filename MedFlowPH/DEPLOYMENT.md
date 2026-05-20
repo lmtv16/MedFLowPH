@@ -4,9 +4,9 @@ Serve the thesis SPA from `Frontend/dist` and the workbench API on the same orig
 
 ## Prerequisites
 
-- Ubuntu 22.04+ (or similar) VM with **≥ 4 GB RAM** and persistent disk for `runs/`
+- Ubuntu 22.04+ (or similar) VM with **≥ 4 GB RAM** and persistent disk for `Backend/runs/`
 - Python **3.11+**, Node **20+**, **nginx**, **Certbot** (TLS)
-- Full `MedFlowPH` tree on the server (PhilGEPS scripts, `Frontend/public`, baseline `output_source/` / `results/`)
+- Full tree: `Backend/` (scripts + baseline `output_source/` / `results/`), `Frontend/public/`
 
 ## Install
 
@@ -14,7 +14,6 @@ Serve the thesis SPA from `Frontend/dist` and the workbench API on the same orig
 cd /opt/medflow/MedFlowPH   # example path
 python3.11 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
 pip install -r Backend/requirements.txt
 
 cd Frontend
@@ -48,7 +47,7 @@ Environment (optional) in the unit file or `/etc/medflow/api.env`:
 | `MEDFLOW_CORS_ORIGINS` | Comma-separated extra SPA origins for split deploy (merged with localhost dev defaults) |
 | `MEDFLOW_DISABLE_UPLOAD` | `true` to reject multipart uploads on public demos |
 
-**Concurrency:** Use a single uvicorn worker (`WEB_CONCURRENCY=1` or default). The pipeline uses SQLite plus an in-process background thread; only one heavy run at a time is safe unless you accept races on `runs/workbench.db`.
+**Concurrency:** Use a single uvicorn worker (`WEB_CONCURRENCY=1` or default). The pipeline uses SQLite plus an in-process background thread; only one heavy run at a time is safe unless you accept races on `Backend/runs/workbench.db`.
 
 ## nginx (same-origin, recommended)
 

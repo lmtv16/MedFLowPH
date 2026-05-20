@@ -1,0 +1,15 @@
+{
+  "cluster_id": 81,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Awardee Organization Name",
+  "column_name": "Awardee Organization Name",
+  "resolved_column": "Awardee Organization Name",
+  "numeric": false,
+  "top_value": "AJR PHARMA AND MEDICAL SUPPLIES DISTRIBUTION",
+  "top_count": 28,
+  "cluster_rows": 547,
+  "top_share_within_cluster": 0.051188299817184646,
+  "global_count_of_top_value": 398,
+  "global_share_of_top_value": 0.0008162344520667343,
+  "lift_vs_global": 62.71274103607618
+}

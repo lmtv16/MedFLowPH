@@ -1,0 +1,15 @@
+{
+  "cluster_id": -2,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Region",
+  "column_name": "Region",
+  "resolved_column": "Region",
+  "numeric": false,
+  "top_value": "NCR",
+  "top_count": 43583,
+  "cluster_rows": 208899,
+  "top_share_within_cluster": 0.2086319226037463,
+  "global_count_of_top_value": 122876,
+  "global_share_of_top_value": 0.25199905661344735,
+  "lift_vs_global": 0.8279075541293639
+}

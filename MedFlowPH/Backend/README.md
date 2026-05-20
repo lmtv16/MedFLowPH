@@ -1,26 +1,22 @@
 # Backend
 
-FastAPI workbench API and pipeline orchestration.
+MedFlow PH backend: FastAPI workbench API, PhilGEPS pipeline scripts, run data, and baseline artifacts.
 
-## Contents (this folder only)
+## Layout
 
-| Item | Purpose |
-|------|---------|
-| `main.py` | Uvicorn app entry (`uvicorn main:app`) |
-| `config.py` | Paths to `runs/`, `source_code/`, `Frontend/public` |
-| `database.py` | SQLite run registry (`runs/workbench.db`) |
-| `pipeline_runner.py` | PhilGEPS subprocess orchestration |
-| `artifacts.py` | Per-run and thesis-final artifact resolution |
-| `models.py` | Pydantic request/response models |
-| `requirements.txt` | API-specific Python deps (install with root `requirements.txt`) |
+```
+Backend/
+├── main.py, config.py, …     # Workbench API (uvicorn)
+├── requirements.txt          # ML stack + API deps
+├── source_code/PhilGEPS/     # Pipeline scripts (01 → 07)
+├── runs/                     # Per-experiment outputs + workbench.db
+├── output_source/            # Baseline pipeline CSV/JSON exports
+├── results/                  # Baseline EDA / summaries
+├── raw_datasets/             # Optional PhilGEPS raw years (2020–2025)
+└── logs/                     # Pipeline activity / terminal logs
+```
 
-## Shared project paths (parent `MedFlowPH/`)
-
-The backend reads/writes these at the repo root — they are **not** duplicated here:
-
-- `source_code/PhilGEPS/` — pipeline scripts
-- `runs/` — experiment outputs
-- `output_source/`, `results/` — baseline artifacts
+Sibling at repo level: **`../Frontend/`** (React SPA; static thesis assets in `Frontend/public/`).
 
 ## Run locally
 
@@ -28,7 +24,6 @@ The backend reads/writes these at the repo root — they are **not** duplicated 
 cd MedFlow/MedFlowPH
 python -m venv .venv
 .venv\Scripts\activate   # or: source .venv/bin/activate
-pip install -r requirements.txt
 pip install -r Backend/requirements.txt
 cd Backend
 uvicorn main:app --reload --port 8000

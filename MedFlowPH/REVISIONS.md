@@ -2,25 +2,30 @@
 
 ## Project layout
 
-| Folder | Role |
-|--------|------|
-| `Backend/` | FastAPI workbench API (uvicorn `main:app`) — API code only |
-| `Frontend/` | React + Vite SPA (thesis pages + `/workbench`) — UI code only |
-| `source_code/` | PhilGEPS pipeline scripts (used by Backend) |
-| `runs/` | Per-experiment outputs + `workbench.db` (used by Backend) |
+```
+MedFlowPH/
+├── Backend/              # API + pipeline + runs + baseline data
+│   ├── source_code/
+│   ├── runs/
+│   ├── output_source/
+│   ├── results/
+│   ├── raw_datasets/     # optional
+│   └── requirements.txt
+└── Frontend/             # React + Vite SPA
+```
 
-If `medflow-web/` still exists (Windows file lock), `Frontend/` is a junction to it until you run `.\restructure-finalize.ps1` after stopping Vite/IDE.
+Use **`Frontend/`** only (`medflow-web/` was retired). If an empty `medflow-web/` remains, delete it or run `.\restructure-finalize.ps1`.
 
 ## Architecture
 
 ```
 User → React Workbench (/workbench)
          ↓ REST (Vite proxy /api → :8000)
-       FastAPI (Backend/main.py, SQLite in runs/workbench.db)
-         ↓ subprocess + MEDFLOW_ROOT=runs/{runId}
+       FastAPI (Backend/main.py, SQLite in Backend/runs/workbench.db)
+         ↓ subprocess + MEDFLOW_ROOT=Backend/runs/{runId}
        PhilGEPS scripts 01→02→03→05→04 …
          ↓
-       runs/{runId}/output_source/ + results/
+       Backend/runs/{runId}/output_source/ + results/
 ```
 
 Frozen baseline **`thesis-final`** keeps serving `Frontend/public/data` and `public/results` so all existing routes work without the API.
@@ -33,7 +38,6 @@ Frozen baseline **`thesis-final`** keeps serving `Frontend/public/data` and `pub
 cd MedFlow/MedFlowPH
 python -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
 pip install -r Backend/requirements.txt
 cd Backend
 uvicorn main:app --reload --port 8000
@@ -76,14 +80,14 @@ Set `MEDFLOW_CORS_ORIGINS=https://spa.example.com` on the API. Do not use `allow
 1. New experiment → uncheck Quick (Full mode), enable K-means
 2. Bundled on, no `raw_datasets/PhilGEPS/` years on disk
 3. Expect `completed` with:
-   - `runs/{id}/output_source/05/KSelection/k_selection_summary.json`
-   - `runs/{id}/output_source/04/KMeans/philgeps_kmeans_assignments.csv`
-   - `runs/{id}/results/03/Clustering/pca_theme_clustering.json`
+   - `Backend/runs/{id}/output_source/05/KSelection/k_selection_summary.json`
+   - `Backend/runs/{id}/output_source/04/KMeans/philgeps_kmeans_assignments.csv`
+   - `Backend/runs/{id}/results/03/Clustering/pca_theme_clustering.json`
 4. Re-open run → Evaluation tab loads core artifacts (no 404)
 
 **Full + bundled + raw** — end-to-end cleaning:
 
-1. When `MedFlowPH/raw_datasets/PhilGEPS/{2020..2025}/` exists, Full mode runs
+1. When `Backend/raw_datasets/PhilGEPS/{2020..2025}/` exists, Full mode runs
    `01 → 02 → 03 → 05 → 04` (API sets `seed_from_baseline=false` automatically)
 2. ZIP uploads: API normalizes `PhilGEPS(YYYY)` / `raw_data/` layouts to `PhilGEPS/YYYY/`
 

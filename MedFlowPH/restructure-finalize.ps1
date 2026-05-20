@@ -1,9 +1,5 @@
-# Finalize Backend/Frontend folder names (run after stopping dev servers).
-# 1. Removes Frontend junction if present
-# 2. Renames medflow-web -> Frontend
-# 3. Removes empty api/ if Backend already has the Python files
-#
-# Requires: no process using MedFlowPH/medflow-web (stop Vite, close IDE on that tree).
+# Legacy helper: Frontend is now a real folder (contents moved from medflow-web).
+# Run only if an empty medflow-web/ or Frontend junction still exists after closing IDE/Vite.
 
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
@@ -13,8 +9,7 @@ function Remove-JunctionIfPresent($path) {
     $item = Get-Item $path -Force
     if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
         cmd /c "rmdir `"$path`""
-    } else {
-        throw "Refusing to delete non-junction: $path"
+        Write-Host "Removed junction: $path"
     }
 }
 
@@ -23,19 +18,15 @@ Remove-JunctionIfPresent (Join-Path $root 'Frontend')
 $web = Join-Path $root 'medflow-web'
 $frontend = Join-Path $root 'Frontend'
 
-if (-not (Test-Path $web)) {
-    Write-Host 'medflow-web already renamed or missing.'
-} elseif (Test-Path $frontend) {
-    throw "Frontend already exists and is not a junction."
-} else {
-    Rename-Item -Path $web -NewName 'Frontend'
-    Write-Host 'Renamed medflow-web -> Frontend'
+if ((Test-Path $web) -and -not (Get-ChildItem $web -Force | Measure-Object).Count) {
+    cmd /c "rmdir `"$web`""
+    Write-Host 'Removed empty medflow-web/'
+} elseif (Test-Path $web) {
+    Write-Host 'medflow-web/ still has files — move them to Frontend/ manually or close locking processes and re-run.'
 }
 
-$api = Join-Path $root 'api'
-if ((Test-Path $api) -and -not (Get-ChildItem $api -Force | Where-Object { $_.Name -ne '.' })) {
-    Remove-Item $api -Force
-    Write-Host 'Removed empty api/'
+if (-not (Test-Path (Join-Path $frontend 'package.json'))) {
+    throw 'Frontend/package.json missing — restore from git or medflow-web backup.'
 }
 
-Write-Host 'Done. Use MedFlowPH/Backend and MedFlowPH/Frontend.'
+Write-Host 'Done. Use MedFlowPH/Frontend/ (see Frontend/README.md).'

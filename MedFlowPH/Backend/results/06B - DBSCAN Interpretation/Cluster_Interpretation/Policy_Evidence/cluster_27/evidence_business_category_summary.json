@@ -1,0 +1,15 @@
+{
+  "cluster_id": 27,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Business Category",
+  "column_name": "Business Category",
+  "resolved_column": "Business Category",
+  "numeric": false,
+  "top_value": "Laboratory Supplies and Equipment",
+  "top_count": 22,
+  "cluster_rows": 31,
+  "top_share_within_cluster": 0.7096774193548387,
+  "global_count_of_top_value": 77843,
+  "global_share_of_top_value": 0.15964356395032864,
+  "lift_vs_global": 4.445386972040083
+}

@@ -1,0 +1,15 @@
+{
+  "cluster_id": -1,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Procurement Mode",
+  "column_name": "Procurement Mode",
+  "resolved_column": "Procurement Mode",
+  "numeric": false,
+  "top_value": "Public Bidding",
+  "top_count": 164514,
+  "cluster_rows": 278470,
+  "top_share_within_cluster": 0.5907781807735124,
+  "global_count_of_top_value": 245757,
+  "global_share_of_top_value": 0.5040083674285538,
+  "lift_vs_global": 1.1721594698668545
+}
