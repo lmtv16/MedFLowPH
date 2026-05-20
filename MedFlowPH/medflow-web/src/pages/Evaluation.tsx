@@ -21,6 +21,8 @@ import type { GalleryImage } from '../components/LightboxGallery'
 import { LightboxGallery } from '../components/LightboxGallery'
 import { PageShell } from '../components/PageShell'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
+import { getManifestAssetUrl } from '../data/artifacts'
+import { useRunId } from '../context/RunContext'
 import { useCsvData } from '../hooks/useCsvData'
 import { tooltipFormatter } from '../utils/chartFormatters'
 
@@ -42,8 +44,28 @@ const dbscanGallery: GalleryImage[] = IMAGES.evaluation.dbscan.map((item) => ({
 const DBSCAN_SWEEP_CHART_MARGIN = { top: 36, right: 24, left: 8, bottom: 40 }
 
 export function Evaluation() {
+  const runId = useRunId()
+  const asset = (src: string) => getManifestAssetUrl(runId, src)
+  const kmeansSlides = useMemo(
+    () => kmeansEvalSlides.map((s) => ({ ...s, src: asset(s.src) })),
+    [runId],
+  )
+  const dbscanSlides = useMemo(
+    () => dbscanEvalSlides.map((s) => ({ ...s, src: asset(s.src) })),
+    [runId],
+  )
+  const kMeansGalleryResolved = useMemo(
+    () => kMeansGallery.map((g) => ({ ...g, src: asset(g.src) })),
+    [runId],
+  )
+  const dbscanGalleryResolved = useMemo(
+    () => dbscanGallery.map((g) => ({ ...g, src: asset(g.src) })),
+    [runId],
+  )
+
   const { data: dbRows, loading: dbscanGridLoading, error: dbscanGridError } = useCsvData(
     DATA_PATHS.dbscanMetricsGrid,
+    runId,
   )
   const [kmeansEvalSlideIdx, setKmeansEvalSlideIdx] = useState(0)
   const [dbscanEvalSlideIdx, setDbscanEvalSlideIdx] = useState(0)
@@ -67,14 +89,14 @@ export function Evaluation() {
 
   function openKmeansEvalCarousel(i: number) {
     setGallery({
-      imgs: kmeansEvalSlides.map((item) => ({ src: item.src, title: item.title })),
+      imgs: kmeansSlides.map((item) => ({ src: item.src, title: item.title })),
       idx: i,
     })
   }
 
   function openDbscanEvalCarousel(i: number) {
     setGallery({
-      imgs: dbscanEvalSlides.map((item) => ({ src: item.src, title: item.title })),
+      imgs: dbscanSlides.map((item) => ({ src: item.src, title: item.title })),
       idx: i,
     })
   }
@@ -195,7 +217,7 @@ export function Evaluation() {
             placeholders in the manifest with your own interpretations.
           </p>
           <LazyFigureCarousel
-            items={kmeansEvalSlides}
+            items={kmeansSlides}
             activeIndex={kmeansEvalSlideIdx}
             onActiveIndexChange={setKmeansEvalSlideIdx}
             onSlideImageClick={openKmeansEvalCarousel}
@@ -210,7 +232,7 @@ export function Evaluation() {
             epsilon/minPts combinations.
           </p>
           <LazyFigureCarousel
-            items={dbscanEvalSlides}
+            items={dbscanSlides}
             activeIndex={dbscanEvalSlideIdx}
             onActiveIndexChange={setDbscanEvalSlideIdx}
             onSlideImageClick={openDbscanEvalCarousel}
@@ -226,13 +248,13 @@ export function Evaluation() {
         />
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {IMAGES.evaluation.kmeans.map((img, idx) => (
+          {kMeansGalleryResolved.map((img, idx) => (
             <ImageCard
               key={img.src}
               src={img.src}
               title={img.title}
               figure={`Figure KM${idx + 1}: ${img.title}`}
-              onClick={() => setGallery({ imgs: kMeansGallery, idx })}
+              onClick={() => setGallery({ imgs: kMeansGalleryResolved, idx })}
             />
           ))}
         </div>
@@ -243,13 +265,13 @@ export function Evaluation() {
         />
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {IMAGES.evaluation.dbscan.map((img, idx) => (
+          {dbscanGalleryResolved.map((img, idx) => (
             <ImageCard
               key={img.src}
               src={img.src}
               title={img.title}
               figure={`Figure DB‑EV${idx + 1}: ${img.title}`}
-              onClick={() => setGallery({ imgs: dbscanGallery, idx })}
+              onClick={() => setGallery({ imgs: dbscanGalleryResolved, idx })}
             />
           ))}
         </div>

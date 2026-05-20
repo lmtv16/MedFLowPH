@@ -56,9 +56,7 @@ from validation.philgeps_step01_validation import (
 CRAMERS_V_MAX_CARDINALITY = 25
 CRAMERS_V_MAX_COLUMNS = 16
 
-# Project root: MedFlowPH/ (three levels up from source_code/PhilGEPS/this_file.py)
-_HERE = os.path.abspath(__file__)
-MEDFLOW_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_HERE)))
+from philgeps_paths import MEDFLOW_ROOT
 
 # --- Paths (per MedFlowPH layout) ---
 PATH_RAW_DATASETS = os.path.join(MEDFLOW_ROOT, "raw_datasets")

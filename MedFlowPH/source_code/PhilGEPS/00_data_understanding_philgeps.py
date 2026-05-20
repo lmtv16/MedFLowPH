@@ -37,8 +37,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
-_HERE = os.path.abspath(__file__)
-MEDFLOW_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_HERE)))
+from philgeps_paths import MEDFLOW_ROOT
 
 PATH_RAW_DATASETS = os.path.join(MEDFLOW_ROOT, "raw_datasets")
 PATH_PHILGEPS_RAW = os.path.join(PATH_RAW_DATASETS, "PhilGEPS")

@@ -103,8 +103,7 @@ from philgeps_theme_scores import (
     POLICY_THEME_SCORE_COLUMNS,
 )
 
-_HERE = os.path.abspath(__file__)
-MEDFLOW_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_HERE)))
+from philgeps_paths import MEDFLOW_ROOT
 
 PATH_SCALED_INPUT = os.path.join(
     MEDFLOW_ROOT, "output_source", "02", "Min-Max Scaling", "philgeps_min_max_scaled.csv",

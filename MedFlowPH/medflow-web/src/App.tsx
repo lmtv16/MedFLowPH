@@ -12,6 +12,18 @@ const ClusteringPage = lazy(() => import('./pages/Clustering').then((m) => ({ de
 const Evaluation = lazy(() => import('./pages/Evaluation').then((m) => ({ default: m.Evaluation })))
 const Interpretation = lazy(() => import('./pages/Interpretation').then((m) => ({ default: m.Interpretation })))
 const Comparison = lazy(() => import('./pages/Comparison').then((m) => ({ default: m.Comparison })))
+const WorkbenchHome = lazy(() =>
+  import('./pages/workbench/WorkbenchHome').then((m) => ({ default: m.WorkbenchHome })),
+)
+const WorkbenchNew = lazy(() =>
+  import('./pages/workbench/WorkbenchNew').then((m) => ({ default: m.WorkbenchNew })),
+)
+const WorkbenchRunDetail = lazy(() =>
+  import('./pages/workbench/WorkbenchRunDetail').then((m) => ({ default: m.WorkbenchRunDetail })),
+)
+const WorkbenchCompare = lazy(() =>
+  import('./pages/workbench/WorkbenchCompare').then((m) => ({ default: m.WorkbenchCompare })),
+)
 
 function RouteFallbackBoundary({ children }: { children: ReactNode }) {
   return <Suspense fallback={<PageRouteFallback />}>{children}</Suspense>
@@ -92,6 +104,38 @@ export default function App() {
             element={
               <RouteFallbackBoundary>
                 <Comparison />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/workbench"
+            element={
+              <RouteFallbackBoundary>
+                <WorkbenchHome />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/workbench/new"
+            element={
+              <RouteFallbackBoundary>
+                <WorkbenchNew />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/workbench/compare"
+            element={
+              <RouteFallbackBoundary>
+                <WorkbenchCompare />
+              </RouteFallbackBoundary>
+            }
+          />
+          <Route
+            path="/workbench/runs/:runId"
+            element={
+              <RouteFallbackBoundary>
+                <WorkbenchRunDetail />
               </RouteFallbackBoundary>
             }
           />

@@ -74,6 +74,13 @@ const NAV_ITEMS: readonly NavItem[] = [
     label: 'Model Comparison',
     highlight: true,
   },
+  {
+    kind: 'link',
+    key: 'workbench',
+    path: '/workbench',
+    label: 'Workbench',
+    highlight: true,
+  },
 ]
 
 type TopbarProps = {

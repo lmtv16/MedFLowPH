@@ -11,6 +11,8 @@ import { PageTOC, TOC_INTERPRETATION } from '../components/PageTOC'
 import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
 import { DATA_PATHS, INTERACTIVE } from '../data/fileManifest'
+import { getManifestAssetUrl } from '../data/artifacts'
+import { useRunId } from '../context/RunContext'
 import { useCsvData } from '../hooks/useCsvData'
 
 const POLICY_CLUSTER_IDS = [0, 1, 2, 3, 4, 5] as const
@@ -1387,10 +1389,22 @@ function DbscanInsightsGridPageCarousel({ children }: { children: ReactNode }) {
 }
 
 export function Interpretation() {
-  const { data: semanticRows, loading: semanticLoading } = useCsvData(DATA_PATHS.clusterSemanticMap)
-  const { data: themeRows, loading: themeLoading } = useCsvData(DATA_PATHS.clusterThemeProfiles)
-  const { data: dbscanSemanticRows, loading: dbscanSemanticLoading } = useCsvData(DATA_PATHS.dbscanSemanticMap)
-  const { data: dbscanThemeRows, loading: dbscanThemeLoading } = useCsvData(DATA_PATHS.dbscanThemeProfiles)
+  const runId = useRunId()
+  const { data: semanticRows, loading: semanticLoading } = useCsvData(
+    DATA_PATHS.clusterSemanticMap,
+    runId,
+  )
+  const { data: themeRows, loading: themeLoading } = useCsvData(DATA_PATHS.clusterThemeProfiles, runId)
+  const { data: dbscanSemanticRows, loading: dbscanSemanticLoading } = useCsvData(
+    DATA_PATHS.dbscanSemanticMap,
+    runId,
+  )
+  const { data: dbscanThemeRows, loading: dbscanThemeLoading } = useCsvData(
+    DATA_PATHS.dbscanThemeProfiles,
+    runId,
+  )
+  const kmeans3dSrc = getManifestAssetUrl(runId, INTERACTIVE.kmeans3d)
+  const dbscan3dSrc = getManifestAssetUrl(runId, INTERACTIVE.dbscan3d)
   const [policyCluster, setPolicyCluster] = useState<(typeof POLICY_CLUSTER_IDS)[number]>(0)
   const [dbscanPolicyFolder, setDbscanPolicyFolder] = useState<
     (typeof DBSCAN_POLICY_EVIDENCE_TABS)[number]['folder']
@@ -1494,7 +1508,7 @@ export function Interpretation() {
           <SectionWrapper id="interpretation-section-kmeans">
             <LazyIframePanel
               id="interpretation-kmeans-3d"
-              src={INTERACTIVE.kmeans3d}
+              src={kmeans3dSrc}
               title="K‑Means PCA"
               height={600}
             />
@@ -1700,7 +1714,7 @@ export function Interpretation() {
             <div className="space-y-3">
               <LazyIframePanel
                 id="interpretation-dbscan-3d"
-                src={INTERACTIVE.dbscan3d}
+                src={dbscan3dSrc}
                 title="DBSCAN(PCA)"
                 height={600}
               />

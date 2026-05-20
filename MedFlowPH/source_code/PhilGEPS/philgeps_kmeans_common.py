@@ -24,8 +24,7 @@ from sklearn.metrics import calinski_harabasz_score, davies_bouldin_score, silho
 
 from philgeps_theme_scores import POLICY_PCA_BASE_COLUMNS, POLICY_THEME_SCORE_COLUMNS
 
-_HERE = os.path.abspath(__file__)
-MEDFLOW_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_HERE)))
+from philgeps_paths import MEDFLOW_ROOT
 
 PATH_OUTPUT_03 = os.path.join(MEDFLOW_ROOT, "output_source", "03", "Clustering")
 PATH_RESULTS_03 = os.path.join(MEDFLOW_ROOT, "results", "03", "Clustering")

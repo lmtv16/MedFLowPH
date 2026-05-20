@@ -62,8 +62,7 @@ from philgeps_theme_scores import (
 # Paths (mirror step 01 layout, but for /02/)
 # ---------------------------------------------------------------------------
 
-_HERE = os.path.abspath(__file__)
-MEDFLOW_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_HERE)))
+from philgeps_paths import MEDFLOW_ROOT
 
 PATH_INPUT_CSV = os.path.join(
     MEDFLOW_ROOT, "output_source", "01", "philgeps_medical_procurement.csv",

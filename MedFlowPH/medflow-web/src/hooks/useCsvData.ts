@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react'
 import Papa from 'papaparse'
+import { getArtifactUrl, THESIS_FINAL_RUN_ID, type RunId } from '../data/artifacts'
 
 /**
  * Fetches a CSV from `/public/data/` (or any path starting with `/`) and returns parsed rows.
+ * Pass `runId` to load artifacts from a workbench experiment (default: frozen thesis baseline).
  */
-export function useCsvData(filename: string) {
+export function useCsvData(filename: string, runId: RunId = THESIS_FINAL_RUN_ID) {
   const [data, setData] = useState<Record<string, string>[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    const url = filename.startsWith('/') ? filename : `/data/${filename}`
+    const url = getArtifactUrl(
+      runId,
+      filename.startsWith('/') ? filename : `/data/${filename}`,
+    )
 
     setLoading(true)
     setError(null)
@@ -39,19 +44,19 @@ export function useCsvData(filename: string) {
     return () => {
       cancelled = true
     }
-  }, [filename])
+  }, [filename, runId])
 
   return { data, loading, error }
 }
 
-export function useTextData(url: string) {
+export function useTextData(url: string, runId: RunId = THESIS_FINAL_RUN_ID) {
   const [text, setText] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    const resolved = url.startsWith('/') ? url : `/data/${url}`
+    const resolved = getArtifactUrl(runId, url.startsWith('/') ? url : `/data/${url}`)
 
     setLoading(true)
     setError(null)
@@ -74,24 +79,25 @@ export function useTextData(url: string) {
     return () => {
       cancelled = true
     }
-  }, [url])
+  }, [url, runId])
 
   return { text, loading, error }
 }
 
-export function useJsonData<T>(url: string) {
+export function useJsonData<T>(url: string, runId: RunId = THESIS_FINAL_RUN_ID) {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     let cancelled = false
+    const resolved = getArtifactUrl(runId, url.startsWith('/') ? url : url)
     setLoading(true)
     setError(null)
 
-    fetch(url)
+    fetch(resolved)
       .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load ${url}`)
+        if (!res.ok) throw new Error(`Failed to load ${resolved}`)
         return res.json() as Promise<T>
       })
       .then((json) => {
@@ -107,7 +113,7 @@ export function useJsonData<T>(url: string) {
     return () => {
       cancelled = true
     }
-  }, [url])
+  }, [url, runId])
 
   return { data, loading, error }
 }

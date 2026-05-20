@@ -9,6 +9,8 @@ import { PageShell } from '../components/PageShell'
 import { SectionHeader } from '../components/SectionHeader'
 import { SectionWrapper } from '../components/SectionWrapper'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
+import { getManifestAssetUrl } from '../data/artifacts'
+import { useRunId } from '../context/RunContext'
 import { useCsvData, useJsonData } from '../hooks/useCsvData'
 
 type ClusterMeta = { k: number }
@@ -24,8 +26,9 @@ type ParsedRow = {
 }
 
 export function Comparison() {
-  const { data } = useCsvData(DATA_PATHS.modelComparisonSummary)
-  const { data: clusterMeta } = useJsonData<ClusterMeta>(DATA_PATHS.clusterCountsKmeans)
+  const runId = useRunId()
+  const { data } = useCsvData(DATA_PATHS.modelComparisonSummary, runId)
+  const { data: clusterMeta } = useJsonData<ClusterMeta>(DATA_PATHS.clusterCountsKmeans, runId)
   const [gallery, setGallery] = useState<{ imgs: GalleryImage[]; idx: number }>({
     imgs: [],
     idx: 0,
@@ -53,12 +56,20 @@ export function Comparison() {
 
   const chosenK = clusterMeta?.k ?? 6
 
-  const galleryImages = IMAGES.comparison.map((item) => ({ src: item.src, title: item.title }))
-  const sideBySideGalleryIdx = IMAGES.comparison.findIndex((img) =>
+  const comparisonImages = useMemo(
+    () =>
+      IMAGES.comparison.map((item) => ({
+        ...item,
+        src: getManifestAssetUrl(runId, item.src),
+      })),
+    [runId],
+  )
+  const galleryImages = comparisonImages.map((item) => ({ src: item.src, title: item.title }))
+  const sideBySideGalleryIdx = comparisonImages.findIndex((img) =>
     img.src.includes('kmeans_vs_DBSCAN'),
   )
   const sideBySideAsset =
-    sideBySideGalleryIdx >= 0 ? IMAGES.comparison[sideBySideGalleryIdx] : undefined
+    sideBySideGalleryIdx >= 0 ? comparisonImages[sideBySideGalleryIdx] : undefined
 
   return (
     <PageShell>
@@ -259,7 +270,7 @@ export function Comparison() {
 
             <SectionWrapper id="comparison-gallery" title="Visual gallery">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                {IMAGES.comparison
+                {comparisonImages
                   .map((img, manifestIdx) => ({ img, manifestIdx }))
                   .filter(({ img }) => !img.src.includes('side_by_side'))
                   .map(({ img, manifestIdx }) => (

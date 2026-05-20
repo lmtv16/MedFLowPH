@@ -151,6 +151,45 @@ export function Landing() {
                   >
                     View Clustering
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => void navigate('/workbench')}
+                    className="inline-flex items-center justify-center rounded-xl border border-primary/30 bg-primary/5 px-5 py-2.5 text-mf-nav font-semibold text-primary shadow-sm hover:bg-primary/10"
+                  >
+                    Analytics Workbench
+                  </button>
+                </div>
+              </div>
+            </SectionWrapper>
+
+            <SectionWrapper id="workbench-defense" title="Defense / Analytics Workbench">
+              <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-card via-primary/5 to-card p-6 shadow-sm sm:p-8">
+                <p className="text-mf-body text-muted-foreground">
+                  Run new clustering experiments from the browser, compare hyperparameters, and explore
+                  artifacts per run — while the frozen thesis baseline remains available for defense demos.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => void navigate('/#dataset-snapshot')}
+                    className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-mf-nav font-semibold text-primary-foreground shadow hover:bg-primary/90"
+                  >
+                    Key metrics
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void navigate('/workbench/new')}
+                    className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-5 py-2.5 text-mf-nav font-semibold text-primary hover:bg-muted"
+                  >
+                    Run new experiment
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void navigate('/workbench/compare')}
+                    className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-5 py-2.5 text-mf-nav font-semibold text-primary hover:bg-muted"
+                  >
+                    Compare experiments
+                  </button>
                 </div>
               </div>
             </SectionWrapper>
