@@ -1,0 +1,19 @@
+[Unit]
+Description=MedFlow PH Workbench API (uvicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=medflow
+Group=medflow
+WorkingDirectory=/opt/medflow/MedFlowPH/Backend
+Environment=PATH=/opt/medflow/MedFlowPH/.venv/bin:/usr/bin
+# EnvironmentFile=-/etc/medflow/api.env
+# MEDFLOW_CORS_ORIGINS=https://your.domain.example
+# MEDFLOW_DISABLE_UPLOAD=true
+ExecStart=/opt/medflow/MedFlowPH/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

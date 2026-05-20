@@ -1,0 +1,15 @@
+{
+  "cluster_id": 4,
+  "evidence_group": "shortage_risk",
+  "logical_column": "award_publish_lag_days",
+  "column_name": "award_publish_lag_days",
+  "resolved_column": "award_publish_lag_days",
+  "numeric": true,
+  "top_value": "High",
+  "top_count": 19506,
+  "cluster_rows": 48437,
+  "top_share_within_cluster": 0.40270867312178704,
+  "global_count_of_top_value": 121603,
+  "global_share_of_top_value": 0.2493883368710329,
+  "lift_vs_global": 1.6147855115215002
+}

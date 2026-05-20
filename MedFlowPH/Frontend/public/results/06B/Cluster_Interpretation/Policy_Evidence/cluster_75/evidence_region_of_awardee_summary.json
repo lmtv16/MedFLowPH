@@ -1,0 +1,15 @@
+{
+  "cluster_id": 75,
+  "evidence_group": "supply_concentration",
+  "logical_column": "Region of Awardee",
+  "column_name": "Region of Awardee",
+  "resolved_column": "Region of Awardee",
+  "numeric": false,
+  "top_value": "NCR",
+  "top_count": 422,
+  "cluster_rows": 854,
+  "top_share_within_cluster": 0.49414519906323184,
+  "global_count_of_top_value": 287874,
+  "global_share_of_top_value": 0.590383609684068,
+  "lift_vs_global": 0.8369900365758185
+}

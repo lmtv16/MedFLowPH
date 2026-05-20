@@ -1,0 +1,15 @@
+{
+  "cluster_id": 66,
+  "evidence_group": "inventory_posture",
+  "logical_column": "Business Category",
+  "column_name": "Business Category",
+  "resolved_column": "Business Category",
+  "numeric": false,
+  "top_value": "Medical Supplies and Laboratory Instrument",
+  "top_count": 324,
+  "cluster_rows": 981,
+  "top_share_within_cluster": 0.3302752293577982,
+  "global_count_of_top_value": 162936,
+  "global_share_of_top_value": 0.33415572030639557,
+  "lift_vs_global": 0.9883871778551651
+}

@@ -1,0 +1,15 @@
+{
+  "cluster_id": 1,
+  "evidence_group": "shortage_risk",
+  "logical_column": "time_to_close_days",
+  "column_name": "time_to_close_days",
+  "resolved_column": "time_to_close_days",
+  "numeric": true,
+  "top_value": "Low",
+  "top_count": 24295,
+  "cluster_rows": 59396,
+  "top_share_within_cluster": 0.40903427840258605,
+  "global_count_of_top_value": 157096,
+  "global_share_of_top_value": 0.3221788127685319,
+  "lift_vs_global": 1.269587763663575
+}

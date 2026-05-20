@@ -1,0 +1,15 @@
+{
+  "cluster_id": 81,
+  "evidence_group": "shortage_risk",
+  "logical_column": "UNSPSC Description",
+  "column_name": "UNSPSC Description",
+  "resolved_column": "UNSPSC Description",
+  "numeric": false,
+  "top_value": "Drugs and Pharmaceutical Products",
+  "top_count": 116,
+  "cluster_rows": 547,
+  "top_share_within_cluster": 0.21206581352833637,
+  "global_count_of_top_value": 94297,
+  "global_share_of_top_value": 0.1933880907701931,
+  "lift_vs_global": 1.0965815562052288
+}

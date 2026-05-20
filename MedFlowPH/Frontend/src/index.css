@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-mf-bg font-sans text-mf-body text-mf-ink antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+  }
+
+  #root {
+    @apply min-h-screen w-full min-w-0;
+  }
+
+  /**
+   * In-page anchors (TOC, hash links): offset for fixed topbar (~3px progress + ~56px bar + optional context row).
+   */
+  .medflow-main [id] {
+    scroll-margin-top: 6.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .medflow-main [id] {
+      scroll-margin-top: 6.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .medflow-main [id] {
+      scroll-margin-top: 7.25rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/**
+ * Sidebar / dropdown TOC scroll-spy enhancement (applied alongside existing Tailwind utilities).
+ */
+@layer components {
+  .medflow-scroll-active-indicator {
+    box-shadow: inset 3px 0 0 hsl(var(--primary) / 0.75);
+  }
+
+  /**
+   * Recharts: fixed pixel height overflows short viewports; cap with vh and allow horizontal scroll if parent clips.
+   */
+  .medflow-recharts-container {
+    width: 100%;
+    min-width: 0;
+    min-height: 220px;
+    height: min(420px, 72vh);
+  }
+
+  @supports (height: 1dvh) {
+    .medflow-recharts-container {
+      height: min(420px, 72dvh);
+    }
+  }
+
+  /** Enhanced scrollbars for wide schema / data tables (EDA raw schema, etc.). */
+  .mf-table-scroll {
+    scrollbar-gutter: stable;
+  }
+
+  .mf-table-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .mf-table-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+  }
+
+  .mf-table-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.4);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .mf-table-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 116, 139, 0.7);
+  }
+
+  @supports (scrollbar-width: thin) {
+    .mf-table-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(100, 116, 139, 0.4) rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  html.dark .mf-table-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  html.dark .mf-table-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.45);
+  }
+
+  html.dark .mf-table-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.75);
+  }
+
+  @supports (scrollbar-width: thin) {
+    html.dark .mf-table-scroll {
+      scrollbar-color: rgba(148, 163, 184, 0.45) rgba(255, 255, 255, 0.04);
+    }
+  }
+}
+
+@media print {
+  .medflow-topbar,
+  .medflow-scroll-progress,
+  .medflow-no-print {
+    display: none !important;
+  }
+
+  .medflow-main {
+    margin: 0 !important;
+    padding: 1rem !important;
+    max-width: none !important;
+  }
+}
+
+/* Design tokens — light in `:root`, dark overrides in `html.dark` (single theme switch). */
+:root {
+  --background: 220 20% 98%;
+  --foreground: 220 30% 12%;
+
+  --border: 220 15% 88%;
+  --input: 220 15% 88%;
+  --ring: 210 80% 42%;
+
+  --card: 220 20% 100%;
+  --card-foreground: 220 30% 12%;
+  --card-border: 220 15% 90%;
+
+  --popover: 220 20% 100%;
+  --popover-foreground: 220 30% 12%;
+  --popover-border: 220 15% 90%;
+
+  --primary: 210 80% 42%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 175 60% 38%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 220 15% 92%;
+  --muted-foreground: 220 20% 40%;
+
+  --accent: 195 70% 45%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --radius: 0.5rem;
+
+  /** MedFlow surface + ink (space-separated RGB for Tailwind `rgb(… / <alpha>)`). */
+  --mf-primary-rgb: 29 78 216;
+  --mf-secondary-rgb: 15 118 110;
+  --mf-bg-rgb: 248 250 252;
+  --mf-card-rgb: 255 255 255;
+  --mf-sidebar-bg-rgb: 30 41 59;
+  --mf-sidebar-text-rgb: 203 213 225;
+  --mf-sidebar-active-rgb: 56 189 248;
+  --mf-ink-rgb: 15 23 42;
+  --mf-muted-rgb: 100 116 139;
+  --mf-border-rgb: 226 232 240;
+
+  /**
+   * Sticky navbar + floating menus (desktop dropdown, mobile drawer).
+   * Derived from semantic tokens so `html.dark` is the only theme switch (no parallel palettes).
+   */
+  --nav-bg: hsl(var(--background) / 0.82);
+  --nav-text: hsl(var(--foreground));
+  --nav-border: hsl(var(--border) / 0.55);
+  --nav-shadow: 0 4px 24px -4px hsl(var(--foreground) / 0.1);
+  --dropdown-bg: hsl(var(--card) / 0.96);
+  --dropdown-text: hsl(var(--popover-foreground));
+  --dropdown-border: hsl(var(--border) / 0.55);
+  --dropdown-ring: hsl(var(--foreground) / 0.06);
+  --dropdown-shadow: 0 8px 30px -6px hsl(var(--foreground) / 0.14);
+  --dropdown-item-hover: hsl(var(--primary) / 0.1);
+  --dropdown-item-active-bg: hsl(var(--primary) / 0.14);
+  --mobile-panel-shadow: 0 12px 40px -8px hsl(var(--foreground) / 0.16);
+  --mobile-overlay: hsl(var(--foreground) / 0.38);
+  --context-bar-bg: hsl(var(--background) / 0.55);
+  --context-bar-border: hsl(var(--border) / 0.5);
+}
+
+html.dark {
+  color-scheme: dark;
+
+  --background: 220 30% 10%;
+  --foreground: 220 20% 98%;
+
+  --border: 220 20% 20%;
+  --input: 220 20% 20%;
+  --ring: 210 80% 60%;
+
+  --card: 220 30% 14%;
+  --card-foreground: 220 20% 98%;
+  --card-border: 220 20% 22%;
+
+  --popover: 220 30% 14%;
+  --popover-foreground: 220 20% 98%;
+  --popover-border: 220 20% 22%;
+
+  --primary: 210 80% 60%;
+  --primary-foreground: 220 30% 10%;
+
+  --secondary: 175 60% 45%;
+  --secondary-foreground: 220 30% 10%;
+
+  --muted: 220 20% 18%;
+  --muted-foreground: 220 15% 70%;
+
+  --accent: 195 70% 55%;
+  --accent-foreground: 220 30% 10%;
+
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 220 20% 98%;
+
+  --mf-primary-rgb: 96 165 250;
+  --mf-secondary-rgb: 45 212 191;
+  --mf-bg-rgb: 15 23 42;
+  --mf-card-rgb: 30 41 59;
+  --mf-sidebar-bg-rgb: 15 23 42;
+  --mf-sidebar-text-rgb: 203 213 225;
+  --mf-sidebar-active-rgb: 56 189 248;
+  --mf-ink-rgb: 248 250 252;
+  --mf-muted-rgb: 148 163 184;
+  --mf-border-rgb: 51 65 85;
+
+  --nav-bg: hsl(var(--background) / 0.88);
+  --nav-text: hsl(var(--foreground));
+  --nav-border: hsl(var(--border) / 0.65);
+  --nav-shadow: 0 4px 28px -4px hsl(var(--foreground) / 0.22);
+  --dropdown-bg: hsl(var(--card) / 0.97);
+  --dropdown-text: hsl(var(--popover-foreground));
+  --dropdown-border: hsl(var(--border) / 0.65);
+  --dropdown-ring: hsl(var(--foreground) / 0.08);
+  --dropdown-shadow: 0 12px 36px -8px hsl(var(--foreground) / 0.28);
+  --dropdown-item-hover: hsl(var(--foreground) / 0.1);
+  --dropdown-item-active-bg: hsl(var(--primary) / 0.24);
+  --mobile-panel-shadow: 0 16px 48px -12px hsl(var(--foreground) / 0.26);
+  --mobile-overlay: hsl(var(--background) / 0.72);
+  --context-bar-bg: hsl(var(--background) / 0.78);
+  --context-bar-border: hsl(var(--border) / 0.55);
+}

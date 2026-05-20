@@ -1,0 +1,15 @@
+{
+  "cluster_id": 2,
+  "evidence_group": "shortage_risk",
+  "logical_column": "Procurement Mode",
+  "column_name": "Procurement Mode",
+  "resolved_column": "Procurement Mode",
+  "numeric": false,
+  "top_value": "Negotiated Procurement - Small Value Procurement (Sec. 53.9)",
+  "top_count": 16324,
+  "cluster_rows": 38657,
+  "top_share_within_cluster": 0.4222779832889257,
+  "global_count_of_top_value": 170850,
+  "global_share_of_top_value": 0.35038607069246624,
+  "lift_vs_global": 1.2051791398396055
+}

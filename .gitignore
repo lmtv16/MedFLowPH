@@ -1,4 +1,4 @@
 ﻿__pycache__/
 *.py[cod]
-MedFlowPH/medflow-web/public/data/02/**
-MedFlowPH/medflow-web/public/output_source/02/**
+MedFlowPH/Frontend/public/data/02/**
+MedFlowPH/Frontend/public/output_source/02/**

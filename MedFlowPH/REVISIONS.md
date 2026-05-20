@@ -1,18 +1,29 @@
 # MedFlow PH — Revision Workbench
 
+## Project layout
+
+| Folder | Role |
+|--------|------|
+| `Backend/` | FastAPI workbench API (uvicorn `main:app`) — API code only |
+| `Frontend/` | React + Vite SPA (thesis pages + `/workbench`) — UI code only |
+| `source_code/` | PhilGEPS pipeline scripts (used by Backend) |
+| `runs/` | Per-experiment outputs + `workbench.db` (used by Backend) |
+
+If `medflow-web/` still exists (Windows file lock), `Frontend/` is a junction to it until you run `.\restructure-finalize.ps1` after stopping Vite/IDE.
+
 ## Architecture
 
 ```
 User → React Workbench (/workbench)
          ↓ REST (Vite proxy /api → :8000)
-       FastAPI (api/main.py, SQLite in runs/workbench.db)
+       FastAPI (Backend/main.py, SQLite in runs/workbench.db)
          ↓ subprocess + MEDFLOW_ROOT=runs/{runId}
        PhilGEPS scripts 01→02→03→05→04 …
          ↓
        runs/{runId}/output_source/ + results/
 ```
 
-Frozen baseline **`thesis-final`** keeps serving `medflow-web/public/data` and `public/results` so all existing routes work without the API.
+Frozen baseline **`thesis-final`** keeps serving `Frontend/public/data` and `public/results` so all existing routes work without the API.
 
 ## Quick start
 
@@ -23,20 +34,34 @@ cd MedFlow/MedFlowPH
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-pip install -r api/requirements.txt
-cd api
+pip install -r Backend/requirements.txt
+cd Backend
 uvicorn main:app --reload --port 8000
 ```
 
 ### 2. Frontend
 
 ```bash
-cd MedFlow/MedFlowPH/medflow-web
+cd MedFlow/MedFlowPH/Frontend
 npm install
 npm run dev
 ```
 
 Open http://localhost:5173/workbench
+
+## Production deployment
+
+**Recommended:** single origin — nginx serves `Frontend/dist`, proxies `/api/*` and `/health` to uvicorn. See **[DEPLOYMENT.md](./DEPLOYMENT.md)** (`deploy/nginx.conf.sample`, `deploy/medflow-api.service`).
+
+**Split SPA + API:** build with an explicit API host:
+
+```bash
+VITE_API_BASE_URL=https://api.example.com npm run build
+```
+
+Set `MEDFLOW_CORS_ORIGINS=https://spa.example.com` on the API. Do not use `allow_origins=["*"]` with credentials.
+
+**Public demo (optional):** `MEDFLOW_DISABLE_UPLOAD=true` blocks ZIP/CSV uploads; Quick + bundled dataset still work.
 
 ### 3. Proof experiments
 

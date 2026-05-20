@@ -1,0 +1,23 @@
+cluster_id,cluster_label,rationale_short
+0,High-Value Centralized Public Procurement Segment,"Summary
+
+Cluster 0 represents a group of medical-related procurement records with very high contract value, very high item budget, high approved budget, and strong concentration in Luzon, NCR, and Metro Manila. Most records are awarded and processed through public bidding, which suggests that this cluster is composed mainly of formal, large-value public procurement activities.
+
+Although the financial value is very high, the quantity is mostly low. This means Cluster 0 is not mainly a high-volume procurement group. Instead, it likely includes expensive medical-related items, bundled procurement lots, medical equipment, laboratory instruments, drugs, medicines, and other high-cost procurement packages."
+1,Low-Value High-Quantity Routine Supply Segment,"Cluster 1 represents routine medical-related procurement activity where quantity is high, but contract amount, item budget, and approved budget are mostly low. This means the cluster likely contains common medical supplies, drugs, medicines, consumables, or laboratory supplies that are purchased in larger quantities but at lower financial value.
+
+This cluster also shows strong representation of Medical Equipment and Accessories and Supplies, Drugs and Pharmaceutical Products, and laboratory-related items. The procurement modes are mostly Small Value Procurement and Public Bidding, suggesting regular or recurring procurement activities."
+2,Delayed Medium-Value Centralized Procurement Segment,"Cluster 2 is strongly characterized by very high award decision lag and very high award publishing lag. This means procurement records in this cluster may take longer to move from evaluation to final award and publication. Unlike Cluster 0, which is very high in contract amount, Cluster 2 is mostly medium-value procurement.
+
+This shows strong concentration in Luzon, NCR, and Metro Manila, especially on the supplier or awardee side. The bid notice status is mostly Closed, with Awarded also present, meaning many records reached a completed or closed stage but with notable delay patterns."
+3,Stable Routine Medical Procurement Segment,"Cluster 3 appears to be a more stable and routine procurement group. It has many awarded records, mostly low time-to-close, and lower or moderate delay indicators compared with delay-heavy clusters. This suggests that procurement activities in this cluster may be processed more smoothly.
+
+This cluster contains medical supplies, laboratory items, drugs, medicines, and medical equipment. Quantity is mostly low, while contract amount and item budget are mostly medium to high. This means it may represent routine procurement packages that are not necessarily bulk purchases but still have meaningful financial value."
+4,High-Volume High-Budget Delayed Procurement Segment,"Cluster 4 shows strong evidence of very high quantity, very high approved budget, very high item budget, and high to very high contract amount. This cluster is also strongly associated with Public Bidding, which suggests that it contains large-scale and formal procurement activities.
+
+The timing indicators are also important. This shows high and very high time-to-close, high award publish lag, and high award decision lag. This means that Cluster 4 may contain large and important procurements that also take longer to complete.
+
+This cluster is strongly medical-related, with many records involving drugs, medicines, medical supplies, laboratory supplies, and medical equipment."
+5,High-Volume Low-to-Medium Cost Public Bidding Segment,"Cluster 5 is characterized by very high and high quantity, but low to medium contract amount and low to medium item budget. This suggests that the cluster may contain bulk procurement of lower-cost medical-related items, such as common supplies, consumables, or medicines purchased in large quantities.
+
+The procurement mode is mostly Public Bidding, and the bid notice status is mostly Closed and Awarded. This means the cluster includes many formally processed procurement records. However, timing indicators such as time-to-close, award publishing lag, and award decision lag show high and very high patterns, meaning this cluster still requires timeline monitoring."

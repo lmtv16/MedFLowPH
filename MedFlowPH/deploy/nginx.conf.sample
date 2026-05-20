@@ -1,0 +1,36 @@
+# MedFlow PH — same-origin SPA + API reverse proxy
+# Install: sudo cp nginx.conf.sample /etc/nginx/sites-available/medflow
+#          sudo ln -s /etc/nginx/sites-available/medflow /etc/nginx/sites-enabled/
+#          sudo nginx -t && sudo systemctl reload nginx
+
+server {
+    listen 80;
+    server_name your.domain.example;
+
+    root /opt/medflow/MedFlowPH/Frontend/dist;
+    index index.html;
+
+    # React SPA (thesis pages + /workbench)
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # FastAPI (uvicorn on loopback)
+    location /api/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        client_max_body_size 50m;
+    }
+
+    location = /health {
+        proxy_pass http://127.0.0.1:8000/health;
+        proxy_set_header Host $host;
+    }
+
+    # Optional: longer timeouts for slow artifact downloads
+    proxy_read_timeout 300s;
+}
