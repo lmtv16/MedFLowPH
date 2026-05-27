@@ -93,15 +93,7 @@ type PageTOCProps = {
   showRouteLinks?: boolean
 }
 
-export const TOC_LANDING: PageTOCSection[] = [
-  { id: 'hero', label: 'Overview' },
-  { id: 'background', label: 'Background' },
-  { id: 'data-collection', label: 'Data' },
-  { id: 'data-description', label: 'Schema' },
-  { id: 'dataset-snapshot', label: 'Snapshot' },
-  { id: 'conclusion', label: 'Conclusion' },
-  { id: 'recommendations', label: 'Recommendations' },
-]
+export const TOC_LANDING: PageTOCSection[] = [{ id: 'hero', label: 'Overview' }]
 
 export const TOC_EDA: PageTOCSection[] = [
   { id: 'du-hero', label: 'Overview' },

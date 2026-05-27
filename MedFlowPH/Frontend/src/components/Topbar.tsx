@@ -63,8 +63,6 @@ const NAV_ITEMS: readonly NavItem[] = [
       // sidebar-route label ("Cluster Segmentation") so the segmentation outputs
       // remain discoverable from the Results group.
       { path: '/clustering', label: 'Cluster Segmentation' },
-      // In-page anchor on Home (preserves the existing #recommendations section).
-      { path: '/#recommendations', label: 'Recommendations' },
     ],
   },
   {
