@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Large preprocessing CSVs (dev-only; parent repo also ignores these)
+public/data/02/**
+public/output_source/02/**
