@@ -139,7 +139,8 @@ export function Landing() {
                   >
                     View Clustering
                   </button>
-                </div>
+                  <a href="https://www.google.com" className="btn btn-primary" target="_blank" rel="noopener noreferrer">Visit Example Website</a>
+                  </div>
               </div>
             </SectionWrapper>
 
