@@ -96,13 +96,11 @@ type PageTOCProps = {
 export const TOC_LANDING: PageTOCSection[] = [
   { id: 'hero', label: 'Overview' },
   { id: 'background', label: 'Background' },
-  { id: 'objectives', label: 'Objectives' },
   { id: 'data-collection', label: 'Data' },
   { id: 'data-description', label: 'Schema' },
   { id: 'dataset-snapshot', label: 'Snapshot' },
   { id: 'conclusion', label: 'Conclusion' },
   { id: 'recommendations', label: 'Recommendations' },
-  { id: 'references', label: 'References' },
 ]
 
 export const TOC_EDA: PageTOCSection[] = [

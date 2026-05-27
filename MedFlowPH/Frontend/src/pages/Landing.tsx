@@ -4,7 +4,6 @@ import {
   Calendar,
   Database,
   DollarSign,
-  ExternalLink,
   FileText,
   Filter,
   GitCompare,
@@ -21,6 +20,7 @@ import {
 } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { handleInteractiveRouting } from '../config/interactiveUrl'
 import { MetricCard } from '../components/MetricCard'
 import { PageShell } from '../components/PageShell'
 import { PageTOC, TOC_LANDING } from '../components/PageTOC'
@@ -28,18 +28,6 @@ import { SectionWrapper } from '../components/SectionWrapper'
 import { parsePhilgepsCleaningSummary, formatIntPh } from '../data/parsePhilgepsCleaningSummary'
 import { DATA_PATHS, IMAGES } from '../data/fileManifest'
 import { useJsonData, useTextData } from '../hooks/useCsvData'
-
-/** Main-campus / Rizal St. location used for map search (College of Science, Legazpi). */
-const INSTITUTION_MAP_QUERY =
-  'Bicol University College of Science, Rizal Street, Legazpi City, 4500 Albay, Philippines'
-
-const INSTITUTION_MAP_EMBED_URL = `https://maps.google.com/maps?q=${encodeURIComponent(
-  INSTITUTION_MAP_QUERY,
-)}&z=16&output=embed`
-
-const INSTITUTION_MAP_OPEN_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  INSTITUTION_MAP_QUERY,
-)}`
 
 type KSelectionSummary = {
   chosen_k: number
@@ -139,7 +127,7 @@ export function Landing() {
                 <div className="mt-8 flex flex-wrap gap-4">
                   <button
                     type="button"
-                    onClick={() => void navigate('/eda')}
+                    onClick={() => handleInteractiveRouting(() => void navigate('/eda'))}
                     className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-mf-nav font-semibold text-primary-foreground shadow hover:bg-primary/90"
                   >
                     Explore Dashboard
@@ -169,43 +157,6 @@ export function Landing() {
                 resource allocation, and enhance equitable access to essential medical resources.
 
                 </p>
-              </div>
-            </SectionWrapper>
-
-            <SectionWrapper id="objectives" title="Objectives of the Study">
-              <div className="space-y-8 text-mf-body leading-relaxed text-muted-foreground">
-                <div>
-                  <h3 className="font-heading text-mf-card-title font-semibold text-foreground">General Objective</h3>
-                  <p className="mt-3">
-                  The objective of this study is to analyze aggregated and non-personal medical-related 
-                  procurement records from Philippine Government Electronic Procurement System (PhilGEPS)
-                  data using unsupervised clustering techniques in order to identify procurement behavior 
-                  patterns and possible systemic procurement risk indicators related to resource allocation, 
-                  procurement concentration, delays, and supply-related inefficiencies. 
-
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-heading text-mf-card-title font-semibold text-foreground">Specific Objectives</h3>
-                  <ol className="mt-3 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-primary">
-                    <li>
-                      To analyze aggregated medical-related procurement and distribution data from Philippine public health
-                      facilities to identify overall procurement and distribution patterns.
-                    </li>
-                    <li>
-                    To apply unsupervised clustering algorithms, specifically K-means and DBSCAN, to group medical-related 
-                    procurement records based on similarities and variations in procurement behavior.
-                    </li>
-                    <li>
-                    To develop a web-based results dashboard that presents clustering results through cluster summaries, 
-                    visualizations, and comparative profiles.
-                    </li>
-                    <li>
-                      To evaluate and compare the clustering results of K-means and DBSCAN using appropriate validation metrics,
-                      such as silhouette score, cluster cohesion, and cluster separation.
-                    </li>
-                  </ol>
-                </div>
               </div>
             </SectionWrapper>
 
@@ -466,86 +417,6 @@ export function Landing() {
                 confirm actual shortages or inefficiencies, the results can guide further investigation, monitoring,
                 and resource planning, and serve as a foundation for more advanced procurement analytics.
               </p>
-            </SectionWrapper>
-
-            <SectionWrapper id="references" title="References & Team">
-              <div className="grid gap-6 md:grid-cols-3">
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                  <Database className="h-8 w-8 text-primary" aria-hidden />
-                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Data Source</h3>
-                  <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
-                    Philippine Government Electronic Procurement System (PhilGEPS),  public procurement award notices, 
-                    2020–2025. Filtered to medical-related procurement entries using the MedFlow PH keyword pipeline.
-                  </p>
-                  <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
-                    
-                  </p>
-                  <a
-                    href="https://www.philgeps.gov.ph"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-block text-mf-body font-medium text-primary hover:underline"
-                  >
-                    https://www.philgeps.gov.ph
-                  </a>
-                </div>
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                  <Users className="h-8 w-8 text-primary" aria-hidden />
-                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Research Team</h3>
-                  <ul className="mt-4 space-y-2 text-mf-body text-muted-foreground">
-                    <li>Cyrrhus L. Jesalva — Researcher</li>
-                    <li>Wesly P. Lopera — Researcher</li>
-                    <li>Louis Mathew T. Vergara — Researcher</li>
-                  </ul>
-                  <p className="mt-4 text-mf-body text-muted-foreground">
-                    Content Adviser: Davie B. Balmadrid, Deng
-                  </p>
-                  <p className="mt-4 text-mf-body text-muted-foreground">
-                    Programming Adviser: Aris J. Ordonez, DIT
-                  </p>
-                </div>
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                  <MapPin className="h-8 w-8 text-primary" aria-hidden />
-                  <h3 className="font-heading mt-4 text-mf-card-title font-semibold text-foreground">Institution</h3>
-                  <p className="mt-3 text-mf-body leading-relaxed text-muted-foreground">
-                    Bicol University College of Science
-                  </p>
-                  <p className="mt-2 text-mf-body text-muted-foreground">
-                    Rizal Street, Legazpi City, 4500 Albay, Bicol, Philippines
-                  </p>
-                  <div className="group relative mt-4 overflow-hidden rounded-lg border border-border">
-                    <iframe
-                      title="Map preview: Bicol University College of Science, Legazpi City"
-                      src={INSTITUTION_MAP_EMBED_URL}
-                      className="pointer-events-none h-52 w-full border-0 bg-muted/50"
-                      loading="lazy"
-                      allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
-                      tabIndex={-1}
-                    />
-                    <a
-                      href={INSTITUTION_MAP_OPEN_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute inset-0 z-10 flex items-end justify-center pb-3 outline-none transition-colors hover:bg-foreground/5 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-                      aria-label="Open this location in Google Maps in a new tab"
-                    >
-                      <span className="pointer-events-none rounded-md bg-card/95 px-2.5 py-1 text-mf-caption font-semibold text-foreground shadow-sm ring-1 ring-border">
-                        Tap to open in Google Maps
-                      </span>
-                    </a>
-                  </div>
-                  <a
-                    href={INSTITUTION_MAP_OPEN_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-1.5 text-mf-body font-medium text-primary hover:underline"
-                  >
-                    Open exact location in Google Maps
-                    <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                  </a>
-                </div>
-              </div>
             </SectionWrapper>
 
             <footer className="flex flex-col gap-3 rounded-2xl border border-dashed border-border bg-card/80 p-6 text-mf-body text-muted-foreground md:flex-row md:items-center md:justify-between">
