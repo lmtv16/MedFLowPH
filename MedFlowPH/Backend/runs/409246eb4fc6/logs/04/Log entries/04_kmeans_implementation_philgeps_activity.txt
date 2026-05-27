@@ -1,0 +1,17 @@
+[2026-05-20T09:47:54] Reading chosen K from step 05 summary: D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\05\KSelection\k_selection_summary.json
+[2026-05-20T09:47:54] chosen_k=6 (method=silhouette)
+[2026-05-20T09:47:54] Loading PC scores from step 03
+[2026-05-20T09:47:55] PC scores: shape=(487605, 3)
+[2026-05-20T09:47:55] Fitting KMeans(K=6) on full PC matrix
+[2026-05-20T09:48:01] Fit done. inertia=510762.2392; centers shape=(6, 3)
+[2026-05-20T09:48:01] Cluster sizes: C0=89312, C1=59396, C2=38657, C3=163091, C4=48437, C5=88712
+[2026-05-20T09:48:07] Wrote assignments -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\KMeans\philgeps_kmeans_assignments.csv (shape=(487605, 5))
+[2026-05-20T09:48:07] Loading backtrack columns from step 02 scaled CSV
+[2026-05-20T09:48:27] Wrote backtrack -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\Backtrack\philgeps_cluster_backtrack.csv (shape=(487605, 17))
+[2026-05-20T09:48:30] Wrote per-cluster CSV cluster_id=0 (rows=89,312) -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\per_cluster\cluster_0.csv
+[2026-05-20T09:48:33] Wrote per-cluster CSV cluster_id=1 (rows=59,396) -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\per_cluster\cluster_1.csv
+[2026-05-20T09:48:34] Wrote per-cluster CSV cluster_id=2 (rows=38,657) -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\per_cluster\cluster_2.csv
+[2026-05-20T09:48:40] Wrote per-cluster CSV cluster_id=3 (rows=163,091) -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\per_cluster\cluster_3.csv
+[2026-05-20T09:48:42] Wrote per-cluster CSV cluster_id=4 (rows=48,437) -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\per_cluster\cluster_4.csv
+[2026-05-20T09:48:45] Wrote per-cluster CSV cluster_id=5 (rows=88,712) -> D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\output_source\04\per_cluster\cluster_5.csv
+[2026-05-20T09:48:45] Loading PCA variance ratios for plot axes

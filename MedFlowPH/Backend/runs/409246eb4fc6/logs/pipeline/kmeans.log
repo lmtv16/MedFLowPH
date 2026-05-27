@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\04_kmeans_implementation_philgeps.py", line 344, in <module>
+    main()
+    ~~~~^^
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\04_kmeans_implementation_philgeps.py", line 336, in main
+    run_step04(
+    ~~~~~~~~~~^
+        k_override=args.k,
+        ^^^^^^^^^^^^^^^^^^
+        pc3d_max_points=int(args.pc3d_max_points),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pc3d_plot_jitter_frac=jf,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\04_kmeans_implementation_philgeps.py", line 233, in run_step04
+    ratios3 = load_pca_ratios3()
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\philgeps_kmeans_common.py", line 213, in load_pca_ratios3
+    raise FileNotFoundError(f"Missing PCA JSON: {path}")
+FileNotFoundError: Missing PCA JSON: D:\medflowv6\MedFlow\MedFlowPH\runs\409246eb4fc6\results\03\Clustering\pca_theme_clustering.json

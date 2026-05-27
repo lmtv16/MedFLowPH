@@ -1,0 +1,91 @@
+{
+  "chosen_k": 6,
+  "chosen_k_method": "silhouette",
+  "alternatives": {
+    "max_silhouette_k": 6,
+    "max_composite_k": 6,
+    "min_davies_bouldin_k": 6
+  },
+  "k_grid": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "metrics_per_k": [
+    {
+      "k": 2.0,
+      "silhouette": 0.2656553052755311,
+      "davies_bouldin": 1.4695473760628106,
+      "calinski_harabasz": 27817.835370274697,
+      "inertia": 239431.47367441014,
+      "composite": -3.297171665990184
+    },
+    {
+      "k": 3.0,
+      "silhouette": 0.3428833937103736,
+      "davies_bouldin": 1.1381588595730678,
+      "calinski_harabasz": 32222.209002435415,
+      "inertia": 178718.03915008632,
+      "composite": -1.0453363486670657
+    },
+    {
+      "k": 4.0,
+      "silhouette": 0.35033039571243824,
+      "davies_bouldin": 0.9013661922907104,
+      "calinski_harabasz": 42299.71174256829,
+      "inertia": 124768.0528284174,
+      "composite": 0.4221220777528367
+    },
+    {
+      "k": 5.0,
+      "silhouette": 0.3745766443638638,
+      "davies_bouldin": 0.8276214635176755,
+      "calinski_harabasz": 47399.7331672245,
+      "inertia": 95749.66330864464,
+      "composite": 1.3448786894188898
+    },
+    {
+      "k": 6.0,
+      "silhouette": 0.3863723589528955,
+      "davies_bouldin": 0.7975840934364324,
+      "calinski_harabasz": 45304.62041817064,
+      "inertia": 84214.74303616353,
+      "composite": 1.4231690736566511
+    },
+    {
+      "k": 7.0,
+      "silhouette": 0.37696566139027105,
+      "davies_bouldin": 0.8670146740474124,
+      "calinski_harabasz": 45720.735858112406,
+      "inertia": 72852.66099871793,
+      "composite": 1.1523381738288716
+    }
+  ],
+  "computations": {
+    "pc_scores_csv": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\409246eb4fc6\\output_source\\03\\Clustering\\philgeps_clustering_pc_scores.csv",
+    "metrics_subsample_rows": 80000,
+    "pc_total_rows": 487605,
+    "metrics_subsample_seed": 42,
+    "kmeans_eval": "sklearn.cluster.KMeans(n_clusters=K, random_state=RANDOM_SEED, n_init=10, algorithm='lloyd').fit_predict(X_sub)",
+    "silhouette": "sklearn.metrics.silhouette_score(X_sub, labels, metric='euclidean'); higher better; P1 picks argmax",
+    "davies_bouldin": "sklearn.metrics.davies_bouldin_score(X_sub, labels); lower better; P3 picks argmin",
+    "calinski_harabasz": "sklearn.metrics.calinski_harabasz_score(X_sub, labels); higher better; enters P2 composite only",
+    "inertia": "KMeans.inertia_ on X_sub (elbow plot); diagnostic for P1; not used to pick K",
+    "composite": "z-score each metric across K in grid; (z_silhouette + z_calinski_harabasz - z_davies_bouldin) / sqrt(3); P2 picks argmax composite",
+    "k_grid_range": {
+      "k_min": 2,
+      "k_max": 7
+    },
+    "step04_final_fit": "KMeans(K=K_chosen).fit_predict(X_full) on all rows of PC CSV; same random_state/n_init"
+  },
+  "paths": {
+    "k_metrics_long_csv": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\409246eb4fc6\\output_source\\05\\KSelection\\k_metrics_long.csv",
+    "k_selection_summary_json": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\409246eb4fc6\\output_source\\05\\KSelection\\k_selection_summary.json",
+    "metric_curves_dir": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\409246eb4fc6\\results\\05\\KSelection",
+    "eda_dir": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\409246eb4fc6\\results\\05\\EDA",
+    "logs_dir": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\409246eb4fc6\\logs\\05"
+  }
+}

@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\05_evaluating_kmeans_philgeps.py", line 447, in <module>
+    main()
+    ~~~~^^
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\05_evaluating_kmeans_philgeps.py", line 438, in main
+    run_step05(
+    ~~~~~~~~~~^
+        k_min=args.k_min,
+        ^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        metrics_on_full=bool(args.metrics_on_full),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\05_evaluating_kmeans_philgeps.py", line 308, in run_step05
+    X = load_pc_scores()
+  File "D:\medflowv6\MedFlow\MedFlowPH\source_code\PhilGEPS\philgeps_kmeans_common.py", line 203, in load_pc_scores
+    raise FileNotFoundError(f"Missing PC scores CSV (run step 03): {path}")
+FileNotFoundError: Missing PC scores CSV (run step 03): D:\medflowv6\MedFlow\MedFlowPH\runs\ca84f4a916d5\output_source\03\Clustering\philgeps_clustering_pc_scores.csv

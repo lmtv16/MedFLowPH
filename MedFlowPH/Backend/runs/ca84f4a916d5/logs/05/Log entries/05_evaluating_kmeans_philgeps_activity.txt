@@ -1,0 +1,2 @@
+[2026-05-20T09:18:10] Step 05 — K selection: k_min=2, k_max=7, metrics_subsample=80000, metrics_on_full=False
+[2026-05-20T09:18:10] Loading PC scores from step 03

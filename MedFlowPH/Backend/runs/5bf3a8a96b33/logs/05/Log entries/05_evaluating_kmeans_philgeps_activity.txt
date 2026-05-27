@@ -1,0 +1,14 @@
+[2026-05-20T13:35:22] Step 05 — K selection: k_min=2, k_max=7, metrics_subsample=80000, metrics_on_full=False
+[2026-05-20T13:35:22] Loading PC scores from step 03
+[2026-05-20T13:35:23] Loaded PC scores: shape=(487605, 3)
+[2026-05-20T13:35:23] Eval subsample: n_sub=80,000 (of n_total=487,605)
+[2026-05-20T13:35:23] Running K-grid evaluation for K = 2..7
+[2026-05-20T13:47:05] Wrote per-K metrics -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\output_source\05\KSelection\k_metrics_long.csv
+[2026-05-20T13:47:05] Picks: silhouette=6 (primary), composite=6, min_davies_bouldin=6
+[2026-05-20T13:47:06] Wrote metric curves -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\KSelection
+[2026-05-20T13:47:06] Wrote combined metrics overlay -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\KSelection\combined_silhouette_db_ch_composite_vs_k.png
+[2026-05-20T13:47:10] EDA: wrote cluster size small-multiples -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\EDA\cluster_sizes_per_k.png
+[2026-05-20T13:47:10] EDA: wrote metric rank heatmap -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\EDA\metric_rank_heatmap.png
+[2026-05-20T13:47:10] Wrote K selection summary -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\output_source\05\KSelection\k_selection_summary.json
+[2026-05-20T13:47:10] Wrote readme -> D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\KSelection\k_selection_readme.txt
+[2026-05-20T13:47:10] Step 05 complete. chosen_k=6

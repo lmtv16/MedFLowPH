@@ -1,0 +1,60 @@
+{
+  "k": 6,
+  "k_source": "silhouette",
+  "n_total": 487605,
+  "random_seed": 42,
+  "n_init": 10,
+  "algorithm": "lloyd",
+  "centers_pc": [
+    [
+      1.7542053325921203,
+      -0.4173428763361842,
+      -0.029604533631498165
+    ],
+    [
+      -2.055078189408442,
+      0.13064728089619285,
+      -0.6092023899153638
+    ],
+    [
+      -0.9477164813634786,
+      -0.6398885417549591,
+      2.8138636750376143
+    ],
+    [
+      -0.09074614223444209,
+      -0.859418632682915,
+      -0.3994477741659629
+    ],
+    [
+      0.9819425555138944,
+      2.08298670649922,
+      0.22759882001588622
+    ],
+    [
+      -0.3433145120062933,
+      1.062275857916681,
+      -0.17674732688300124
+    ]
+  ],
+  "inertia_full": 510762.2391935033,
+  "pc3d_max_points": 30000,
+  "pc3d_plot_jitter_frac": 0.025,
+  "paths": {
+    "assignments_csv": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\KMeans\\philgeps_kmeans_assignments.csv",
+    "backtrack_csv": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\Backtrack\\philgeps_cluster_backtrack.csv",
+    "per_cluster_csv_dir": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster",
+    "per_cluster_csvs": {
+      "0": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster\\cluster_0.csv",
+      "1": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster\\cluster_1.csv",
+      "2": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster\\cluster_2.csv",
+      "3": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster\\cluster_3.csv",
+      "4": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster\\cluster_4.csv",
+      "5": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\04\\per_cluster\\cluster_5.csv"
+    },
+    "numeric_3d_png": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\results\\04\\PCA_Cluster\\pca_space_pc123_3d_kmeans_numeric.png",
+    "cluster_counts_json": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\results\\04\\Summaries\\cluster_counts.json",
+    "k_selection_summary_json": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\output_source\\05\\KSelection\\k_selection_summary.json",
+    "logs_dir": "D:\\medflowv6\\MedFlow\\MedFlowPH\\runs\\3ac59b9fd6d3\\logs\\04"
+  }
+}

@@ -1,0 +1,22 @@
+[2026-05-20T14:17:13] Reading chosen K from step 05 summary: D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\05\KSelection\k_selection_summary.json
+[2026-05-20T14:17:13] chosen_k=6 (method=silhouette)
+[2026-05-20T14:17:13] Loading PC scores from step 03
+[2026-05-20T14:17:14] PC scores: shape=(487605, 3)
+[2026-05-20T14:17:14] Fitting KMeans(K=6) on full PC matrix
+[2026-05-20T14:17:19] Fit done. inertia=510762.2392; centers shape=(6, 3)
+[2026-05-20T14:17:19] Cluster sizes: C0=89312, C1=59396, C2=38657, C3=163091, C4=48437, C5=88712
+[2026-05-20T14:17:22] Wrote assignments -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\KMeans\philgeps_kmeans_assignments.csv (shape=(487605, 5))
+[2026-05-20T14:17:22] Loading backtrack columns from step 02 scaled CSV
+[2026-05-20T14:17:34] Wrote backtrack -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\Backtrack\philgeps_cluster_backtrack.csv (shape=(487605, 17))
+[2026-05-20T14:17:36] Wrote per-cluster CSV cluster_id=0 (rows=89,312) -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\per_cluster\cluster_0.csv
+[2026-05-20T14:17:37] Wrote per-cluster CSV cluster_id=1 (rows=59,396) -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\per_cluster\cluster_1.csv
+[2026-05-20T14:17:37] Wrote per-cluster CSV cluster_id=2 (rows=38,657) -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\per_cluster\cluster_2.csv
+[2026-05-20T14:17:40] Wrote per-cluster CSV cluster_id=3 (rows=163,091) -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\per_cluster\cluster_3.csv
+[2026-05-20T14:17:42] Wrote per-cluster CSV cluster_id=4 (rows=48,437) -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\per_cluster\cluster_4.csv
+[2026-05-20T14:17:43] Wrote per-cluster CSV cluster_id=5 (rows=88,712) -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\output_source\04\per_cluster\cluster_5.csv
+[2026-05-20T14:17:43] Loading PCA variance ratios for plot axes
+[2026-05-20T14:17:44] Saved numeric 3D K-means scatter -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\results\04\PCA_Cluster\pca_space_pc123_3d_kmeans_numeric.png
+[2026-05-20T14:17:44] Wrote cluster counts -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\results\04\Summaries\cluster_counts.json
+[2026-05-20T14:17:44] Wrote run meta -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\results\04\Summaries\run_meta.json
+[2026-05-20T14:17:44] Wrote readme -> D:\medflowv6\MedFlow\MedFlowPH\runs\3ac59b9fd6d3\results\04\Summaries\kmeans_implementation_readme.txt
+[2026-05-20T14:17:44] Step 04 complete. K=6

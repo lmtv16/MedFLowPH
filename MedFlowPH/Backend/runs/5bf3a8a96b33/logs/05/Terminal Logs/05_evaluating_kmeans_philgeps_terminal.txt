@@ -1,0 +1,8 @@
+ k  silhouette  davies_bouldin  calinski_harabasz       inertia  composite
+ 2    0.265655        1.469547       27817.835370 239431.473674  -3.297172
+ 3    0.342883        1.138159       32222.209002 178718.039150  -1.045336
+ 4    0.350330        0.901366       42299.711743 124768.052828   0.422122
+ 5    0.374577        0.827621       47399.733167  95749.663309   1.344879
+ 6    0.386372        0.797584       45304.620418  84214.743036   1.423169
+ 7    0.376966        0.867015       45720.735858  72852.660999   1.152338
+PhilGEPS step 05 done. chosen_k=6 (silhouette); composite=6; min_DB=6. summary: D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\output_source\05\KSelection\k_selection_summary.json; metrics: D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\output_source\05\KSelection\k_metrics_long.csv; plots: D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\KSelection; eda: D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\results\05\EDA; logs: D:\medflowv6\MedFlow\MedFlowPH\runs\5bf3a8a96b33\logs\05. Run 04_kmeans_implementation_philgeps.py next.
